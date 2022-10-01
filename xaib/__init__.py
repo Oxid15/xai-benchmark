@@ -3,4 +3,4 @@ __author__ = 'Ilia Moiseev'
 __author_email__ = 'ilia.moiseev.5@yandex.ru'
 
 
-import base
+from . import base
