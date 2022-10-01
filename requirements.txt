@@ -1,1 +1,1 @@
-cascade-ml
+cascade-ml>=0.7.2
