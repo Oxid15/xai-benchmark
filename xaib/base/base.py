@@ -36,5 +36,10 @@ class Case(cdm.Model):
     Case is an entity which accepts Explainer, Model and Dataset and outputs a metric
     corresponding to the quality of Explainer m = c(g, f, x)
     '''
+    def __init__(self, ds, model, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.ds = ds
+        self.model = model
+
     def evaluate(self, ds: Dataset, model: Model, expl: Explainer) -> None:
         raise NotImplementedError()
