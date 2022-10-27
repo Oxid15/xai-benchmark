@@ -37,4 +37,6 @@ class ContrastivityCase(Case):
                 e = expl.predict(self.ds[unique_coords[u][i][0]], self.model)
                 explanations[u].append(e)
 
-        self.metrics['contrastivity'] = self._compare(unique_coords, explanations)
+        self.metrics['contrastivity'] = {
+            'label_difference': self._compare(unique_coords, explanations)
+        }
