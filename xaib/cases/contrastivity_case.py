@@ -31,10 +31,10 @@ class ContrastivityCase(Case):
 
         unique_coords = [np.argwhere(labels == ul)[:min_len] for ul in unique]
 
-        explanations = []
-        for u in range(len(unique)):
+        explanations = [[] for u in range(len(unique_coords))]
+        for u in range(len(unique_coords)):
             for i in range(len(unique_coords[u])):
                 e = expl.predict(self.ds[unique_coords[u][i][0]], self.model)
-                explanations.append(e)
+                explanations[u].append(e)
 
         self.metrics['contrastivity'] = self._compare(unique_coords, explanations)
