@@ -10,4 +10,4 @@ class ConstantExplainer(Explainer):
         self.constant = constant
     
     def predict(self, x: Any, model: Model) -> Any:
-        return np.full((len(x), self.n_features), self.constant)
+        return np.full(self.n_features, self.constant)
