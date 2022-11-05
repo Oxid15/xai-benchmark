@@ -34,7 +34,8 @@ class ContrastivityCase(Case):
         explanations = [[] for u in range(len(unique_coords))]
         for u in range(len(unique_coords)):
             for i in range(len(unique_coords[u])):
-                e = expl.predict(self.ds[unique_coords[u][i][0]], self.model)
+                item, _ = self.ds[unique_coords[u][i][0]]
+                e = expl.predict(item, self.model)
                 explanations[u].append(e)
 
         self.metrics['contrastivity'] = {
