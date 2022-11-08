@@ -37,5 +37,5 @@ class CoherenceCase(Case):
             diffs.append(d)
 
         self.metrics['coherence'] = {
-            'other_disaggreement': np.nanmean(diffs)
+            'other_disagreement': np.nanmean(diffs)
         }
