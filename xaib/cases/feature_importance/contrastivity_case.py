@@ -1,6 +1,6 @@
 import numpy as np
 
-from xaib.utils import rmse
+from xaib.utils import batch_rmse
 from ...base import Case, Explainer
 
 
@@ -14,12 +14,15 @@ class ContrastivityCase(Case):
 
                 # Calculate the RMSE between this explanation and
                 # others of other classes
-                d = [rmse(e, explanations[x][i]) for x in range(len(coords)) if x != u]
-                d = np.mean(d)
-                diffs.append(d)
+                d = []
+                for x in range(len(coords)):
+                    if x != u:
+                        d += batch_rmse(e, explanations[x][i])
+                diffs += d
         return diffs
 
     def evaluate(self, expl: Explainer) -> None:
+        # TODO: refactor the process
         labels = np.asarray([item['label'] for item in self._ds])
         unique, counts = np.unique(labels, return_counts=True)
         min_len = np.min(counts)

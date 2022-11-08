@@ -4,14 +4,14 @@ import numpy as np
 from tqdm import tqdm
 
 from ...base import Case, Explainer, Model, Dataset
-from ...utils import rmse, SimpleDataloader
+from ...utils import batch_rmse, SimpleDataloader
 
 
 class ContinuityCase(Case):
     """
     Apply noise of small magnitude to the input data.
     Obtain original and perturbed explanations.
-    Compare them using **MSE or RMSE** and average.
+    Compare them using RMSE and average.
     """
     def __init__(self, ds: Dataset, noisy_ds: Dataset, model: Model) -> None:
         super().__init__(ds, model)
@@ -36,7 +36,7 @@ class ContinuityCase(Case):
             explanation = expl.predict(item, self._model, **expl_kwargs)
             noisy_explanation = expl.predict(noisy_item, self._model, **expl_kwargs)
 
-            rmses.append(rmse(explanation, noisy_explanation))
+            rmses += batch_rmse(explanation, noisy_explanation)
 
         self.metrics['continuity'] = {
             'small_noise_check': np.nanmean(rmses)

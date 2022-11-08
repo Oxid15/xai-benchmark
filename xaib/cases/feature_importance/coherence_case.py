@@ -4,7 +4,7 @@ import numpy as np
 from tqdm import tqdm
 
 from ...base import Case, Explainer, Model, Dataset
-from ...utils import rmse, SimpleDataloader
+from ...utils import batch_rmse, SimpleDataloader
 
 
 class CoherenceCase(Case):
@@ -32,9 +32,8 @@ class CoherenceCase(Case):
             other_e = [other_expl.predict(item, self._model, **other_kwargs) 
                 for other_expl, other_kwargs in zip(expls, expls_kwargs)]
 
-            d = [rmse(e, oe) for oe in other_e]
-            d = np.mean(d)
-            diffs.append(d)
+            for oe in other_e:
+                diffs += batch_rmse(e, oe)
 
         self.metrics['coherence'] = {
             'other_disagreement': np.nanmean(diffs)

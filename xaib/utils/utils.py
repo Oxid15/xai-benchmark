@@ -8,6 +8,10 @@ def rmse(x, y):
     return np.sqrt(mse)
 
 
+def batch_rmse(bx, by):
+    return [rmse(x, y) for (x, y) in zip(bx, by)]
+
+
 class SimpleDataloader:
     def __init__(self, data, batch_size: int = 1) -> None:
         self._data = data

@@ -1,1 +1,1 @@
-from .utils import rmse, SimpleDataloader
+from .utils import batch_rmse, SimpleDataloader
