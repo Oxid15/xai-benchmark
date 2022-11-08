@@ -9,4 +9,4 @@ class RandomExplainer(Explainer):
         self.n_features = n_features
     
     def predict(self, x: Any, model: Model) -> Any:
-        return np.random.random(self.n_features)
+        return np.random.random((len(x), self.n_features))
