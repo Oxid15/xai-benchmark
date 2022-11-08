@@ -18,7 +18,7 @@ class SimpleDataloader:
         batch = {ch: [] for ch in self._channels}
 
         start_index = index * self._bs
-        end_index = min((index + 1) * self._bs, len(self._data) - 1)
+        end_index = min((index + 1) * self._bs, len(self._data))
         for i in range(start_index, end_index):
             item = self._data[i]
             for ch in self._channels:
