@@ -3,8 +3,8 @@ from typing import Dict
 import numpy as np
 from tqdm import tqdm
 
-from ..base import Case, Explainer, Model, Dataset
-from ..utils import rmse
+from ...base import Case, Explainer, Model, Dataset
+from ...utils import rmse
 
 
 class ContinuityCase(Case):

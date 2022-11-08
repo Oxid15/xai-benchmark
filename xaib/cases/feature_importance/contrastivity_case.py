@@ -1,7 +1,7 @@
 import numpy as np
 
 from xaib.utils import rmse
-from ..base import Dataset, Model, Case, Explainer
+from ...base import Dataset, Model, Case, Explainer
 
 
 class ContrastivityCase(Case):
