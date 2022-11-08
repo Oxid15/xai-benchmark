@@ -38,8 +38,8 @@ class Case(cdm.Model):
     '''
     def __init__(self, ds, model, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.ds = ds
-        self.model = model
+        self._ds = ds
+        self._model = model
 
     def evaluate(self, ds: Dataset, model: Model, expl: Explainer) -> None:
         raise NotImplementedError()

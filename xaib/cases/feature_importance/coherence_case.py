@@ -3,8 +3,8 @@ from typing import Dict, Iterable
 import numpy as np
 from tqdm import tqdm
 
-from ..base import Case, Explainer, Model, Dataset
-from ..utils import rmse
+from ...base import Case, Explainer, Model, Dataset
+from ...utils import rmse, SimpleDataloader
 
 
 class CoherenceCase(Case):
@@ -15,6 +15,7 @@ class CoherenceCase(Case):
             self, 
             expl: Explainer,
             expls: Iterable[Explainer],
+            batch_size: int = 1,
             expl_kwargs: Dict = None,
             expls_kwargs: Iterable[Dict] = None
         ) -> None:
@@ -24,11 +25,11 @@ class CoherenceCase(Case):
             expls_kwargs = [{} for _ in range(len(expls))]
 
         diffs = []
-        for i in tqdm(range(len(self.ds))):
-            item = self.ds[i]
+        for batch in tqdm(SimpleDataloader(self._ds, batch_size)):
+            item = batch['item']
 
-            e = expl.predict(item, self.model, **expl_kwargs)
-            other_e = [other_expl.predict(item, self.model, **other_kwargs) 
+            e = expl.predict(item, self._model, **expl_kwargs)
+            other_e = [other_expl.predict(item, self._model, **other_kwargs) 
                 for other_expl, other_kwargs in zip(expls, expls_kwargs)]
 
             d = [rmse(e, oe) for oe in other_e]
