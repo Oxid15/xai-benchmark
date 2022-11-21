@@ -34,4 +34,4 @@ class SimpleDataloader:
             yield self[i]
 
     def __len__(self) -> int:
-        return len(self._data) // self._bs + 1
+        return int(np.ceil(len(self._data) / self._bs))
