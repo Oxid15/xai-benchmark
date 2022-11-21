@@ -3,7 +3,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from ...base import Explainer
 
 
-class KNN(Explainer):
+class KNNExplainer(Explainer):
     def __init__(self, train_ds, n_neighbors=5, metric='minkowski', **kwargs) -> None:
         super().__init__(**kwargs)
         self._train_ds = train_ds
