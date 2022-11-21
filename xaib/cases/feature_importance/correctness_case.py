@@ -9,7 +9,7 @@ class CorrectnessCase(Case):
         super().__init__(ds, model, **kwargs)
         self._noisy_model = noisy_model
 
-    def evaluate(self, expl: Explainer, batch_size: int = 1, expl_kwargs=None, expl_noisy_kwargs=None) -> None:
+    def evaluate(self, name:str, expl: Explainer, batch_size: int = 1, expl_kwargs=None, expl_noisy_kwargs=None) -> None:
         if expl_kwargs is None:
             expl_kwargs = {}
         if expl_noisy_kwargs is None:
@@ -25,6 +25,7 @@ class CorrectnessCase(Case):
 
             diffs_expl += batch_rmse(explanation_batch, noisy_explanation_batch)
 
+        self.metrics[name] = {}
         self.metrics['correctness'] = {
                 'parameter_randomization_check': np.nanmean(diffs_expl)
         }
