@@ -41,5 +41,5 @@ class Case(cdm.Model):
         self._ds = ds
         self._model = model
 
-    def evaluate(self, ds: Dataset, model: Model, expl: Explainer) -> None:
+    def evaluate(self, name: str, expl: Explainer, *args, **kwargs) -> None:
         raise NotImplementedError()
