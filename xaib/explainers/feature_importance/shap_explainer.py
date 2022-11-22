@@ -1,7 +1,7 @@
 import numpy as np
 import shap
 
-from ..base import Explainer
+from ...base import Explainer
 
 
 class ShapExplainer(Explainer):

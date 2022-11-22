@@ -1,6 +1,6 @@
 from typing import Any
 import numpy as np
-from ..base import Model, Explainer
+from ...base import Model, Explainer
 
 
 class RandomExplainer(Explainer):
