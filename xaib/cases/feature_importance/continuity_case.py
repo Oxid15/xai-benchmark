@@ -18,6 +18,7 @@ class ContinuityCase(Case):
         self._noisy_ds = noisy_ds
 
     def evaluate(self,
+        name: str,
         expl: Explainer,
         batch_size: int = 1,
         expl_kwargs: Dict = None) -> None:
@@ -38,6 +39,7 @@ class ContinuityCase(Case):
 
             rmses += batch_rmse(explanation, noisy_explanation)
 
-        self.metrics['continuity'] = {
+        self.metrics[name] = {}
+        self.metrics[name]['continuity'] = {
             'small_noise_check': np.nanmean(rmses)
         }

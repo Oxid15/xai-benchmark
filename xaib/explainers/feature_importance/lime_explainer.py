@@ -1,7 +1,7 @@
 from lime import lime_tabular
 import numpy as np
 
-from ..base import Explainer
+from ...base import Explainer
 
 
 class LimeExplainer(Explainer):

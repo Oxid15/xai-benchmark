@@ -19,7 +19,7 @@ class Filter(Sampler):
 
 
 class ContrastivityCase(Case):
-    def evaluate(self, expl: Explainer, batch_size: int = 1) -> None:
+    def evaluate(self, name: str, expl: Explainer, batch_size: int = 1) -> None:
         # Obtain all the labels
         labels = np.asarray([item['label'] for item in
             tqdm(self._ds, desc='Obtaining labels', leave=False)])
@@ -54,6 +54,7 @@ class ContrastivityCase(Case):
         for u in unique_labels:
             diffs[u] = np.nanmean(diffs[u])
 
-        self.metrics['contrastivity'] = {
+        self.metrics[name] = {}
+        self.metrics[name]['contrastivity'] = {
             'label_difference': np.nanmean([diffs[u] for u in diffs])
         }
