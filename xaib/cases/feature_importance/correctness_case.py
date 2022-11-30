@@ -27,5 +27,5 @@ class CorrectnessCase(Case):
 
         self.metrics[name] = {}
         self.metrics[name]['correctness'] = {
-                'parameter_randomization_check': np.nanmean(diffs_expl)
+            'parameter_randomization_check': np.nanmean(diffs_expl)
         }

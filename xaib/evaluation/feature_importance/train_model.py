@@ -2,11 +2,9 @@ import os
 import sys
 
 import numpy as np
-
 from cascade import data as cdd
 from cascade import utils as cdu
 from sklearn.svm import SVC
-# from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,5 +26,5 @@ Y_test = np.array(Y_test, dtype=int)
 model = cdu.SkModel(blocks=[SVC(probability=True)])
 model.fit(X_train, Y_train)
 model.evaluate(X_test, Y_test, {'f1': f1_score})
-print(model.metrics)
+print(model.get_meta())
 model.save('svm')

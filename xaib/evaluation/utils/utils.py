@@ -1,3 +1,5 @@
+from typing import Dict, Any
+
 import numpy as np
 from sklearn.datasets import make_classification
 from cascade import data as cdd
@@ -9,15 +11,15 @@ class MakeClassificationDataset(cdd.Dataset):
         super().__init__(**kwargs)
         self.X, self.y = make_classification(*args, **kwargs)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.X)
 
-    def __getitem__(self, index):# -> Dict:
+    def __getitem__(self, index: int) -> Dict[str, Any]:
         return {'item': self.X[index], 'label': self.y[index]}
 
 
 class NoiseApplier(cdd.Modifier):
-    def __init__(self, dataset, multiplier=1, *args, **kwargs) -> None:
+    def __init__(self, dataset, multiplier: float = 1., *args, **kwargs) -> None:
         super().__init__(dataset, *args, **kwargs)
 
         self._multiplier = multiplier

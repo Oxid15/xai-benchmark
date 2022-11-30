@@ -13,8 +13,8 @@ class ContinuityCase(Case):
     Obtain original and perturbed explanations.
     Compare them using RMSE and average.
     """
-    def __init__(self, ds: Dataset, noisy_ds: Dataset, model: Model) -> None:
-        super().__init__(ds, model)
+    def __init__(self, ds: Dataset, noisy_ds: Dataset, model: Model, *args, **kwargs) -> None:
+        super().__init__(ds, model, *args, **kwargs)
         self._noisy_ds = noisy_ds
 
     def evaluate(self,
