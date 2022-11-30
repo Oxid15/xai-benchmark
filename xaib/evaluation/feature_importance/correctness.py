@@ -27,10 +27,9 @@ def correctness(explainers: Dict[str, Explainer], batch_size: int) -> None:
     noisy_model = RandomBinBaseline()
 
     c = CorrectnessCase(test_ds, model, noisy_model)
+    repo = cdm.ModelRepo('repo')
+    line = repo.add_line('correctness')
 
     for name in explainers:
         c.evaluate(name, explainers[name], batch_size=batch_size)
-
-    repo = cdm.ModelRepo('repo')
-    line = repo.add_line('correctness')
-    line.save(c, only_meta=True)
+        line.save(c, only_meta=True)

@@ -23,10 +23,9 @@ def contrastivity(explainers: Dict[str, Explainer], batch_size: int) -> None:
     model.load('svm')
 
     c = ContrastivityCase(test_ds, model)
+    repo = cdm.ModelRepo('repo')
+    line = repo.add_line('contrastivity')
 
     for name in explainers:
         c.evaluate(name, explainers[name], batch_size=batch_size)
-
-    repo = cdm.ModelRepo('repo')
-    line = repo.add_line('contrastivity')
-    line.save(c, only_meta=True)
+        line.save(c, only_meta=True)

@@ -23,6 +23,8 @@ def coherence(explainers: Dict[str, Explainer], batch_size: int) -> None:
     model.load('svm')
 
     c = CoherenceCase(test_ds, model)
+    repo = cdm.ModelRepo('repo')
+    line = repo.add_line('coherence')
 
     for name in explainers:
         c.evaluate(
@@ -31,6 +33,4 @@ def coherence(explainers: Dict[str, Explainer], batch_size: int) -> None:
                 for another in explainers if another != name],
             batch_size=batch_size)
 
-    repo = cdm.ModelRepo('repo')
-    line = repo.add_line('coherence')
-    line.save(c, only_meta=True)
+        line.save(c, only_meta=True)

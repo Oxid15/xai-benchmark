@@ -54,7 +54,5 @@ class ContrastivityCase(Case):
         for u in unique_labels:
             diffs[u] = np.nanmean(diffs[u])
 
-        self.metrics[name] = {}
-        self.metrics[name]['contrastivity'] = {
-            'label_difference': np.nanmean([diffs[u] for u in diffs])
-        }
+        self.params['name'] = name
+        self.metrics['label_difference'] = np.nanmean([diffs[u] for u in diffs])

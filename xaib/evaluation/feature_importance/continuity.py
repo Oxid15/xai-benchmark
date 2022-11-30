@@ -25,10 +25,9 @@ def continuity(explainers: Dict[str, Explainer], batch_size: int) -> None:
     model.load('svm')
 
     c = ContinuityCase(test_ds, test_ds_noisy, model, multiplier=MULTIPLIER)
+    repo = cdm.ModelRepo('repo')
+    line = repo.add_line('continuity')
 
     for name in explainers:
         c.evaluate(name, explainers[name], batch_size=batch_size)
-
-    repo = cdm.ModelRepo('repo')
-    line = repo.add_line('continuity')
-    line.save(c, only_meta=True)
+        line.save(c, only_meta=True)

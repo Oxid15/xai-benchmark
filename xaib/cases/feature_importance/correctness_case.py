@@ -25,7 +25,4 @@ class CorrectnessCase(Case):
 
             diffs_expl += batch_rmse(explanation_batch, noisy_explanation_batch)
 
-        self.metrics[name] = {}
-        self.metrics[name]['correctness'] = {
-            'parameter_randomization_check': np.nanmean(diffs_expl)
-        }
+        self.metrics['parameter_randomization_check'] = np.nanmean(diffs_expl)
