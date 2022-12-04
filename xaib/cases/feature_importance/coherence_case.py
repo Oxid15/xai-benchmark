@@ -36,7 +36,5 @@ class CoherenceCase(Case):
             for oe in other_e:
                 diffs += batch_rmse(e, oe)
 
-        self.metrics[name] = {}
-        self.metrics[name]['coherence'] = {
-            'other_disagreement': np.nanmean(diffs)
-        }
+        self.params['name'] = name
+        self.metrics['other_disagreement'] = np.nanmean(diffs)
