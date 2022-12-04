@@ -4,7 +4,7 @@ from tqdm import tqdm
 import numpy as np
 from cascade.data import Sampler
 
-from ...utils import batch_rmse, SimpleDataloader
+from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
 from ...base import Case, Explainer
 
 
@@ -36,7 +36,9 @@ class ContrastivityCase(Case):
         for u in unique_labels:
             dl = SimpleDataloader(Filter(self._ds, coords[u]), batch_size=batch_size)
             for batch in tqdm(dl):
-                explanations[u].append(expl.predict(batch['item'], self._model))
+                ex = expl.predict(batch['item'], self._model)
+                ex = minmax_normalize(ex)
+                explanations[u].append(ex)
 
         # Compare explanations of different labels
         diffs = {u: [] for u in unique_labels}

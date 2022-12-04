@@ -12,6 +12,13 @@ def batch_rmse(bx, by):
     return [rmse(x, y) for (x, y) in zip(bx, by)]
 
 
+def minmax_normalize(x):
+    min_val = np.min(x)
+    max_val = np.max(x)
+    x_scaled = (x + np.abs(min_val)) / (max_val + np.abs(min_val))
+    return x_scaled
+
+
 class SimpleDataloader:
     def __init__(self, data, batch_size: int = 1) -> None:
         self._data = data

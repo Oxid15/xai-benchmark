@@ -1,7 +1,7 @@
 import numpy as np
 from tqdm import tqdm
 from ...base import Case, Explainer, Dataset, Model
-from ...utils import batch_rmse, SimpleDataloader
+from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
 
 
 class CorrectnessCase(Case):
@@ -22,6 +22,9 @@ class CorrectnessCase(Case):
 
             explanation_batch = expl.predict(item, self._model, **expl_kwargs)
             noisy_explanation_batch = expl.predict(item, self._noisy_model, **expl_noisy_kwargs)
+
+            explanation_batch = minmax_normalize(explanation_batch)
+            noisy_explanation_batch = minmax_normalize(noisy_explanation_batch)
 
             diffs_expl += batch_rmse(explanation_batch, noisy_explanation_batch)
 
