@@ -10,16 +10,16 @@ from utils import MakeClassificationDataset
 
 params = {
     'n_samples': 1000,
-    'n_features': 2,
+    'n_features': 10,
     'random_state': 0,
-    'n_informative': 1,
+    'n_informative': 5,
     'n_redundant': 0,
     'n_repeated': 0,
     'n_clusters_per_class': 1
 }
 
 ds = MakeClassificationDataset(**params)
-train_ds, test_ds = cdd.split(ds, frac=0.99)
+train_ds, test_ds = cdd.split(ds, frac=0.90)
 
 train_ds.update_meta({'n_features': params['n_features']})
 train_ds = cdd.Pickler('train_ds', train_ds)
