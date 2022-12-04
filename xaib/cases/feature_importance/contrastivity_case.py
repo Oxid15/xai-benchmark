@@ -13,7 +13,7 @@ class Filter(Sampler):
         super().__init__(ds, num_samples=len(indices), **kwargs)
 
         self._indices = indices
-    
+
     def __getitem__(self, index):
         return self._dataset[self._indices[index]]
 
@@ -29,7 +29,7 @@ class ContrastivityCase(Case):
         min_len = np.min(counts)
 
         # For each label get indexes of its items
-        coords = {u: np.argwhere(labels == 0).T[0][:min_len] for u in unique_labels}
+        coords = {u: np.argwhere(labels == u).T[0][:min_len] for u in unique_labels}
 
         # Obtain all explanations by batches
         explanations = {u: [] for u in unique_labels}
