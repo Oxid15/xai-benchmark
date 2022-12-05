@@ -13,6 +13,7 @@ def batch_rmse(bx, by):
 
 
 def entropy(x):
+    x += 1e-6
     return -np.sum(x * np.log2(x))
 
 
