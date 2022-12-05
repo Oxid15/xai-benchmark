@@ -12,6 +12,14 @@ def batch_rmse(bx, by):
     return [rmse(x, y) for (x, y) in zip(bx, by)]
 
 
+def entropy(x):
+    return -np.sum(x * np.log2(x))
+
+
+def batch_entropy(x):
+    return [entropy(i) for i in x]
+
+
 def minmax_normalize(x):
     min_val = np.min(x)
     max_val = np.max(x)
