@@ -17,10 +17,6 @@ def entropy(x):
     return -np.sum(x * np.log2(x))
 
 
-def batch_entropy(x):
-    return [entropy(i) for i in x]
-
-
 def gini(x):
     n = len(x)
     ad = 0
