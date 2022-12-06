@@ -18,7 +18,6 @@ from utils import MakeClassificationDataset, NoiseApplier
 
 def covariate_complexity(explainers: Dict[str, Explainer], batch_size: int) -> None:
     test_ds = cdd.Pickler('test_ds')
-    test_ds = cdd.CyclicSampler(test_ds, 10)
 
     model = cdu.SkModel()
     model.load('svm')
