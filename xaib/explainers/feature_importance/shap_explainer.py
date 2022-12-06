@@ -12,4 +12,4 @@ class ShapExplainer(Explainer):
 
     def predict(self, x, model):
         explainer = shap.Explainer(model.predict, self._train_data)
-        return np.array(explainer(x).data)
+        return np.array(explainer(x).values)

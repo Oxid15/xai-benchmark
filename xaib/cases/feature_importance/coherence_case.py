@@ -4,7 +4,7 @@ import numpy as np
 from tqdm import tqdm
 
 from ...base import Case, Explainer, Model, Dataset
-from ...utils import batch_rmse, SimpleDataloader
+from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
 
 
 class CoherenceCase(Case):
@@ -30,13 +30,12 @@ class CoherenceCase(Case):
             item = batch['item']
 
             e = expl.predict(item, self._model, **expl_kwargs)
-            other_e = [other_expl.predict(item, self._model, **other_kwargs) 
+            e = minmax_normalize(e)
+            other_e = [minmax_normalize(other_expl.predict(item, self._model, **other_kwargs))
                 for other_expl, other_kwargs in zip(expls, expls_kwargs)]
 
             for oe in other_e:
                 diffs += batch_rmse(e, oe)
 
-        self.metrics[name] = {}
-        self.metrics[name]['coherence'] = {
-            'other_disagreement': np.nanmean(diffs)
-        }
+        self.params['name'] = name
+        self.metrics['other_disagreement'] = np.nanmean(diffs)
