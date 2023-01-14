@@ -1,25 +1,22 @@
-from typing import Dict, Iterable
+from typing import Dict, List, Any, Union
 
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Case, Explainer, Model, Dataset
+from ...base import Case, Explainer
 from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
 
 
 class CoherenceCase(Case):
-    def __init__(self, ds: Dataset, model: Model) -> None:
-        super().__init__(ds, model)
-
     def evaluate(
-            self,
-            name: str,
-            expl: Explainer,
-            expls: Iterable[Explainer],
-            batch_size: int = 1,
-            expl_kwargs: Dict = None,
-            expls_kwargs: Iterable[Dict] = None
-        ) -> None:
+        self,
+        name: str,
+        expl: Explainer,
+        expls: List[Explainer],
+        batch_size: int = 1,
+        expl_kwargs: Union[Dict[Any, Any], None] = None,
+        expls_kwargs: Union[List[Dict[Any, Any]], None] = None
+    ) -> None:
         if expl_kwargs is None:
             expl_kwargs = {}
         if expls_kwargs is None:
@@ -32,7 +29,7 @@ class CoherenceCase(Case):
             e = expl.predict(item, self._model, **expl_kwargs)
             e = minmax_normalize(e)
             other_e = [minmax_normalize(other_expl.predict(item, self._model, **other_kwargs))
-                for other_expl, other_kwargs in zip(expls, expls_kwargs)]
+                       for other_expl, other_kwargs in zip(expls, expls_kwargs)]
 
             for oe in other_e:
                 diffs += batch_rmse(e, oe)

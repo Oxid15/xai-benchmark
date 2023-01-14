@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Any, Union
 
 import numpy as np
 from tqdm import tqdm
@@ -13,15 +13,24 @@ class ContinuityCase(Case):
     Obtain original and perturbed explanations.
     Compare them using RMSE and average.
     """
-    def __init__(self, ds: Dataset, noisy_ds: Dataset, model: Model, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        ds: Dataset,
+        noisy_ds: Dataset,
+        model: Model,
+        *args: Any,
+        **kwargs: Any
+    ) -> None:
         super().__init__(ds, model, *args, **kwargs)
         self._noisy_ds = noisy_ds
 
-    def evaluate(self,
+    def evaluate(
+        self,
         name: str,
         expl: Explainer,
         batch_size: int = 1,
-        expl_kwargs: Dict = None) -> None:
+        expl_kwargs: Union[Dict[Any, Any], None] = None
+    ) -> None:
         if expl_kwargs is None:
             expl_kwargs = {}
 

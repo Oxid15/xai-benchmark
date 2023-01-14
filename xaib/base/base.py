@@ -8,8 +8,8 @@ class Dataset(cdd.Dataset):
     Dataset is a wrapper around any collection of items to put in the ML model
     for inference
     '''
-    def __getitem__(self, index):
-        super().__getitem__(index)
+    def __getitem__(self, index: int) -> Any:
+        return super().__getitem__(index)
 
 
 class Model(cdm.Model):
@@ -36,10 +36,10 @@ class Case(cdm.Model):
     Case is an entity which accepts Explainer, Model and Dataset and outputs a metric
     corresponding to the quality of Explainer m = c(g, f, x)
     '''
-    def __init__(self, ds, model, *args, **kwargs) -> None:
+    def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self._ds = ds
         self._model = model
 
-    def evaluate(self, name: str, expl: Explainer, *args, **kwargs) -> None:
+    def evaluate(self, name: str, expl: Explainer, *args: Any, **kwargs: Any) -> None:
         raise NotImplementedError()

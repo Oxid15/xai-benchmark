@@ -1,9 +1,8 @@
-from typing import Dict, Iterable
-
+from typing import Dict, Union, Any
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Case, Explainer, Model, Dataset
+from ...base import Case, Explainer
 from ...utils import entropy, minmax_normalize, SimpleDataloader
 
 
@@ -13,7 +12,7 @@ class CovariateComplexityCase(Case):
             name: str,
             expl: Explainer,
             batch_size: int = 1,
-            expl_kwargs: Dict = None,
+            expl_kwargs: Union[Dict[Any, Any], None] = None,
     ) -> None:
         if expl_kwargs is None:
             expl_kwargs = {}
