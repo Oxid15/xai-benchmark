@@ -1,3 +1,4 @@
+from typing import Any, Union, Dict
 import numpy as np
 from tqdm import tqdm
 from ...base import Case, Explainer, Dataset, Model
@@ -5,11 +6,18 @@ from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
 
 
 class CorrectnessCase(Case):
-    def __init__(self, ds: Dataset, model: Model, noisy_model:Model, **kwargs):
+    def __init__(self, ds: Dataset, model: Model, noisy_model: Model, **kwargs: Any) -> None:
         super().__init__(ds, model, **kwargs)
         self._noisy_model = noisy_model
 
-    def evaluate(self, name: str, expl: Explainer, batch_size: int = 1, expl_kwargs=None, expl_noisy_kwargs=None) -> None:
+    def evaluate(
+        self,
+        name: str,
+        expl: Explainer,
+        batch_size: int = 1,
+        expl_kwargs: Union[Dict[Any, Any], None] = None,
+        expl_noisy_kwargs: Union[Dict[Any, Any], None] = None
+    ) -> None:
         if expl_kwargs is None:
             expl_kwargs = {}
         if expl_noisy_kwargs is None:

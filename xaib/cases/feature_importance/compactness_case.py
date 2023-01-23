@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Union, Any
 
 import numpy as np
 from tqdm import tqdm
@@ -13,7 +13,7 @@ class CompactnessCase(Case):
         name: str,
         expl: Explainer,
         batch_size: int = 1,
-        expl_kwargs: Dict = None
+        expl_kwargs: Union[Dict[Any, Any], None] = None
     ) -> None:
         if expl_kwargs is None:
             expl_kwargs = {}

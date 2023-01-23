@@ -1,28 +1,37 @@
-from typing import Iterable
+from typing import List, Union, Dict, Any
 
 from tqdm import tqdm
 import numpy as np
 from cascade.data import Sampler
 
 from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
-from ...base import Case, Explainer
+from ...base import Dataset, Case, Explainer
 
 
 class Filter(Sampler):
-    def __init__(self, ds, indices: Iterable[int], **kwargs) -> None:
+    def __init__(self, ds: Dataset, indices: List[int], **kwargs) -> None:
         super().__init__(ds, num_samples=len(indices), **kwargs)
 
         self._indices = indices
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> Any:
         return self._dataset[self._indices[index]]
 
 
 class ContrastivityCase(Case):
-    def evaluate(self, name: str, expl: Explainer, batch_size: int = 1) -> None:
+    def evaluate(
+        self,
+        name: str,
+        expl: Explainer,
+        batch_size: int = 1,
+        expl_kwargs: Union[Dict[Any, Any], None] = None
+    ) -> None:
+        if expl_kwargs is None:
+            expl_kwargs = {} 
+
         # Obtain all the labels
         labels = np.asarray([item['label'] for item in
-            tqdm(self._ds, desc='Obtaining labels', leave=False)])
+                             tqdm(self._ds, desc='Obtaining labels', leave=False)])
 
         # Determine how much of an intersection different labels have
         unique_labels, counts = np.unique(labels, return_counts=True)
@@ -36,7 +45,7 @@ class ContrastivityCase(Case):
         for u in unique_labels:
             dl = SimpleDataloader(Filter(self._ds, coords[u]), batch_size=batch_size)
             for batch in tqdm(dl):
-                ex = expl.predict(batch['item'], self._model)
+                ex = expl.predict(batch['item'], self._model, **expl_kwargs)
                 ex = minmax_normalize(ex)
                 explanations[u].append(ex)
 
