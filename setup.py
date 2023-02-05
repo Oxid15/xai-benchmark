@@ -1,9 +1,4 @@
-import os
-import sys
 import setuptools
-sys.path.append(os.path.dirname(__file__))
-
-import xaib
 
 
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -11,9 +6,9 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="xai-benchmark",
-    version=xaib.__version__,
-    author=xaib.__author__,
-    author_email=xaib.__author_email__,
+    version='0.1.0',
+    author='Ilia Moiseev',
+    author_email='ilia.moiseev.5@yandex.ru',
     license='MIT',
     description="Benchmark for Explainable AI methods",
     long_description=long_description,
