@@ -53,6 +53,10 @@ class SimpleDataloader:
             item = self._data[i]
             for ch in self._channels:
                 batch[ch].append(item[ch])
+        
+        for ch in batch:
+            batch[ch] = np.array(batch[ch])
+
         return batch
 
     def __iter__(self):
