@@ -6,9 +6,7 @@ XAIB is an open benchmark that provides a way to compare different XAI methods u
 
 ## Installation
 ```
-git clone https://github.com/Oxid15/xai-benchmark.git
-cd xai-benchmark
-pip install .
+pip3 install xai-benchmark
 ```
 Then you can verify your installation by importing:
 ```python
