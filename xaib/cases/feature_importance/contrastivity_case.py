@@ -19,6 +19,10 @@ class Filter(Sampler):
 
 
 class ContrastivityCase(Case):
+    """
+    Measures how different explanations
+    are actually different from each other
+    """
     def evaluate(
         self,
         name: str,

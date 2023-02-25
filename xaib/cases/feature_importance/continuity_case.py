@@ -9,9 +9,8 @@ from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
 
 class ContinuityCase(Case):
     """
-    Apply noise of small magnitude to the input data.
-    Obtain original and perturbed explanations.
-    Compare them using RMSE and average.
+    Continuity measures how continuous
+    explanation function is
     """
     def __init__(
         self,

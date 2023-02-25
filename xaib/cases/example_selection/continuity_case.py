@@ -4,10 +4,14 @@ import numpy as np
 from tqdm import tqdm
 
 from ...base import Case, Explainer, Model, Dataset
-from ...utils import batch_count_eq, minmax_normalize, SimpleDataloader
+from ...utils import batch_count_eq, SimpleDataloader
 
 
 class ContinuityCase(Case):
+    """
+    Continuity measures how continuous
+    explanation function is
+    """
     def __init__(
         self,
         ds: Dataset,
