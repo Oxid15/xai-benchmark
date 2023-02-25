@@ -41,3 +41,20 @@ class RandomBinBaseline(cdm.BasicModel):
     def predict_proba(self, x):
         proba = np.array([np.random.random() for _ in range(len(x))])
         return np.stack((proba, 1.0 - proba), axis=1)
+
+
+def case(explainers, batch_size=1):
+    def wrapper(case_init):
+        def wrap_case():
+            c = case_init()
+
+            repo = cdm.ModelRepo('repo')
+            line = repo.add_line('correctness')
+
+            for name in explainers:
+                c.evaluate(name, explainers[name], batch_size=batch_size)
+                line.save(c, only_meta=True)
+
+        return wrap_case
+
+    return wrapper
