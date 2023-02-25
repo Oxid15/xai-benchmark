@@ -7,5 +7,5 @@ class ConstantExplainer(Explainer):
         super().__init__(**kwargs)
         self._example = example
 
-    def predict(self, x):
+    def predict(self, x, model):
         return np.asarray([self._example for _ in range(len(x))])
