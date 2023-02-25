@@ -43,16 +43,16 @@ class RandomBinBaseline(cdm.BasicModel):
         return np.stack((proba, 1.0 - proba), axis=1)
 
 
-def case(explainers, batch_size=1):
+def case(explainers, *args, batch_size=1, **kwargs):
     def wrapper(case_init):
         def wrap_case():
             c = case_init()
 
             repo = cdm.ModelRepo('repo')
-            line = repo.add_line('correctness')
+            line = repo.add_line()
 
             for name in explainers:
-                c.evaluate(name, explainers[name], batch_size=batch_size)
+                c.evaluate(name, explainers[name], *args, batch_size=batch_size, **kwargs)
                 line.save(c, only_meta=True)
 
         return wrap_case
