@@ -1,3 +1,4 @@
-python3 make_dataset.py
-python3 train_model.py
-python3 feature_importance.py
+#!/bin/sh
+python make_dataset.py
+python train_model.py
+python feature_importance.py
