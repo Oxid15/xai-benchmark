@@ -1,9 +1,14 @@
 from typing import Dict, Any
+import os
 
 import numpy as np
 from sklearn.datasets import make_classification
 from cascade import data as cdd
 from cascade import models as cdm
+
+from cascade.meta import MetaViewer
+import pandas as pd
+from plotly import graph_objects as go
 
 
 class MakeClassificationDataset(cdd.Dataset):
@@ -43,12 +48,12 @@ class RandomBinBaseline(cdm.BasicModel):
         return np.stack((proba, 1.0 - proba), axis=1)
 
 
-def case(explainers, *args, batch_size=1, **kwargs):
+def case(root, explainers, *args, batch_size=1, **kwargs):
     def wrapper(case_init):
         def wrap_case():
             c = case_init()
 
-            repo = cdm.ModelRepo('repo')
+            repo = cdm.ModelRepo(os.path.join(root, 'repo'))
             line = repo.add_line()
 
             for name in explainers:
@@ -58,3 +63,19 @@ def case(explainers, *args, batch_size=1, **kwargs):
         return wrap_case
 
     return wrapper
+
+
+def visualize_results(path, output_path) -> None:
+    m = MetaViewer(path, filt={'type': 'model'})
+
+    df = pd.DataFrame([{'name': p[0]['params']['name'], **p[0]['metrics']} for p in m])\
+        .groupby('name', as_index=False)\
+        .agg('min')
+
+    fig = go.Figure(data=[go.Table(
+        header=dict(values=list(df.columns),
+                    align='left'),
+        cells=dict(values=[df[col] for col in df.columns],
+                align='left'))
+    ])
+    fig.write_image(output_path)
