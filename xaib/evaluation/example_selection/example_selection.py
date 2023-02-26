@@ -1,8 +1,7 @@
-# !python make_dataset.py
-# !python train_knn_model.py
+import os
+import sys
 
 from cascade.models import ModelRepo
-from cascade.meta import MetricViewer
 from cascade import data as cdd
 from cascade import utils as cdu
 
@@ -10,8 +9,8 @@ from xaib.explainers.example_selection.constant_explainer import ConstantExplain
 from xaib.explainers.example_selection.random_explainer import RandomExplainer
 from xaib.explainers.example_selection.knn_explainer import KNNExplainer
 
-import os
-import sys
+from xaib.cases.example_selection import ContinuityCase
+
 
 SCRIPT_DIR = os.path.dirname(__file__)
 sys.path.append(os.path.abspath(os.path.dirname(SCRIPT_DIR)))
@@ -35,17 +34,22 @@ explainers = {
     'knn': KNNExplainer(train_ds)
 }
 
-from xaib.cases.example_selection import ContinuityCase
-from utils import NoiseApplier
 
+from utils import NoiseApplier
 
 MULTIPLIER = 0.01
 
-@case(SCRIPT_DIR, explainers=explainers, batch_size=BS)
-def continuity() -> None:
-    test_ds_noisy = NoiseApplier(test_ds, multiplier=MULTIPLIER)
 
-    return ContinuityCase(test_ds, test_ds_noisy, model, multiplier=MULTIPLIER)
+@case(SCRIPT_DIR, explainers=explainers, batch_size=BS)
+def continuity():
+    test_ds_noisy = NoiseApplier(test_ds, multiplier=MULTIPLIER)
+    return ContinuityCase(
+        test_ds,
+        test_ds_noisy,
+        model,
+        multiplier=MULTIPLIER
+    )
+
 
 continuity()
 

@@ -137,3 +137,4 @@ repo/
 *.pkl
 *_ds
 .vscode/
+*.zip
