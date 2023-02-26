@@ -103,4 +103,4 @@ def covariate_complexity():
 covariate_complexity()
 
 
-visualize_results(os.path.join(SCRIPT_DIR, 'repo'), os.path.join(SCRIPT_DIR, 'results.png'))
+visualize_results(os.path.join(SCRIPT_DIR, 'repo'), os.path.join(SCRIPT_DIR, 'repo', 'results.png'))
