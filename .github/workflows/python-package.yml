@@ -50,8 +50,20 @@ jobs:
         name: Feature importance results
         path: xaib/evaluation/feature_importance/repo.zip
 
-    - name: Archive example selection importance results
+    - name: Archive example selection results
       uses: actions/upload-artifact@v3
       with:
         name: Example selection results
         path: xaib/evaluation/example_selection/repo.zip
+    
+    - name: Archive feature importance table image
+      uses: actions/upload-artifact@v3
+      with:
+        name: Example selection table image
+        path: xaib/evaluation/feature_imaportance/results.png
+    
+    - name: Archive example selection table image
+      uses: actions/upload-artifact@v3
+      with:
+        name: Example selection table image
+        path: xaib/evaluation/example_selection/results.png
