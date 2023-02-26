@@ -32,3 +32,5 @@ jobs:
       run: |
         cd xaib/evaluation/feature_importance/
         ./evaluate.sh
+        cd ../example_selection
+        ./evaluate.sh
