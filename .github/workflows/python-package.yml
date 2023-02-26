@@ -30,14 +30,27 @@ jobs:
         pip install -r https://raw.githubusercontent.com/oxid15/cascade/main/utils_requirements.txt
         pip install .
 
-    - name: Evaluate
+    - name: Feature importance
       run: |
         cd xaib/evaluation/feature_importance/
         ./evaluate.sh
+        zip -r repo .
+
+    - name: Example selection
+        pwd
+        ls
         cd ../example_selection
         ./evaluate.sh
-    - name: Archive evaluation results
+        zip -r repo .
+
+    - name: Archive feature importance results
       uses: actions/upload-artifact@v3
       with:
-        name: Evaluation results
-        path: output/test/code-coverage.html
+        name: Feature importance results
+        path: xaib/evaluation/feature_importance/repo.zip
+
+    - name: Archive example selection importance results
+      uses: actions/upload-artifact@v3
+      with:
+        name: Example selection results
+        path: xaib/evaluation/example_selection/repo.zip
