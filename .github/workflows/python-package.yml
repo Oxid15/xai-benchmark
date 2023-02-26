@@ -37,6 +37,7 @@ jobs:
         zip -r repo .
 
     - name: Example selection
+      run: |
         pwd
         ls
         cd ../example_selection
