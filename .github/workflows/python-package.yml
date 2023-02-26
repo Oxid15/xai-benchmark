@@ -21,6 +21,7 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -28,9 +29,15 @@ jobs:
         pip install -r explainers_requirements.txt
         pip install -r https://raw.githubusercontent.com/oxid15/cascade/main/utils_requirements.txt
         pip install .
+
     - name: Evaluate
       run: |
         cd xaib/evaluation/feature_importance/
         ./evaluate.sh
         cd ../example_selection
         ./evaluate.sh
+    - name: Archive evaluation results
+      uses: actions/upload-artifact@v3
+      with:
+        name: Evaluation results
+        path: output/test/code-coverage.html
