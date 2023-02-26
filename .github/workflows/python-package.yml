@@ -27,6 +27,7 @@ jobs:
         pip install -r requirements.txt
         pip install -r explainers_requirements.txt
         pip install -r https://raw.githubusercontent.com/oxid15/cascade/main/utils_requirements.txt
+        pip install .
     - name: Evaluate
       run: |
         cd xaib/evaluation/feature_importance/
