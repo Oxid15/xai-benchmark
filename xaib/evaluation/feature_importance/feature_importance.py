@@ -97,8 +97,5 @@ def covariate_complexity():
 
 covariate_complexity()
 
-repo = ModelRepo(os.path.join(SCRIPT_DIR, 'repo'))
-
-# os.path.join(SCRIPT_DIR, 'repo')
 
 visualize_results(os.path.join(SCRIPT_DIR, 'repo'), os.path.join(SCRIPT_DIR, 'results.png'))
