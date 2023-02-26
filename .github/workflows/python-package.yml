@@ -30,4 +30,4 @@ jobs:
         pwd
         ls
         cd xaib/evaluation/feature_importance/
-        python evaluate.sh
+        ./evaluate.sh
