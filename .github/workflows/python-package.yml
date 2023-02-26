@@ -40,7 +40,7 @@ jobs:
       run: |
         pwd
         ls
-        cd ../example_selection
+        cd xaib/evaluation/example_selection
         ./evaluate.sh
         zip -r repo .
 
