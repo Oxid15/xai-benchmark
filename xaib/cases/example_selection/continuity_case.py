@@ -4,7 +4,7 @@ import numpy as np
 from tqdm import tqdm
 
 from ...base import Case, Explainer, Model, Dataset
-from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
+from ...utils import batch_count_eq, SimpleDataloader
 
 
 class ContinuityCase(Case):
@@ -33,7 +33,7 @@ class ContinuityCase(Case):
         if expl_kwargs is None:
             expl_kwargs = {}
 
-        rmses = []
+        counts = []
         dls = zip(
             SimpleDataloader(self._ds, batch_size),
             SimpleDataloader(self._noisy_ds, batch_size)
@@ -45,10 +45,7 @@ class ContinuityCase(Case):
             explanation_batch = expl.predict(item, self._model, **expl_kwargs)
             noisy_explanation_batch = expl.predict(noisy_item, self._model, **expl_kwargs)
 
-            explanation_batch = minmax_normalize(explanation_batch)
-            noisy_explanation_batch = minmax_normalize(noisy_explanation_batch)
-
-            rmses += batch_rmse(explanation_batch, noisy_explanation_batch)
+            counts += batch_count_eq(explanation_batch, noisy_explanation_batch)
 
         self.params['name'] = name
-        self.metrics['small_noise_check'] = np.nanmean(rmses)
+        self.metrics['small_noise_check'] = np.sum(counts) / (len(self._ds) * len(self._ds[0]['item']))

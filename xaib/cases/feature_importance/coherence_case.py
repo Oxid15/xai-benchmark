@@ -8,6 +8,11 @@ from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
 
 
 class CoherenceCase(Case):
+    """
+    Coherence measures how method
+    complies with domain knowledge, ground-truth
+    or other methods
+    """
     def evaluate(
         self,
         name: str,

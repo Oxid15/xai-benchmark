@@ -7,6 +7,11 @@ from ...utils import entropy, minmax_normalize, SimpleDataloader
 
 
 class CovariateComplexityCase(Case):
+    """
+    Measures how complex explanation features are, their
+    consistency. If explanation features are noisy, then
+    they are harder to remember.
+    """
     def evaluate(
             self,
             name: str,

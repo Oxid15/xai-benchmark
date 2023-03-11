@@ -1,21 +1,11 @@
-from sklearn.neighbors import KNeighborsClassifier
-
 from ...base import Explainer
 
 
 class KNNExplainer(Explainer):
-    def __init__(self, train_ds, n_neighbors=5, metric='minkowski', **kwargs) -> None:
-        super().__init__(**kwargs)
+    def __init__(self, train_ds, **kwargs) -> None:
         self._train_ds = train_ds
+        super().__init__(**kwargs)
 
-        X, Y = [], []
-        for item in self._train_ds:
-            X.append(item['item'])
-            Y.append(item['label'])
-
-        self._model = KNeighborsClassifier(n_neighbors=n_neighbors, metric=metric)
-        self._model.fit(X, Y)
-
-    def predict(self, x):
-        _, indices = self._model.kneighbors(x, 1)
+    def predict(self, x, model):
+        _, indices = model._pipeline[0].kneighbors(x, 1)
         return [self._train_ds[i[0]]['item'] for i in indices]

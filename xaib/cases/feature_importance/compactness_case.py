@@ -8,6 +8,11 @@ from ...utils import batch_gini, minmax_normalize, SimpleDataloader
 
 
 class CompactnessCase(Case):
+    """
+    Compactness measures how compact
+    representations are. Explanations are more
+    understandable if they are short.
+    """
     def evaluate(
         self,
         name: str,

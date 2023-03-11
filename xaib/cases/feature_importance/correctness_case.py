@@ -6,6 +6,11 @@ from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
 
 
 class CorrectnessCase(Case):
+    """
+    Measures truthfullness of the method
+    to the underlying model - whether it is
+    sensitive to the changes in model
+    """
     def __init__(self, ds: Dataset, model: Model, noisy_model: Model, **kwargs: Any) -> None:
         super().__init__(ds, model, **kwargs)
         self._noisy_model = noisy_model
