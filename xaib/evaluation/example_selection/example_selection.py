@@ -3,9 +3,9 @@ import sys
 
 from cascade.models import ModelRepo
 from cascade import data as cdd
-from cascade import utils as cdu
+from cascade.utils.sk_model import SkModel
 
-from xaib.evaluation.example_selection import ExplainerFactory
+from xaib.evaluation.example_selection import ExplainerFactory, CaseFactory
 
 from xaib.cases.example_selection import ContinuityCase
 
@@ -26,26 +26,16 @@ ModelRepo(REPO_PATH, overwrite=True)
 train_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'train_ds')).ds()
 test_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'test_ds')).ds()
 
-model = cdu.SkModel()
+model = SkModel()
 model.load(os.path.join(SCRIPT_DIR, 'model'))
 
 explainers = ExplainerFactory(train_ds, model).get('all')
-
-
-from utils import NoiseApplier
-
-MULTIPLIER = 0.01
+case_factory = CaseFactory(test_ds, model)
 
 
 @case(REPO_PATH, explainers=explainers, batch_size=BS)
 def continuity():
-    test_ds_noisy = NoiseApplier(test_ds, multiplier=MULTIPLIER)
-    return ContinuityCase(
-        test_ds,
-        test_ds_noisy,
-        model,
-        multiplier=MULTIPLIER
-    )
+    return case_factory.get('continuity')
 
 
 continuity()

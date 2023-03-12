@@ -5,12 +5,9 @@ from cascade import data as cdd
 from cascade import utils as cdu
 from cascade.models import ModelRepo
 
+from xaib.evaluation.feature_importance import CaseFactory
 from xaib.evaluation.feature_importance import ExplainerFactory
-from xaib.cases.feature_importance import (
-    CorrectnessCase, ContinuityCase,
-    ContrastivityCase, CoherenceCase, 
-    CompactnessCase, CovariateComplexityCase
-)
+
 
 SCRIPT_DIR = os.path.dirname(__file__)
 
@@ -34,68 +31,44 @@ model = cdu.SkModel()
 model.load(os.path.join(SCRIPT_DIR, 'svm'))
 
 explainers = ExplainerFactory(train_ds, model).get('all')
-
-
-from utils import RandomBinBaseline
+case_factory = CaseFactory(test_ds, model)
 
 
 @case(REPO_PATH, explainers=explainers, batch_size=BS)
 def correctness():
-    noisy_model = RandomBinBaseline()
-
-    c = CorrectnessCase(test_ds, model, noisy_model)
-    return c
-
-
-correctness()
-
-
-from utils import NoiseApplier
-
-
-MULTIPLIER = 0.01
+    return case_factory.get('correctness')
 
 
 @case(REPO_PATH, explainers=explainers, batch_size=BS)
 def continuity() -> None:
-    test_ds_noisy = NoiseApplier(test_ds, multiplier=MULTIPLIER)
-
-    c = ContinuityCase(test_ds, test_ds_noisy, model, multiplier=MULTIPLIER)
-    return c
-
-
-continuity()
+    return case_factory.get('continuity')
 
 
 @case(REPO_PATH, explainers=explainers, batch_size=BS)
 def contrastivity():
-    return ContrastivityCase(test_ds, model)
-
-
-contrastivity()
+    return case_factory.get('contrastivity')
 
 
 @case(REPO_PATH, explainers=explainers, expls=list(explainers.values()), batch_size=BS)
 def coherence():
-    return CoherenceCase(test_ds, model)
-
-
-coherence()
+    return case_factory.get('coherence')
 
 
 @case(REPO_PATH, explainers=explainers, batch_size=BS)
 def compactness():
-    return CompactnessCase(test_ds, model)
-
-
-compactness()
+    return case_factory.get('compactness')
 
 
 @case(REPO_PATH, explainers=explainers, batch_size=BS)
 def covariate_complexity():
-    return CovariateComplexityCase(test_ds, model)
+    return case_factory.get('covariate_complexity')
 
 
+correctness()
+continuity()
+contrastivity()
+coherence()
+compactness()
 covariate_complexity()
 
 
