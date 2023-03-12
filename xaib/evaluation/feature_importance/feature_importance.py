@@ -31,7 +31,6 @@ ModelRepo(REPO_PATH, overwrite=True)
 
 train_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'train_ds')).ds()
 test_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'test_ds')).ds()
-n_features = train_ds.get_meta()[0]['n_features']
 
 model = cdu.SkModel()
 model.load(os.path.join(SCRIPT_DIR, 'svm'))
