@@ -53,7 +53,7 @@ def case(root, explainers, *args, batch_size=1, **kwargs):
         def wrap_case():
             c = case_init()
 
-            repo = cdm.ModelRepo(os.path.join(root, 'repo'))
+            repo = cdm.ModelRepo(os.path.join(root))
             line = repo.add_line()
 
             for name in explainers:
