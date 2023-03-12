@@ -5,7 +5,7 @@ from cascade import data as cdd
 from cascade import utils as cdu
 from cascade.models import ModelRepo
 
-from xaib.evaluation import ExplainerFactory
+from xaib.evaluation.feature_importance import ExplainerFactory
 from xaib.cases.feature_importance import (
     CorrectnessCase, ContinuityCase,
     ContrastivityCase, CoherenceCase, 

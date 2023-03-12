@@ -5,9 +5,7 @@ from cascade.models import ModelRepo
 from cascade import data as cdd
 from cascade import utils as cdu
 
-from xaib.explainers.example_selection.constant_explainer import ConstantExplainer
-from xaib.explainers.example_selection.random_explainer import RandomExplainer
-from xaib.explainers.example_selection.knn_explainer import KNNExplainer
+from xaib.evaluation.example_selection import ExplainerFactory
 
 from xaib.cases.example_selection import ContinuityCase
 
@@ -27,15 +25,11 @@ ModelRepo(REPO_PATH, overwrite=True)
 
 train_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'train_ds')).ds()
 test_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'test_ds')).ds()
-n_features = train_ds.get_meta()[0]['n_features']
+
 model = cdu.SkModel()
 model.load(os.path.join(SCRIPT_DIR, 'model'))
 
-explainers = {
-    'const': ConstantExplainer(train_ds, train_ds[0]['item']),
-    'random': RandomExplainer(train_ds),
-    'knn': KNNExplainer(train_ds)
-}
+explainers = ExplainerFactory(train_ds, model).get('all')
 
 
 from utils import NoiseApplier

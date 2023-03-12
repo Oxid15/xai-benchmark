@@ -1,6 +1,6 @@
-from ..base import Dataset, Model, Factory
-from ..explainers.feature_importance.constant_explainer import ConstantExplainer
-from ..explainers.feature_importance.random_explainer import RandomExplainer
+from ...base import Dataset, Model, Factory
+from ...explainers.feature_importance.constant_explainer import ConstantExplainer
+from ...explainers.feature_importance.random_explainer import RandomExplainer
 
 
 class ExplainerFactory(Factory):
