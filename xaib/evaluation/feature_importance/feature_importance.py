@@ -16,6 +16,9 @@ from xaib.cases.feature_importance import (
 )
 
 SCRIPT_DIR = os.path.dirname(__file__)
+# xaib/results/...
+REPO_PATH = os.path.join(os.path.dirname(os.path.dirname(SCRIPT_DIR)), 'results', 'feature_importance')
+
 sys.path.append(os.path.abspath(os.path.dirname(SCRIPT_DIR)))
 from utils import case, visualize_results
 
@@ -23,7 +26,8 @@ from utils import case, visualize_results
 BS = 5
 
 # Overwrite previous run
-ModelRepo(os.path.join(SCRIPT_DIR, 'repo'), overwrite=True)
+ModelRepo(REPO_PATH, overwrite=True)
+
 
 train_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'train_ds')).ds()
 test_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'test_ds')).ds()
@@ -43,7 +47,7 @@ explainers = {
 from utils import RandomBinBaseline
 
 
-@case(SCRIPT_DIR, explainers=explainers, batch_size=BS)
+@case(REPO_PATH, explainers=explainers, batch_size=BS)
 def correctness():
     noisy_model = RandomBinBaseline()
 
@@ -60,7 +64,7 @@ from utils import NoiseApplier
 MULTIPLIER = 0.01
 
 
-@case(SCRIPT_DIR, explainers=explainers, batch_size=BS)
+@case(REPO_PATH, explainers=explainers, batch_size=BS)
 def continuity() -> None:
     test_ds_noisy = NoiseApplier(test_ds, multiplier=MULTIPLIER)
 
@@ -71,7 +75,7 @@ def continuity() -> None:
 continuity()
 
 
-@case(SCRIPT_DIR, explainers=explainers, batch_size=BS)
+@case(REPO_PATH, explainers=explainers, batch_size=BS)
 def contrastivity():
     return ContrastivityCase(test_ds, model)
 
@@ -79,7 +83,7 @@ def contrastivity():
 contrastivity()
 
 
-@case(SCRIPT_DIR, explainers=explainers, expls=list(explainers.values()), batch_size=BS)
+@case(REPO_PATH, explainers=explainers, expls=list(explainers.values()), batch_size=BS)
 def coherence():
     return CoherenceCase(test_ds, model)
 
@@ -87,7 +91,7 @@ def coherence():
 coherence()
 
 
-@case(SCRIPT_DIR, explainers=explainers, batch_size=BS)
+@case(REPO_PATH, explainers=explainers, batch_size=BS)
 def compactness():
     return CompactnessCase(test_ds, model)
 
@@ -95,7 +99,7 @@ def compactness():
 compactness()
 
 
-@case(SCRIPT_DIR, explainers=explainers, batch_size=BS)
+@case(REPO_PATH, explainers=explainers, batch_size=BS)
 def covariate_complexity():
     return CovariateComplexityCase(test_ds, model)
 
@@ -103,4 +107,4 @@ def covariate_complexity():
 covariate_complexity()
 
 
-visualize_results(os.path.join(SCRIPT_DIR, 'repo'), os.path.join(SCRIPT_DIR, 'repo', 'results.png'))
+visualize_results(REPO_PATH, os.path.join(REPO_PATH, 'results.png'))
