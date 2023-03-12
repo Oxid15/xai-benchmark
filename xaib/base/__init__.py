@@ -1,1 +1,1 @@
-from .base import Dataset, Model, Explainer, Case
+from .base import Dataset, Model, Explainer, Metric, Case

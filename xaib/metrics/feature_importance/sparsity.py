@@ -3,11 +3,11 @@ from typing import Dict, Union, Any
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Case, Explainer
+from ...base import Metric, Explainer
 from ...utils import batch_gini, minmax_normalize, SimpleDataloader
 
 
-class CompactnessCase(Case):
+class Sparsity(Metric):
     """
     Compactness measures how compact
     representations are. Explanations are more

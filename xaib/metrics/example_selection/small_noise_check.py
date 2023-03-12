@@ -3,11 +3,11 @@ from typing import Dict, Any, Union
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Case, Explainer, Model, Dataset
+from ...base import Metric, Explainer, Model, Dataset
 from ...utils import batch_count_eq, SimpleDataloader
 
 
-class ContinuityCase(Case):
+class SmallNoiseCheck(Metric):
     """
     Continuity measures how continuous
     explanation function is

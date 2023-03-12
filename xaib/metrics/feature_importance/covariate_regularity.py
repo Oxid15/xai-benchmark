@@ -2,13 +2,13 @@ from typing import Dict, Union, Any
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Case, Explainer
+from ...base import Metric, Explainer
 from ...utils import entropy, minmax_normalize, SimpleDataloader
 
 
-class CovariateComplexityCase(Case):
+class CovariateRegularity(Metric):
     """
-    Measures how complex explanation features are, their
+    CovariateComplexity Measures how complex explanation features are, their
     consistency. If explanation features are noisy, then
     they are harder to remember.
     """

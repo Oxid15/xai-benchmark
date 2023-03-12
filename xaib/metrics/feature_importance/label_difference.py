@@ -5,7 +5,7 @@ import numpy as np
 from cascade.data import Sampler
 
 from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
-from ...base import Dataset, Case, Explainer
+from ...base import Dataset, Metric, Explainer
 
 
 class Filter(Sampler):
@@ -18,9 +18,9 @@ class Filter(Sampler):
         return self._dataset[self._indices[index]]
 
 
-class ContrastivityCase(Case):
+class LabelDifference(Metric):
     """
-    Measures how different explanations
+    ContrastivityCase Measures how different explanations
     are actually different from each other
     """
     def evaluate(

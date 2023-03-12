@@ -1,13 +1,13 @@
 from typing import Any, Union, Dict
 import numpy as np
 from tqdm import tqdm
-from ...base import Case, Explainer, Dataset, Model
+from ...base import Metric, Explainer, Dataset, Model
 from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
 
 
-class CorrectnessCase(Case):
+class ParameterRandomizationCheck(Metric):
     """
-    Measures truthfullness of the method
+    CorrectnessCase Measures truthfullness of the method
     to the underlying model - whether it is
     sensitive to the changes in model
     """

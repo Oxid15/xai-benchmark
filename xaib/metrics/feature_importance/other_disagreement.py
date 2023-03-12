@@ -3,11 +3,11 @@ from typing import Dict, List, Any, Union
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Case, Explainer
+from ...base import Metric, Explainer
 from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
 
 
-class CoherenceCase(Case):
+class OtherDisagreement(Metric):
     """
     Coherence measures how method
     complies with domain knowledge, ground-truth
