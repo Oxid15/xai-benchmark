@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Union, List, Dict, Any
 from cascade import data as cdd
 from cascade import models as cdm
 
@@ -53,10 +53,19 @@ class Case(cdm.Model):
     def __init__(self, name: str, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self._name = name
-        self._metrics = dict()
+        self.params['case'] = name
+
+        self._metric_objs = dict()
 
     def add_metric(self, name: str, metric: Metric) -> None:
-        self._metrics[name] = metric
+        self._metric_objs[name] = metric
 
-    def evaluate(self, *args: Any, **kwargs: Any) -> None:
-        raise NotImplementedError()
+    def evaluate(self, name: str, expl: Explainer, metrics_kwargs: Union[List[Dict[Any, Any]], None] = None, **kwargs: Any) -> None:
+        if metrics_kwargs is None:
+            metrics_kwargs = [{} for _ in range(len(self._metric_objs))]
+
+        for mname, mkwargs in zip(self._metric_objs, metrics_kwargs):
+            self._metric_objs[mname].evaluate(name, expl, **mkwargs, **kwargs)
+
+            self.params['name'] = name
+            self.metrics.update(self._metric_objs[mname].metrics)
