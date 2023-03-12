@@ -5,17 +5,15 @@ from cascade import data as cdd
 from cascade import utils as cdu
 from cascade.models import ModelRepo
 
-from xaib.explainers.feature_importance.constant_explainer import ConstantExplainer
-from xaib.explainers.feature_importance.random_explainer import RandomExplainer
-from xaib.explainers.feature_importance.shap_explainer import ShapExplainer
-from xaib.explainers.feature_importance.lime_explainer import LimeExplainer
-
+from xaib.evaluation import ExplainerFactory
 from xaib.cases.feature_importance import (
     CorrectnessCase, ContinuityCase,
-    ContrastivityCase, CoherenceCase, CompactnessCase, CovariateComplexityCase
+    ContrastivityCase, CoherenceCase, 
+    CompactnessCase, CovariateComplexityCase
 )
 
 SCRIPT_DIR = os.path.dirname(__file__)
+
 # xaib/results/...
 REPO_PATH = os.path.join(os.path.dirname(os.path.dirname(SCRIPT_DIR)), 'results', 'feature_importance')
 
@@ -35,12 +33,7 @@ test_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'test_ds')).ds()
 model = cdu.SkModel()
 model.load(os.path.join(SCRIPT_DIR, 'svm'))
 
-explainers = {
-    'const': ConstantExplainer(n_features=n_features, constant=1),
-    'random': RandomExplainer(n_features=n_features, shift=-15, magnitude=10),
-    # 'shap': ShapExplainer(train_ds),
-    # 'lime': LimeExplainer(train_ds, labels=(0, 1))
-}
+explainers = ExplainerFactory(train_ds, model).get('all')
 
 
 from utils import RandomBinBaseline

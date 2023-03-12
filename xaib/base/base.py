@@ -1,4 +1,4 @@
-from typing import Union, List, Dict, Any
+from typing import Union, List, Dict, Any, Callable
 from cascade import data as cdd
 from cascade import models as cdm
 
@@ -69,3 +69,37 @@ class Case(cdm.Model):
 
             self.params['name'] = name
             self.metrics.update(self._metric_objs[mname].metrics)
+
+
+class Factory:
+    """
+    Collection of constructors to build and return objects
+    from predefined hardcoded or added dynamically constructors
+    """
+    def __init__(self) -> None:
+        self._constructors = dict()
+        self._constructors_kwargs = dict()
+
+    def _get_all(self) -> Dict[str, Any]:
+        return {
+                name: self._get(name)
+                for name in self._constructors
+            }
+
+    def _get(self, name: str) -> Any:
+        if name not in self._constructors_kwargs:
+            kwargs = {}
+        else:
+            kwargs = self._constructors_kwargs[name]
+
+        constructor = self._constructors[name]
+        return constructor(**kwargs)
+
+    def get(self, name: str) -> Union[Dict[str, Any], Any]:
+        if name == 'all':
+            return self._get_all()
+        return self._get(name)
+
+    def add(self, name: str, constructor: Callable[[Any], Any], constr_kwargs: Union[Any, None] = None) -> None:
+        self._constructors[name] = constructor
+        self._constructors_kwargs[name] = constr_kwargs
