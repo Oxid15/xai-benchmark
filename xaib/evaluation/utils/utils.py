@@ -11,7 +11,7 @@ import pandas as pd
 from plotly import graph_objects as go
 
 
-class MakeClassificationDataset(cdd.Dataset):
+class MakeClassificationDataset(cdd.SizedDataset):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(**kwargs)
         self.X, self.y = make_classification(*args, **kwargs)
