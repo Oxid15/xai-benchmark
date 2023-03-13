@@ -38,11 +38,27 @@ class Metric(cdm.Model):
     """
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
+        self.name = None
         self._ds = ds
         self._model = model
 
-    def evaluate(self, name: str, expl: Explainer, *args: Any, **kwargs: Any) -> None:
+    def compute(self, expl: Explainer, batch_size: int = 1, expl_kwargs: Union[Dict[Any, Any], None] = None) -> Any:
         raise NotImplementedError()
+
+    def evaluate(
+            self,
+            name: str,
+            expl: Explainer,
+            batch_size: int = 1,
+            expl_kwargs: Union[Dict[Any, Any], None] = None,
+            **kwargs: Any
+    ) -> None:
+        if expl_kwargs is None:
+            expl_kwargs = {}
+        value = self.compute(expl, batch_size=batch_size, **expl_kwargs, **kwargs)
+
+        self.params['name'] = name
+        self.metrics[self.name] = value
 
 
 class Case(cdm.Model):
@@ -52,7 +68,7 @@ class Case(cdm.Model):
     """
     def __init__(self, name: str, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self._name = name
+        self.name = name
         self.params['case'] = name
 
         self._metric_objs = dict()
@@ -60,15 +76,19 @@ class Case(cdm.Model):
     def add_metric(self, name: str, metric: Metric) -> None:
         self._metric_objs[name] = metric
 
-    def evaluate(self, name: str, expl: Explainer, metrics_kwargs: Union[List[Dict[Any, Any]], None] = None, **kwargs: Any) -> None:
+    def evaluate(self, name: str, expl: Explainer, metrics_kwargs: Union[Dict[str, Dict[Any, Any]], None] = None, **kwargs: Any) -> None:
         if metrics_kwargs is None:
-            metrics_kwargs = [{} for _ in range(len(self._metric_objs))]
+            metrics_kwargs = {name: {} for _ in self._metric_objs}
 
-        for mname, mkwargs in zip(self._metric_objs, metrics_kwargs):
-            self._metric_objs[mname].evaluate(name, expl, **mkwargs, **kwargs)
+        for m_name in self._metric_objs:
+            mkwargs = {}
+            if m_name in metrics_kwargs:
+                mkwargs = metrics_kwargs[m_name]
+
+            self._metric_objs[m_name].evaluate(name, expl, **mkwargs, **kwargs)
 
             self.params['name'] = name
-            self.metrics.update(self._metric_objs[mname].metrics)
+            self.metrics.update(self._metric_objs[m_name].metrics)
 
 
 class Factory:

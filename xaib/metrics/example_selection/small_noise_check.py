@@ -12,6 +12,7 @@ class SmallNoiseCheck(Metric):
     Continuity measures how continuous
     explanation function is
     """
+
     def __init__(
         self,
         ds: Dataset,
@@ -22,10 +23,10 @@ class SmallNoiseCheck(Metric):
     ) -> None:
         super().__init__(ds, model, *args, **kwargs)
         self._noisy_ds = noisy_ds
+        self.name = 'small_noise_check'
 
-    def evaluate(
+    def compute(
         self,
-        name: str,
         expl: Explainer,
         batch_size: int = 1,
         expl_kwargs: Union[Dict[Any, Any], None] = None
@@ -47,5 +48,4 @@ class SmallNoiseCheck(Metric):
 
             counts += batch_count_eq(explanation_batch, noisy_explanation_batch)
 
-        self.params['name'] = name
-        self.metrics['small_noise_check'] = np.sum(counts) / (len(self._ds) * len(self._ds[0]['item']))
+        return np.sum(counts) / (len(self._ds) * len(self._ds[0]['item']))

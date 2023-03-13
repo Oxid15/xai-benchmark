@@ -2,7 +2,7 @@ from typing import Dict, Union, Any
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Metric, Explainer
+from ...base import Dataset, Model, Metric, Explainer
 from ...utils import entropy, minmax_normalize, SimpleDataloader
 
 
@@ -12,13 +12,16 @@ class CovariateRegularity(Metric):
     consistency. If explanation features are noisy, then
     they are harder to remember.
     """
-    def evaluate(
+    def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
+        super().__init__(ds, model, *args, **kwargs)
+        self.name = 'covariate_regularity'
+
+    def compute(
             self,
-            name: str,
             expl: Explainer,
             batch_size: int = 1,
             expl_kwargs: Union[Dict[Any, Any], None] = None,
-    ) -> None:
+    ):
         if expl_kwargs is None:
             expl_kwargs = {}
 
@@ -37,5 +40,4 @@ class CovariateRegularity(Metric):
             e = entropy(explanations[:, f])
             entropies_of_features.append(e)
 
-        self.params['name'] = name
-        self.metrics['covariate_regularity'] = np.nanmean(entropies_of_features)
+        return np.nanmean(entropies_of_features)

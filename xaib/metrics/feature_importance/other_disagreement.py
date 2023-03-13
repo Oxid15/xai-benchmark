@@ -3,7 +3,7 @@ from typing import Dict, List, Any, Union
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Metric, Explainer
+from ...base import Dataset, Model, Metric, Explainer
 from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
 
 
@@ -13,19 +13,28 @@ class OtherDisagreement(Metric):
     complies with domain knowledge, ground-truth
     or other methods
     """
-    def evaluate(
+    def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
+        super().__init__(ds, model, *args, **kwargs)
+        self.name = 'other_disagreement'
+
+    def compute(
         self,
-        name: str,
         expl: Explainer,
-        expls: List[Explainer],
         batch_size: int = 1,
+        expls: Union[List[Explainer], None] = None,
         expl_kwargs: Union[Dict[Any, Any], None] = None,
         expls_kwargs: Union[List[Dict[Any, Any]], None] = None
     ) -> None:
+        # Default initialization in case of empty
+        # parameter to not to break default argument order
+        # TODO: can revise this later
+        if expls is None:
+            expls = [expl]
         if expl_kwargs is None:
             expl_kwargs = {}
         if expls_kwargs is None:
             expls_kwargs = [{} for _ in range(len(expls))]
+
 
         diffs = []
         for batch in tqdm(SimpleDataloader(self._ds, batch_size)):
@@ -39,5 +48,4 @@ class OtherDisagreement(Metric):
             for oe in other_e:
                 diffs += batch_rmse(e, oe)
 
-        self.params['name'] = name
-        self.metrics['other_disagreement'] = np.nanmean(diffs)
+        return np.nanmean(diffs)

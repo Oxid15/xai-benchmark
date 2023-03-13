@@ -5,7 +5,7 @@ import numpy as np
 from cascade.data import Sampler
 
 from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
-from ...base import Dataset, Metric, Explainer
+from ...base import Dataset, Model, Metric, Explainer
 
 
 class Filter(Sampler):
@@ -23,9 +23,12 @@ class LabelDifference(Metric):
     ContrastivityCase Measures how different explanations
     are actually different from each other
     """
-    def evaluate(
+    def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
+        super().__init__(ds, model, *args, **kwargs)
+        self.name = 'label_difference'
+
+    def compute(
         self,
-        name: str,
         expl: Explainer,
         batch_size: int = 1,
         expl_kwargs: Union[Dict[Any, Any], None] = None
@@ -69,5 +72,4 @@ class LabelDifference(Metric):
         for u in unique_labels:
             diffs[u] = np.nanmean(diffs[u])
 
-        self.params['name'] = name
-        self.metrics['label_difference'] = np.nanmean([diffs[u] for u in diffs])
+        return np.nanmean([diffs[u] for u in diffs])

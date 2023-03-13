@@ -22,10 +22,10 @@ class SmallNoiseCheck(Metric):
     ) -> None:
         super().__init__(ds, model, *args, **kwargs)
         self._noisy_ds = noisy_ds
+        self.name = 'small_noise_check'
 
-    def evaluate(
+    def compute(
         self,
-        name: str,
         expl: Explainer,
         batch_size: int = 1,
         expl_kwargs: Union[Dict[Any, Any], None] = None
@@ -50,5 +50,4 @@ class SmallNoiseCheck(Metric):
 
             rmses += batch_rmse(explanation_batch, noisy_explanation_batch)
 
-        self.params['name'] = name
-        self.metrics['small_noise_check'] = np.nanmean(rmses)
+        return np.nanmean(rmses)

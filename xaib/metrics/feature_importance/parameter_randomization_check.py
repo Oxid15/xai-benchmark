@@ -14,10 +14,10 @@ class ParameterRandomizationCheck(Metric):
     def __init__(self, ds: Dataset, model: Model, noisy_model: Model, **kwargs: Any) -> None:
         super().__init__(ds, model, **kwargs)
         self._noisy_model = noisy_model
+        self.name = 'parameter_randomization_check'
 
-    def evaluate(
+    def compute(
         self,
-        name: str,
         expl: Explainer,
         batch_size: int = 1,
         expl_kwargs: Union[Dict[Any, Any], None] = None,
@@ -41,5 +41,4 @@ class ParameterRandomizationCheck(Metric):
 
             diffs_expl += batch_rmse(explanation_batch, noisy_explanation_batch)
 
-        self.params['name'] = name
-        self.metrics['parameter_randomization_check'] = np.nanmean(diffs_expl)
+        return np.nanmean(diffs_expl)

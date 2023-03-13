@@ -3,7 +3,7 @@ from typing import Dict, Union, Any
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Metric, Explainer
+from ...base import Dataset, Model, Metric, Explainer
 from ...utils import batch_gini, minmax_normalize, SimpleDataloader
 
 
@@ -13,9 +13,12 @@ class Sparsity(Metric):
     representations are. Explanations are more
     understandable if they are short.
     """
-    def evaluate(
+    def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
+        super().__init__(ds, model, *args, **kwargs)
+        self.name = 'sparsity'
+
+    def compute(
         self,
-        name: str,
         expl: Explainer,
         batch_size: int = 1,
         expl_kwargs: Union[Dict[Any, Any], None] = None
@@ -33,5 +36,4 @@ class Sparsity(Metric):
 
             ginis += batch_gini(explanation_batch)
 
-        self.params['name'] = name
-        self.metrics['sparsity'] = np.nanmean(ginis)
+        return np.nanmean(ginis)
