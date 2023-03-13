@@ -5,19 +5,16 @@ from cascade import data as cdd
 from cascade import utils as cdu
 from cascade.models import ModelRepo
 
-from xaib.evaluation.feature_importance import CaseFactory
-from xaib.evaluation.feature_importance import ExplainerFactory
+from xaib.evaluation.feature_importance import ExplainerFactory, ExperimentFactory
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(SCRIPT_DIR)
+sys.path.append(BASE_DIR)
+
+from utils import visualize_results, WrapperModel
 
 
-SCRIPT_DIR = os.path.dirname(__file__)
-
-# xaib/results/...
-REPO_PATH = os.path.join(os.path.dirname(os.path.dirname(SCRIPT_DIR)), 'results', 'feature_importance')
-
-sys.path.append(os.path.abspath(os.path.dirname(SCRIPT_DIR)))
-from utils import case, visualize_results, WrapperModel
-
-
+REPO_PATH = os.path.join(os.path.dirname(BASE_DIR), 'results', 'feature_importance')
 BS = 5
 
 # Overwrite previous run
@@ -31,45 +28,18 @@ model = WrapperModel(cdu.SkModel(), 'svm')
 model.load(os.path.join(SCRIPT_DIR, 'svm'))
 
 explainers = ExplainerFactory(train_ds, model).get('all')
-case_factory = CaseFactory(test_ds, model)
 
+experiment_factory = ExperimentFactory(
+    REPO_PATH,
+    explainers,
+    test_ds,
+    model,
+    BS
+)
 
-@case(REPO_PATH, explainers=explainers, batch_size=BS)
-def correctness():
-    return case_factory.get('correctness')
-
-
-@case(REPO_PATH, explainers=explainers, batch_size=BS)
-def continuity():
-    return case_factory.get('continuity')
-
-
-@case(REPO_PATH, explainers=explainers, batch_size=BS)
-def contrastivity():
-    return case_factory.get('contrastivity')
-
-
-@case(REPO_PATH, explainers=explainers, expls=list(explainers.values()), batch_size=BS)
-def coherence():
-    return case_factory.get('coherence')
-
-
-@case(REPO_PATH, explainers=explainers, batch_size=BS)
-def compactness():
-    return case_factory.get('compactness')
-
-
-@case(REPO_PATH, explainers=explainers, batch_size=BS)
-def covariate_complexity():
-    return case_factory.get('covariate_complexity')
-
-
-correctness()
-continuity()
-contrastivity()
-coherence()
-compactness()
-covariate_complexity()
+experiments = experiment_factory.get('all')
+for name in experiments:
+    experiments[name]()
 
 
 visualize_results(REPO_PATH, os.path.join(REPO_PATH, 'results.png'))

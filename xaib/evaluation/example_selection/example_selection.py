@@ -15,7 +15,7 @@ SCRIPT_DIR = os.path.dirname(__file__)
 REPO_PATH = os.path.join(os.path.dirname(os.path.dirname(SCRIPT_DIR)), 'results', 'example_selection')
 
 sys.path.append(os.path.abspath(os.path.dirname(SCRIPT_DIR)))
-from utils import case, visualize_results
+from utils import experiment, visualize_results
 
 
 BS = 5
@@ -33,7 +33,7 @@ explainers = ExplainerFactory(train_ds, model).get('all')
 case_factory = CaseFactory(test_ds, model)
 
 
-@case(REPO_PATH, explainers=explainers, batch_size=BS)
+@experiment(REPO_PATH, explainers=explainers, batch_size=BS)
 def continuity():
     return case_factory.get('continuity')
 

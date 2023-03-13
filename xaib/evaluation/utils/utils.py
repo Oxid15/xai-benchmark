@@ -65,7 +65,7 @@ class RandomBinBaseline(cdm.BasicModel):
         return np.stack((proba, 1.0 - proba), axis=1)
 
 
-def case(root, explainers, *args, batch_size=1, **kwargs):
+def experiment(root, explainers, *args, batch_size=1, **kwargs):
     def wrapper(case_init):
         def wrap_case():
             c = case_init()
