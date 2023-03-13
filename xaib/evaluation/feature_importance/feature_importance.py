@@ -40,7 +40,7 @@ def correctness():
 
 
 @case(REPO_PATH, explainers=explainers, batch_size=BS)
-def continuity() -> None:
+def continuity():
     return case_factory.get('continuity')
 
 
