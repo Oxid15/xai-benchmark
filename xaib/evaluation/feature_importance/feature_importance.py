@@ -15,7 +15,7 @@ SCRIPT_DIR = os.path.dirname(__file__)
 REPO_PATH = os.path.join(os.path.dirname(os.path.dirname(SCRIPT_DIR)), 'results', 'feature_importance')
 
 sys.path.append(os.path.abspath(os.path.dirname(SCRIPT_DIR)))
-from utils import case, visualize_results
+from utils import case, visualize_results, WrapperModel
 
 
 BS = 5
@@ -27,7 +27,7 @@ ModelRepo(REPO_PATH, overwrite=True)
 train_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'train_ds')).ds()
 test_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'test_ds')).ds()
 
-model = cdu.SkModel()
+model = WrapperModel(cdu.SkModel(), 'svm')
 model.load(os.path.join(SCRIPT_DIR, 'svm'))
 
 explainers = ExplainerFactory(train_ds, model).get('all')

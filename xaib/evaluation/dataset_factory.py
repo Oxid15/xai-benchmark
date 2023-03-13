@@ -3,11 +3,7 @@ import sys
 from cascade import data as cdd
 
 from ..base import Factory
-
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-# BASE_DIR = os.path.dirname(SCRIPT_DIR)
-sys.path.append(SCRIPT_DIR)
-from utils import MakeClassificationDataset
+from .utils import MakeClassificationDataset, WrapperDataset
 
 
 def generate_dataset(frac: float = 0.8, **kwargs):
@@ -15,7 +11,10 @@ def generate_dataset(frac: float = 0.8, **kwargs):
     train_ds, test_ds = cdd.split(ds, frac=frac)
     train_ds.update_meta(kwargs)
 
-    return train_ds, test_ds
+    return (
+        WrapperDataset(train_ds, 'synthetic'),
+        WrapperDataset(test_ds, 'synthetic')
+    )
 
 
 class DatasetFactory(Factory):

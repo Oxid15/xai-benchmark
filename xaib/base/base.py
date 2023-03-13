@@ -8,6 +8,10 @@ class Dataset(cdd.Dataset):
     Dataset is a wrapper around any collection of items to put in the ML model
     for inference
     """
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.name = None
+
     def __getitem__(self, index: int) -> Any:
         return super().__getitem__(index)
 
@@ -17,6 +21,10 @@ class Model(cdm.Model):
     Model is a wrapper around any inference of ML or other solution in the form y = f(x)
     it implements method `predict` that given certain data x returns the response y
     """
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.name = None
+
     def predict(self, x: Any) -> Any:
         raise NotImplementedError()
 
@@ -26,6 +34,9 @@ class Explainer(cdm.Model):
     Explainer is a special kind of Model e = g(f, x) that accepts another Model and data as input
     and also returns a response e - an explanation
     """
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.name = None
 
     def predict(self, x: Any, model: Model) -> Any:
         raise NotImplementedError()
@@ -58,6 +69,8 @@ class Metric(cdm.Model):
         value = self.compute(expl, batch_size=batch_size, **expl_kwargs, **kwargs)
 
         self.params['name'] = name
+        self.params['dataset'] = self._ds.name
+        self.params['model'] = self._model.name
         self.metrics[self.name] = value
 
 
@@ -66,11 +79,9 @@ class Case(cdm.Model):
     Case is a collection of Metrics which represent some
     high-level property of an Explainer
     """
-    def __init__(self, name: str, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self.name = name
-        self.params['case'] = name
-
+        self.name = None
         self._metric_objs = dict()
 
     def add_metric(self, name: str, metric: Metric) -> None:
@@ -87,7 +98,8 @@ class Case(cdm.Model):
 
             self._metric_objs[m_name].evaluate(name, expl, **mkwargs, **kwargs)
 
-            self.params['name'] = name
+            self.params['case'] = self.name
+            self.params.update(self._metric_objs[m_name].params)
             self.metrics.update(self._metric_objs[m_name].metrics)
 
 
