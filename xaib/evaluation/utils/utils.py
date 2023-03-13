@@ -68,9 +68,23 @@ def case(root, explainers, *args, batch_size=1, **kwargs):
 def visualize_results(path, output_path) -> None:
     m = MetaViewer(path, filt={'type': 'model'})
 
-    df = pd.DataFrame([{'name': p[0]['params']['name'], **p[0]['metrics']} for p in m])\
-        .groupby('name', as_index=False)\
-        .agg('min')
+    data = []
+    for p in m:
+        for metric_name in p[0]['metrics']:
+            data.append(
+                {
+                    'name': p[0]['params']['name'],
+                    'case': p[0]['params']['case'],
+                    'metric': metric_name,
+                    'value': p[0]['metrics'][metric_name]
+                }
+            )
+
+    df = pd.DataFrame(data)
+    df = pd.pivot_table(df, values='value', columns=['name'], index=['case', 'metric'])
+
+    df = df.reset_index()
+    df.loc[df['case'].duplicated(), 'case'] = ''
 
     fig = go.Figure(data=[go.Table(
         header=dict(values=list(df.columns),
