@@ -5,24 +5,16 @@ from cascade import data as cdd
 from cascade import utils as cdu
 from cascade.models import ModelRepo
 
-from xaib.explainers.feature_importance.constant_explainer import ConstantExplainer
-from xaib.explainers.feature_importance.random_explainer import RandomExplainer
-from xaib.explainers.feature_importance.shap_explainer import ShapExplainer
-from xaib.explainers.feature_importance.lime_explainer import LimeExplainer
+from xaib.evaluation.feature_importance import ExplainerFactory, ExperimentFactory
 
-from xaib.cases.feature_importance import (
-    CorrectnessCase, ContinuityCase,
-    ContrastivityCase, CoherenceCase, CompactnessCase, CovariateComplexityCase
-)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(SCRIPT_DIR)
+sys.path.append(BASE_DIR)
 
-SCRIPT_DIR = os.path.dirname(__file__)
-# xaib/results/...
-REPO_PATH = os.path.join(os.path.dirname(os.path.dirname(SCRIPT_DIR)), 'results', 'feature_importance')
-
-sys.path.append(os.path.abspath(os.path.dirname(SCRIPT_DIR)))
-from utils import case, visualize_results
+from utils import visualize_results, WrapperModel
 
 
+REPO_PATH = os.path.join(os.path.dirname(BASE_DIR), 'results', 'feature_importance')
 BS = 5
 
 # Overwrite previous run
@@ -31,80 +23,23 @@ ModelRepo(REPO_PATH, overwrite=True)
 
 train_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'train_ds')).ds()
 test_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'test_ds')).ds()
-n_features = train_ds.get_meta()[0]['n_features']
 
-model = cdu.SkModel()
+model = WrapperModel(cdu.SkModel(), 'svm')
 model.load(os.path.join(SCRIPT_DIR, 'svm'))
 
-explainers = {
-    'const': ConstantExplainer(n_features=n_features, constant=1),
-    'random': RandomExplainer(n_features=n_features, shift=-15, magnitude=10),
-    # 'shap': ShapExplainer(train_ds),
-    # 'lime': LimeExplainer(train_ds, labels=(0, 1))
-}
+explainers = ExplainerFactory(train_ds, model).get('all')
 
+experiment_factory = ExperimentFactory(
+    REPO_PATH,
+    explainers,
+    test_ds,
+    model,
+    BS
+)
 
-from utils import RandomBinBaseline
-
-
-@case(REPO_PATH, explainers=explainers, batch_size=BS)
-def correctness():
-    noisy_model = RandomBinBaseline()
-
-    c = CorrectnessCase(test_ds, model, noisy_model)
-    return c
-
-
-correctness()
-
-
-from utils import NoiseApplier
-
-
-MULTIPLIER = 0.01
-
-
-@case(REPO_PATH, explainers=explainers, batch_size=BS)
-def continuity() -> None:
-    test_ds_noisy = NoiseApplier(test_ds, multiplier=MULTIPLIER)
-
-    c = ContinuityCase(test_ds, test_ds_noisy, model, multiplier=MULTIPLIER)
-    return c
-
-
-continuity()
-
-
-@case(REPO_PATH, explainers=explainers, batch_size=BS)
-def contrastivity():
-    return ContrastivityCase(test_ds, model)
-
-
-contrastivity()
-
-
-@case(REPO_PATH, explainers=explainers, expls=list(explainers.values()), batch_size=BS)
-def coherence():
-    return CoherenceCase(test_ds, model)
-
-
-coherence()
-
-
-@case(REPO_PATH, explainers=explainers, batch_size=BS)
-def compactness():
-    return CompactnessCase(test_ds, model)
-
-
-compactness()
-
-
-@case(REPO_PATH, explainers=explainers, batch_size=BS)
-def covariate_complexity():
-    return CovariateComplexityCase(test_ds, model)
-
-
-covariate_complexity()
+experiments = experiment_factory.get('all')
+for name in experiments:
+    experiments[name]()
 
 
 visualize_results(REPO_PATH, os.path.join(REPO_PATH, 'results.png'))

@@ -3,4 +3,4 @@ __author__ = 'Ilia Moiseev'
 __author_email__ = 'ilia.moiseev.5@yandex.ru'
 
 
-from . import base
+from .base import Dataset, Model, Explainer, Metric, Case, Factory
