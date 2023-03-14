@@ -5,9 +5,7 @@ from cascade.models import ModelRepo
 from cascade import data as cdd
 from cascade.utils.sk_model import SkModel
 
-from xaib.evaluation.example_selection import ExplainerFactory, CaseFactory
-
-from xaib.cases.example_selection import ContinuityCase
+from xaib.evaluation.example_selection import ExplainerFactory, ExperimentFactory
 
 
 SCRIPT_DIR = os.path.dirname(__file__)
@@ -15,29 +13,38 @@ SCRIPT_DIR = os.path.dirname(__file__)
 REPO_PATH = os.path.join(os.path.dirname(os.path.dirname(SCRIPT_DIR)), 'results', 'example_selection')
 
 sys.path.append(os.path.abspath(os.path.dirname(SCRIPT_DIR)))
-from utils import experiment, visualize_results
+from utils import visualize_results, WrapperModel
 
 
-BS = 5
+class SkWrapper(SkModel):
+    def __init__(self, *args, blocks=None, name=None, **kwargs) -> None:
+        super().__init__(*args, blocks=blocks, **kwargs)
+        self.name = name
+
 
 # Overwrite previous run
 ModelRepo(REPO_PATH, overwrite=True)
 
+BS = 5
+
 train_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'train_ds')).ds()
 test_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'test_ds')).ds()
 
-model = SkModel()
-model.load(os.path.join(SCRIPT_DIR, 'model'))
+model = SkWrapper(name='knn')
+model.load(os.path.join(SCRIPT_DIR, 'knn'))
 
 explainers = ExplainerFactory(train_ds, model).get('all')
-case_factory = CaseFactory(test_ds, model)
 
+experiment_factory = ExperimentFactory(
+    REPO_PATH,
+    explainers,
+    test_ds,
+    model,
+    BS
+)
 
-@experiment(REPO_PATH, explainers=explainers, batch_size=BS)
-def continuity():
-    return case_factory.get('continuity')
-
-
-continuity()
+experiments = experiment_factory.get('all')
+for name in experiments:
+    experiments[name]()
 
 visualize_results(REPO_PATH, os.path.join(REPO_PATH, 'results.png'))

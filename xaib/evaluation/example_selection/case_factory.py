@@ -3,7 +3,7 @@ from ...cases.example_selection import (
     ContinuityCase
 )
 
-from utils import NoiseApplier
+from ..utils import NoiseApplier
 
 
 def continuity(test_ds, model):

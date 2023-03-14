@@ -18,4 +18,4 @@ test_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'train_ds'))
 
 model = ModelFactory(train_ds, test_ds).get('knn')
 print(model.get_meta())
-model.save(os.path.join(SCRIPT_DIR, 'model'))
+model.save(os.path.join(SCRIPT_DIR, 'knn'))
