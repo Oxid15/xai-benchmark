@@ -1,20 +1,11 @@
-import os
-import sys
-from cascade import data as cdd
-
 from ..base import Factory
-from .utils import MakeClassificationDataset, WrapperDataset
+from ..datasets import SyntheticDataset
 
 
-def generate_dataset(frac: float = 0.8, **kwargs):
-    ds = MakeClassificationDataset(**kwargs)
-    train_ds, test_ds = cdd.split(ds, frac=frac)
-    train_ds.update_meta(kwargs)
-
-    return (
-        WrapperDataset(train_ds, 'synthetic'),
-        WrapperDataset(test_ds, 'synthetic')
-    )
+def generate_dataset(frac: float = 0.9, **kwargs):
+    train_ds, test_ds = (SyntheticDataset('train', frac=frac, **kwargs),
+                         SyntheticDataset('test', frac=frac, **kwargs))
+    return train_ds, test_ds
 
 
 class DatasetFactory(Factory):

@@ -10,9 +10,9 @@ from sklearn.metrics import f1_score
 from xaib.evaluation import ModelFactory
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
+PROJECT_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 sys.path.append(PROJECT_DIR)
-from utils import MakeClassificationDataset
+from datasets import SyntheticDataset
 
 
 train_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'train_ds'))

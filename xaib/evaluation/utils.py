@@ -2,7 +2,6 @@ from typing import Dict, Any
 import os
 
 import numpy as np
-from sklearn.datasets import make_classification
 from cascade import data as cdd
 from cascade import models as cdm
 
@@ -26,18 +25,6 @@ class WrapperDataset(cdd.Modifier):
     def __init__(self, ds, name: str, *args: Any, **kwargs: Any) -> None:
         super().__init__(dataset=ds, *args, **kwargs)
         self.name = name
-
-
-class MakeClassificationDataset(cdd.SizedDataset):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(**kwargs)
-        self.X, self.y = make_classification(*args, **kwargs)
-
-    def __len__(self) -> int:
-        return len(self.X)
-
-    def __getitem__(self, index: int) -> Dict[str, Any]:
-        return {'item': self.X[index], 'label': self.y[index]}
 
 
 class NoiseApplier(cdd.Modifier):
