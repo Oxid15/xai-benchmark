@@ -5,7 +5,12 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import f1_score
 
 from ..base import Factory
-from .utils import WrapperModel
+
+
+class SkWrapper(SkModel):
+    def __init__(self, *args, blocks=None, name=None, **kwargs) -> None:
+        super().__init__(*args, blocks=blocks, **kwargs)
+        self.name = name
 
 
 def svm(train_ds, test_ds):
@@ -17,10 +22,10 @@ def svm(train_ds, test_ds):
     X_test = np.array(X_test)
     Y_test = np.array(Y_test, dtype=int)
 
-    model = SkModel(blocks=[SVC(probability=True)])
+    model = SkWrapper(blocks=[SVC(probability=True)], name='svm')
     model.fit(X_train, Y_train)
     model.evaluate(X_test, Y_test, {'f1': f1_score})
-    return WrapperModel(model, 'svm')
+    return model
 
 
 def knn(train_ds, test_ds):
@@ -32,11 +37,10 @@ def knn(train_ds, test_ds):
     X_test = np.array(X_test)
     Y_test = np.array(Y_test, dtype=int)
 
-
-    model = SkModel(blocks=[KNeighborsClassifier(n_neighbors=3)])
+    model = SkWrapper(blocks=[KNeighborsClassifier(n_neighbors=3)], name='svm')
     model.fit(X_train, Y_train)
     model.evaluate(X_test, Y_test, {'f1': f1_score})
-    return WrapperModel(model, 'knn')
+    return model
 
 
 class ModelFactory(Factory):

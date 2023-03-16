@@ -12,16 +12,11 @@ BASE_DIR = os.path.dirname(SCRIPT_DIR)
 sys.path.append(BASE_DIR)
 
 from utils import visualize_results
+from ..model_factory import SkWrapper
 
 
 REPO_PATH = os.path.join(os.path.dirname(BASE_DIR), 'results', 'feature_importance')
 BS = 5
-
-
-class SkWrapper(SkModel):
-    def __init__(self, *args, blocks=None, name=None, **kwargs) -> None:
-        super().__init__(*args, blocks=blocks, **kwargs)
-        self.name = name
 
 
 # Overwrite previous run
