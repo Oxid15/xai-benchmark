@@ -23,5 +23,8 @@ setuptools.setup(
     python_requires=">=3.8",
     install_requires=[
         'cascade-ml>=0.7.2',
+        'scikit-learn',
+        'plotly',
+        'kaleido'
     ]
 )
