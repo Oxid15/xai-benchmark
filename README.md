@@ -136,7 +136,7 @@ import numpy as np
 from xaib.base import Dataset
 
 
-class CoolNewDataset(Dataset):
+class NewDataset(Dataset):
     """
     Here the documentation on data should be filled
     """
@@ -145,7 +145,7 @@ class CoolNewDataset(Dataset):
 
         # It is important to set the name
         # the name will be used to identify a dataset
-        self.name = 'cool_new_dataset'
+        self.name = 'new_dataset'
 
         # While creating you can download and cache data,
         # define splits, etc
@@ -176,10 +176,10 @@ from xaib.evaluation.feature_importance import ExplainerFactory, ExperimentFacto
 from xaib.evaluation.utils import visualize_results
 
 
-train_ds, test_ds = CoolNewDataset('train'), CoolNewDataset('test')
+train_ds, test_ds = NewDataset('train'), NewDataset('test')
 model = ModelFactory(train_ds, test_ds).get('svm')
 
-explainers = {'const': ExplainerFactory(train_ds, model, labels=[0, 1]).get('const')}
+explainers = ExplainerFactory(train_ds, model, labels=[0, 1]).get('all')
 ```
 
 ```python
@@ -206,15 +206,15 @@ visualize_results('results', 'results/results.png')
 # ...
 
 # Create a constructor - function that will build your dataset
-def my_cool_dataset():
-    return CoolNewDataset('train'), CoolNewDataset('test')
+def new_dataset():
+    return NewDataset('train'), NewDataset('test')
 
 
 class DatasetFactory(Factory):
     def __init__(self) -> None:
         # ...
         # add it to the factory
-        self._constructors['cool_new_dataset'] = lambda: my_cool_dataset()
+        self._constructors['new_dataset'] = lambda: new_dataset()
 ```
 
 ### Add model
@@ -226,7 +226,7 @@ import numpy as np
 from xaib.base import Model
 
 
-class CoolNewModel(Model):
+class NewModel(Model):
     """
     Here the documentation on model should be filled
     """
@@ -237,7 +237,7 @@ class CoolNewModel(Model):
 
         # It is important to set the name
         # the name will be used to identify a model
-        self.name = 'cool_new_model'
+        self.name = 'new_model'
 
     def predict(self, x):
         return np.array([self.const for _ in range(len(x))])
@@ -262,7 +262,7 @@ from xaib.evaluation.feature_importance import ExplainerFactory, ExperimentFacto
 from xaib.evaluation.utils import visualize_results
 
 
-model = CoolNewModel(const=1)
+model = NewModel(const=1)
 ```
 
 ```python
@@ -290,10 +290,12 @@ visualize_results('results', 'results/results.png')
 ```python
 # xaib/evaluation/model_factory.py
 # ...
+from ...models.new_model import NewModel
+# ...
 
 # Create a constructor - function that will build your model
-def my_cool_model():
-    return (CoolNewModel('train'), CoolNewModel('test'))
+def new_model():
+    return (NewModel('train'), NewModel('test'))
 
 
 class ModelFactory(Factory):
@@ -301,8 +303,7 @@ class ModelFactory(Factory):
         
         # ...
         # add it to the factory
-        self._constructors['cool_new_model'] = lambda: my_cool_model()
-
+        self._constructors['new_model'] = lambda: new_model()
 ```
 
 ### Add explainer
@@ -314,11 +315,11 @@ import numpy as np
 from xaib import Explainer
 
 
-class MyCoolExplainer(Explainer):
+class NewExplainer(Explainer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.name = 'my_cool_explainer'
+        self.name = 'new_explainer'
 
     def predict(self, x, model, *args, **kwargs):
         return np.random.rand(len(x), len(x[0]))
@@ -337,7 +338,7 @@ model = ModelFactory(train_ds, test_ds).get('svm')
 ```
 
 ```python
-explainers = {'my_cool_explainer': MyCoolExplainer()}
+explainers = {'new_explainer': NewExplainer()}
 
 experiment_factory = ExperimentFactory(
     repo_path='results',
@@ -359,12 +360,12 @@ visualize_results('results', 'results/results.png')
 ```python
 # xaib/evaluation/feature_importance/explainer_factory.py
 # ...
-from ...explainers.feature_importance.my_cool_explainer import MyCoolExplainer
+from ...explainers.feature_importance.new_explainer import NewExplainer
 # ...
 
 # Create a constructor - function that will build your explainer
-def my_cool_explainer():
-    return MyCoolExplainer()
+def new_explainer():
+    return NewExplainer()
 
 
 class ExplainerFactory(Factory):
@@ -372,8 +373,7 @@ class ExplainerFactory(Factory):
         
         # ...
         # add it to the factory
-        self._constructors['cool_new_explainer'] = lambda: my_cool_explainer()
-
+        self._constructors['new_explainer'] = lambda: new_explainer()
 ```
 
 ### Add metric
@@ -381,11 +381,11 @@ class ExplainerFactory(Factory):
 #### Create metric wrapper
 
 ```python
-class MyCoolMetric(Metric):
+class NewMetric(Metric):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.name = 'my_cool_metric'
+        self.name = 'new_metric'
 
     def compute(self, explainer, *args, batch_size=1, **kwargs):
         return np.random.rand()
@@ -404,7 +404,7 @@ model = ModelFactory(train_ds, test_ds).get('svm')
 
 explainers = ExplainerFactory(train_ds, model, labels=[0, 1]).get('all')
 
-metric = MyCoolMetric(test_ds, model)
+metric = NewMetric(test_ds, model)
 
 
 @experiment(
@@ -416,7 +416,7 @@ metric = MyCoolMetric(test_ds, model)
 )
 def coherence():
     case = CoherenceCase(test_ds, model)
-    case.add_metric('my_cool_metric', metric)
+    case.add_metric('new_metric', metric)
     return case
 
 visualize_results('results', 'results/results.png')
@@ -427,7 +427,7 @@ visualize_results('results', 'results/results.png')
 ```python
 # xaib/cases/feature_importance/coherence_case.py
 # ...
-from ...metrics.feature_importance import MyCoolMetric
+from ...metrics.feature_importance import NewMetric
 
 
 class CoherenceCase(Case):
@@ -435,7 +435,7 @@ class CoherenceCase(Case):
         super().__init__(ds, model, *args, **kwargs)
         # ...
 
-        self._metric_objs['my_cool_metric'] = MyCoolMetric(ds, model)
+        self._metric_objs['new_metric'] = NewMetric(ds, model)
 
 ```
 
