@@ -37,7 +37,8 @@ extensions = [
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
-    "sphinx.ext.extlinks"
+    "sphinx.ext.extlinks",
+    "sphinx_copybutton"
 ]
 
 autodoc_default_options = {
@@ -65,3 +66,23 @@ html_theme = 'sphinx_material'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 # html_static_path = ['_static']
+
+
+html_theme_options = {
+    'base_url': 'http://oxid15.github.io/xai-benchmark/',
+    'repo_url': 'https://github.com/Oxid15/xai-benchmark/',
+    'repo_name': 'xai-benchmark',
+    'repo_type': 'github',
+    'globaltoc_depth': 2,
+    'globaltoc_collapse': True,
+    'color_primary': 'white',
+    'color_accent': 'red',
+    'html_minify': True,
+    'css_minify': True,
+    'nav_title': 'XAIB - Open and extensible benchmark for XAI methods',
+    'logo_icon': '&#x7d30&#x90e8' #&#x8cea
+}
+
+html_sidebars = {
+    "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+}

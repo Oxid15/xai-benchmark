@@ -1,5 +1,5 @@
 from ..base import Factory
-from ..datasets import SyntheticDataset
+from ..datasets.synthetic_dataset import SyntheticDataset
 
 
 def generate_dataset(frac: float = 0.9, **kwargs):

@@ -4,7 +4,7 @@ Open and extensible benchmark for XAI methods
 
 ## Description
 
-XAIB is an open benchmark that provides a way to compare different XAI methods using broad set of metrics that aimed to measure different aspects of interpretability
+XAIB is an open benchmark that provides a way to compare different XAI methods using broad set of metrics that measure different aspects of interpretability
 
 ## Installation
 
@@ -30,17 +30,23 @@ pip3 install -r https://raw.githubusercontent.com/oxid15/xai-benchmark/master/ex
 
 ## Results
 
-Full representation of evaluation results is planned to be
-hosted along with documentation [here](https://oxid15.github.io/xai-benchmark/)  
-`Coming soon`
-
-For current results, please proceed to regular assesment done automatically [here](https://github.com/Oxid15/xai-benchmark/actions)
+Updated results table can be found [hosted here](https://oxid15.github.io/xai-benchmark/results)  
 
 ## How to use
 
 ### Introduction
 
-`Coming soon`
+XAIB is build to bring various data, models and explainers together and
+measure quality of an explainer in different ways.  
+  
+The setup is formed from particular Dataset, Model and Explainer.  
+Case stands for some interpretability quality which we are trying to proxy numerically
+using Metrics. Since there are always more than one way to measure something, one Case
+may (and should ideally) have several metrics inside.
+
+Read more on [Cases](https://oxid15.github.io/xai-benchmark/cases) and [Metrics](https://oxid15.github.io/xai-benchmark/metrics) in documentation.
+
+![dia](xaib/docs/images/diagram.jpg)
 
 ### Reproduce
 
@@ -129,7 +135,14 @@ the picture of XAI-methods quality by adding:
 
 ### Add dataset
 
+New datasets may extend our understanding of how different explainers
+behave in context of different domains and tasks.  
+To add your dataset, you should provide a Wrapper, which will
+download or access prepared data from disk.
+
 #### Create data wrapper
+
+First you need to create a wrapper with required interface and fields
 
 ```python
 import numpy as np
@@ -169,6 +182,9 @@ class NewDataset(Dataset):
 
 #### Test new dataset
 
+Before adding your implementation directly into source code, it would be useful to
+test how it will work with standard XAIB setup
+
 ```python
 
 from xaib.evaluation import DatasetFactory, ModelFactory
@@ -176,13 +192,14 @@ from xaib.evaluation.feature_importance import ExplainerFactory, ExperimentFacto
 from xaib.evaluation.utils import visualize_results
 
 
+# Here you create your data
 train_ds, test_ds = NewDataset('train'), NewDataset('test')
+
+# And then pass it further
 model = ModelFactory(train_ds, test_ds).get('svm')
 
 explainers = ExplainerFactory(train_ds, model, labels=[0, 1]).get('all')
-```
 
-```python
 experiment_factory = ExperimentFactory(
     repo_path='results',
     explainers=explainers,
@@ -201,11 +218,18 @@ visualize_results('results', 'results/results.png')
 
 #### Integrate new dataset
 
+Finally you can integrate your dataset into the source code.  
+To do that you need to add it into `xaib.datasets` module
+and then make a constructor for the Factory.
+
 ```python
 # xaib/evaluation/dataset_factory.py
 # ...
+from ..datasets.new_dataset import NewDataset
+# ...
 
 # Create a constructor - function that will build your dataset
+# it should provide all defaults needed
 def new_dataset():
     return NewDataset('train'), NewDataset('test')
 
@@ -219,7 +243,17 @@ class DatasetFactory(Factory):
 
 ### Add model
 
+New models and model classes provide information on how good explainers
+are in some particular cases.
+
 #### Create model wrapper
+
+First model wrapper should be implemented. It has many
+required methods that should be implemented.
+For example `fit` and `evaluate` methods are needed
+to be able to train the model on different datasets
+see specification in `xaib/base` and examples in
+`xaib/evaluation/model_factory.py`
 
 ```python
 import numpy as np
@@ -239,6 +273,12 @@ class NewModel(Model):
         # the name will be used to identify a model
         self.name = 'new_model'
 
+    def fit(self, x, y):
+        pass
+
+    def evaluate(self, x, y):
+        pass
+
     def predict(self, x):
         return np.array([self.const for _ in range(len(x))])
 
@@ -256,12 +296,16 @@ class NewModel(Model):
 
 #### Test new model
 
+Before adding your implementation directly into source code, it would be useful to
+test how it will work with standard XAIB setup
+
 ```python
 from xaib.evaluation import DatasetFactory
 from xaib.evaluation.feature_importance import ExplainerFactory, ExperimentFactory
 from xaib.evaluation.utils import visualize_results
 
 
+# Create your model
 model = NewModel(const=1)
 ```
 
@@ -273,7 +317,7 @@ experiment_factory = ExperimentFactory(
     repo_path='results',
     explainers=explainers,
     test_ds=test_ds,
-    model=model,
+    model=model, # and put it here
     batch_size=10
 )
 
@@ -287,15 +331,19 @@ visualize_results('results', 'results/results.png')
 
 #### Integrate new model
 
+Finally you can integrate your model into the source code.  
+To do that you need to add it into `xaib.models` module
+and then make a constructor for the Factory.
+
 ```python
 # xaib/evaluation/model_factory.py
 # ...
-from ...models.new_model import NewModel
+from ..models.new_model import NewModel
 # ...
 
 # Create a constructor - function that will build your model
-def new_model():
-    return (NewModel('train'), NewModel('test'))
+def new_model(const):
+    return NewModel(const=const)
 
 
 class ModelFactory(Factory):
@@ -303,12 +351,18 @@ class ModelFactory(Factory):
         
         # ...
         # add it to the factory
-        self._constructors['new_model'] = lambda: new_model()
+        self._constructors['new_model'] = lambda: new_model(const=1)
 ```
 
 ### Add explainer
 
+Explainers are the heart of this benchmark, they are being thorougly tested
+and the more of them added, the more we know
+
 #### Create wrapper
+
+Explainers wrappers are less demanding than model's which makes them
+easier to be implemented
 
 ```python
 import numpy as np
@@ -319,6 +373,8 @@ class NewExplainer(Explainer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # name is essential to put explainer into
+        # results table correctly
         self.name = 'new_explainer'
 
     def predict(self, x, model, *args, **kwargs):
@@ -326,6 +382,9 @@ class NewExplainer(Explainer):
 ```
 
 #### Test new explainer
+
+Before adding your implementation directly into source code, it would be useful to
+test how it will work with standard XAIB setup
 
 ```python
 from xaib.evaluation import DatasetFactory, ModelFactory
@@ -357,6 +416,10 @@ visualize_results('results', 'results/results.png')
 
 #### Integrate new explainer
 
+Finally you can integrate your explainer into the source code.  
+To do that you need to add it into `xaib.explainers` module
+and then make a constructor for the Factory.
+
 ```python
 # xaib/evaluation/feature_importance/explainer_factory.py
 # ...
@@ -378,7 +441,13 @@ class ExplainerFactory(Factory):
 
 ### Add metric
 
-#### Create metric wrapper
+Metrics are ways to numerically assess the quality of explainers and are parts of
+Cases
+
+#### Create metric
+
+First you need to create a Metric object - which will accept and explainer and data
+and return some value
 
 ```python
 class NewMetric(Metric):
@@ -392,6 +461,13 @@ class NewMetric(Metric):
 ```
 
 #### Test new metric
+
+Before adding your implementation directly into source code, it would be useful to
+test how it will work with standard XAIB setup  
+  
+Since metrics are more low-level objects, they need special treatment
+when tested. Basically you need to create metric and append it to the existing
+Case of choice.
 
 ```python
 from xaib.evaluation import DatasetFactory, ModelFactory

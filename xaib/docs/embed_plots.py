@@ -11,7 +11,7 @@ RESULTS = ('feature_importance', 'example_selection')
 
 REPO_PATHS = [os.path.join(BASE_DIR, 'xaib', 'results', name)
               for name in RESULTS]
-INDEX_PATH = os.path.join(BASE_DIR, 'xaib', 'docs', 'build', 'index.html')
+INDEX_PATH = os.path.join(BASE_DIR, 'xaib', 'docs', 'build', 'results.html')
 
 for name, path in zip(RESULTS, REPO_PATHS):
     title = 'Results of ' + ' '.join([a.capitalize() for a in name.split('_')]) + ' Methods'
