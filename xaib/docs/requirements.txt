@@ -1,2 +1,4 @@
 sphinx>=5.2.0
 sphinx-material
+beautifulsoup4
+plotly
