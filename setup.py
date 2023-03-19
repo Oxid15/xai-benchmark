@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="xai-benchmark",
-    version='0.1.0',
+    version='0.2.0-alpha',
     author='Ilia Moiseev',
     author_email='ilia.moiseev.5@yandex.ru',
     license='MIT',
