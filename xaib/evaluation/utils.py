@@ -78,22 +78,22 @@ def visualize_results(path, output_path=None, write=True) -> None:
             data.append(
                 {
                     'name': p[0]['params']['name'],
-                    # 'case': p[0]['params']['case'],
-                    # 'dataset': p[0]['params']['dataset'],
-                    # 'model': p[0]['params']['model'],
+                    'case': p[0]['params']['case'],
+                    'dataset': p[0]['params']['dataset'],
+                    'model': p[0]['params']['model'],
                     'metric': metric_name,
                     'value': p[0]['metrics'][metric_name]
                 }
             )
 
     df = pd.DataFrame(data)
-    df = pd.pivot_table(df, values='value', columns=['name'], index=['metric']) # 'dataset', 'model', 'case'
+    df = pd.pivot_table(df, values='value', columns=['name'], index=['dataset', 'model', 'case', 'metric'])
 
     df = df.reset_index()
-    # df.loc[df['case'].duplicated(), 'case'] = ''
+    df.loc[df['dataset'].duplicated(), 'dataset'] = ''
+    df.loc[df['model'].duplicated(), 'model'] = ''
+    df.loc[df['case'].duplicated(), 'case'] = ''
     df.loc[df['metric'].duplicated(), 'metric'] = ''
-    # df.loc[df['dataset'].duplicated(), 'dataset'] = ''
-    # df.loc[df['model'].duplicated(), 'model'] = ''
 
     fig = go.Figure(data=[go.Table(
         header=dict(values=list(df.columns),
