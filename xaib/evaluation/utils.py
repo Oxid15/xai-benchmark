@@ -69,7 +69,7 @@ def experiment(root, explainers, *args, batch_size=1, **kwargs):
     return wrapper
 
 
-def visualize_results(path, output_path=None, write=True) -> None:
+def visualize_results(path, output_path=None, title=None):
     m = MetaViewer(path, filt={'type': 'model'})
 
     data = []
@@ -100,11 +100,11 @@ def visualize_results(path, output_path=None, write=True) -> None:
                     align='left'),
         cells=dict(values=[df[col] for col in df.columns],
                 align='left'))
-    ])
+        ]
+    )
+    fig.update_layout(title=title)
 
-    if write:
-        if output_path is None:
-            raise ValueError('output_path is None')
+    if output_path is not None:
         fig.write_image(output_path)
 
     return fig

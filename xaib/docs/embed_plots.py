@@ -7,12 +7,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 sys.path.append(BASE_DIR)
 from xaib.evaluation.utils import visualize_results
 
+RESULTS = ('feature_importance', 'example_selection')
+
 REPO_PATHS = [os.path.join(BASE_DIR, 'xaib', 'results', name)
-              for name in ('feature_importance', 'example_selection')]
+              for name in RESULTS]
 INDEX_PATH = os.path.join(BASE_DIR, 'xaib', 'docs', 'build', 'index.html')
 
-for path in REPO_PATHS:
-    fig = visualize_results(path, write=False)
+for name, path in zip(RESULTS, REPO_PATHS):
+    title = 'Results of ' + ' '.join([a.capitalize() for a in name.split('_')]) + ' Methods'
+
+    fig = visualize_results(path, title=title)
     htmlfig = fig.to_html(include_plotlyjs='cdn')
 
     htmlfig = BeautifulSoup(htmlfig, "html.parser")

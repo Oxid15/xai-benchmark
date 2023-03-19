@@ -1,13 +1,11 @@
 import os
 import sys
 
+from xaib.datasets import SyntheticDataset
 from xaib.evaluation import ModelFactory
 from cascade import data as cdd
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
-sys.path.append(PROJECT_DIR)
-from utils import MakeClassificationDataset
 
 
 N_NEIGHBORS = 3
