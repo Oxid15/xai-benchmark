@@ -1,0 +1,75 @@
+Add metric
+==========
+Metrics are ways to numerically assess the quality of explainers and are parts of
+Cases
+
+Create metric
+-------------
+First you need to create a Metric object - which will accept and explainer and data
+and return some value
+
+.. code-block:: python
+
+    class NewMetric(Metric):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+
+            self.name = 'new_metric'
+
+        def compute(self, explainer, *args, batch_size=1, **kwargs):
+            return np.random.rand()
+
+Test new metric
+---------------
+Before adding your implementation directly into source code, it would be useful to
+test how it will work with standard XAIB setup  
+  
+Since metrics are more low-level objects, they need special treatment
+when tested. Basically you need to create metric and append it to the existing
+Case of choice.
+
+.. code-block:: python
+
+    from xaib.evaluation import DatasetFactory, ModelFactory
+    from xaib.evaluation.feature_importance import ExplainerFactory
+    from xaib.evaluation.utils import visualize_results
+
+
+    train_ds, test_ds = DatasetFactory().get('synthetic')
+    model = ModelFactory(train_ds, test_ds).get('svm')
+
+    explainers = ExplainerFactory(train_ds, model, labels=[0, 1]).get('all')
+
+    metric = NewMetric(test_ds, model)
+
+
+    @experiment(
+        'results',
+        explainers=explainers,
+        metrics_kwargs={
+            'other_disagreement': dict(expls=list(explainers.values()))
+        }
+    )
+    def coherence():
+        case = CoherenceCase(test_ds, model)
+        case.add_metric('new_metric', metric)
+        return case
+
+    visualize_results('results', 'results/results.png')
+
+Integrate new metric
+--------------------
+
+.. code-block:: python
+
+    # xaib/cases/feature_importance/coherence_case.py
+    # ...
+    from ...metrics.feature_importance import NewMetric
+
+
+    class CoherenceCase(Case):
+        def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
+            super().__init__(ds, model, *args, **kwargs)
+            # ...
+
+            self._metric_objs['new_metric'] = NewMetric(ds, model)

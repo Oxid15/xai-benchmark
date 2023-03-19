@@ -7,25 +7,18 @@ from cascade import utils as cdu
 from sklearn.svm import SVC
 from sklearn.metrics import f1_score
 
+from xaib.evaluation import ModelFactory
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
+PROJECT_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 sys.path.append(PROJECT_DIR)
-from utils import MakeClassificationDataset
+from datasets import SyntheticDataset
 
 
 train_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'train_ds'))
 test_ds = cdd.Pickler(os.path.join(SCRIPT_DIR, 'train_ds'))
 
-X_train, Y_train = [x['item'] for x in train_ds], [x['label'] for x in train_ds]
-X_test, Y_test = [x['item'] for x in test_ds], [x['label'] for x in test_ds]
+model = ModelFactory(train_ds, test_ds).get('svm')
 
-X_train = np.array(X_train)
-Y_train = np.array(Y_train, dtype=int)
-X_test = np.array(X_test)
-Y_test = np.array(Y_test, dtype=int)
-
-model = cdu.SkModel(blocks=[SVC(probability=True)])
-model.fit(X_train, Y_train)
-model.evaluate(X_test, Y_test, {'f1': f1_score})
 print(model.get_meta())
 model.save(os.path.join(SCRIPT_DIR, 'svm'))
