@@ -9,10 +9,11 @@ from xaib.evaluation.feature_importance import ExplainerFactory, ExperimentFacto
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SCRIPT_DIR)
-sys.path.append(BASE_DIR)
+PROJECT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
+sys.path.append(PROJECT_DIR)
 
-from utils import visualize_results
-from ..model_factory import SkWrapper
+from xaib.evaluation.utils import visualize_results
+from xaib.evaluation.model_factory import SkWrapper
 
 
 REPO_PATH = os.path.join(os.path.dirname(BASE_DIR), 'results', 'feature_importance')
