@@ -23,6 +23,7 @@ class SmallNoiseCheck(Metric):
         super().__init__(ds, model, *args, **kwargs)
         self._noisy_ds = noisy_ds
         self.name = 'small_noise_check'
+        self.direction = 'down'
 
     def compute(
         self,

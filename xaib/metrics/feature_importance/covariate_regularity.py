@@ -15,6 +15,7 @@ class CovariateRegularity(Metric):
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
         super().__init__(ds, model, *args, **kwargs)
         self.name = 'covariate_regularity'
+        self.direction = 'down'
 
     def compute(
             self,

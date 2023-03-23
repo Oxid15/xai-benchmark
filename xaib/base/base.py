@@ -50,6 +50,7 @@ class Metric(cdm.Model):
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.name = None
+        self.direction = None
         self._ds = ds
         self._model = model
 
@@ -69,6 +70,7 @@ class Metric(cdm.Model):
         value = self.compute(expl, batch_size=batch_size, **expl_kwargs, **kwargs)
 
         self.params['name'] = name
+        self.params['direction'] = self.direction
         self.params['dataset'] = self._ds.name
         self.params['model'] = self._model.name
         self.metrics[self.name] = value

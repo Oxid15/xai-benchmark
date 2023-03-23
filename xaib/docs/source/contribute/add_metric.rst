@@ -8,6 +8,13 @@ Create metric
 First you need to create a Metric object - which will accept and explainer and data
 and return some value
 
+.. note::
+
+    You should define `self.name` and `self.direction` of the metric in order for
+    it to be displayed correctly in results.  
+    `self.name` is the short name of what is measured and `self.direction`
+    denotes what values are considered better - greater or less.
+
 .. code-block:: python
 
     class NewMetric(Metric):
@@ -15,6 +22,7 @@ and return some value
             super().__init__(*args, **kwargs)
 
             self.name = 'new_metric'
+            self.direction = 'down'
 
         def compute(self, explainer, *args, batch_size=1, **kwargs):
             return np.random.rand()

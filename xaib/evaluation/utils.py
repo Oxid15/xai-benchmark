@@ -82,12 +82,13 @@ def visualize_results(path, output_path=None, title=None):
                     'dataset': p[0]['params']['dataset'],
                     'model': p[0]['params']['model'],
                     'metric': metric_name,
+                    'direction': p[0]['params']['direction'],
                     'value': p[0]['metrics'][metric_name]
                 }
             )
 
     df = pd.DataFrame(data)
-    df = pd.pivot_table(df, values='value', columns=['name'], index=['dataset', 'model', 'case', 'metric'])
+    df = pd.pivot_table(df, values='value', columns=['name'], index=['dataset', 'model', 'case', 'metric', 'direction'])
 
     df = df.reset_index()
     df.loc[df['dataset'].duplicated(), 'dataset'] = ''

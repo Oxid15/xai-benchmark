@@ -26,6 +26,7 @@ class LabelDifference(Metric):
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
         super().__init__(ds, model, *args, **kwargs)
         self.name = 'label_difference'
+        self.direction = 'up'
 
     def compute(
         self,

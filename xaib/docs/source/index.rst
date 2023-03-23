@@ -11,4 +11,6 @@ XAIB is an open benchmark that provides a way to compare different XAI methods u
     results
     cases
     metrics
+    datasets
+    models
     modules
