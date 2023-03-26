@@ -1,7 +1,6 @@
 import os
-import sys
 
-from xaib.datasets import SyntheticDataset
+from xaib.datasets.synthetic_dataset import SyntheticDataset
 from xaib.evaluation import ModelFactory
 from cascade import data as cdd
 

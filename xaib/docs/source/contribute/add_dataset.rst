@@ -92,7 +92,7 @@ and then make a constructor for the Factory.
 
     # xaib/evaluation/dataset_factory.py
     # ...
-    from xaib.datasets import NewDataset
+    from xaib.datasets.new_dataset import NewDataset
     # ...
 
     # Create a constructor - function that will build your dataset
