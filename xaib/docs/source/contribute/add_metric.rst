@@ -52,7 +52,7 @@ Case of choice.
 
     from xaib.evaluation import DatasetFactory, ModelFactory
     from xaib.evaluation.feature_importance import ExplainerFactory
-    from xaib.evaluation.utils import visualize_results
+    from xaib.evaluation.utils import visualize_results, experiment
 
 
     train_ds, test_ds = DatasetFactory().get('synthetic')
