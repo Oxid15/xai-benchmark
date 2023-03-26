@@ -146,7 +146,7 @@ First you need to create a wrapper with required interface and fields
 
 ```python
 import numpy as np
-from xaib.base import Dataset
+from xaib import Dataset
 
 
 class NewDataset(Dataset):
@@ -257,7 +257,7 @@ see specification in `xaib/base` and examples in
 
 ```python
 import numpy as np
-from xaib.base import Model
+from xaib import Model
 
 
 class NewModel(Model):
@@ -450,7 +450,7 @@ First you need to create a Metric object - which will accept and explainer and d
 and return some value
 
 ```python
-    from xaib.base import Metric
+    from xaib import Metric
 
     class NewMetric(Metric):
         def __init__(self, ds, model *args, **kwargs):

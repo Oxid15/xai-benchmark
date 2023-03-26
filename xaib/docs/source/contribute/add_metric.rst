@@ -17,7 +17,7 @@ and return some value
 
 .. code-block:: python
 
-    from xaib.base import Metric
+    from xaib import Metric
 
     class NewMetric(Metric):
         def __init__(self, ds, model *args, **kwargs):

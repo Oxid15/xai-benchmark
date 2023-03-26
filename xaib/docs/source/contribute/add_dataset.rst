@@ -14,7 +14,7 @@ First you need to create a wrapper with required interface and fields
 .. code-block:: python
     
     import numpy as np
-    from xaib.base import Dataset
+    from xaib import Dataset
 
 
     class NewDataset(Dataset):
