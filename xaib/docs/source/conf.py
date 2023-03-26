@@ -80,7 +80,7 @@ html_theme_options = {
     'html_minify': True,
     'css_minify': True,
     'nav_title': 'XAIB - Open and extensible benchmark for XAI methods',
-    'logo_icon': '&#x7d30&#x90e8' #&#x8cea
+    'logo_icon': '&#x8cea' #'&#x7d30&#x90e8'
 }
 
 html_sidebars = {
