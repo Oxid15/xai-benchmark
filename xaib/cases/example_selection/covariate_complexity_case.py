@@ -1,0 +1,10 @@
+from typing import Any
+from ...base import Dataset, Model, Case
+from ...metrics.example_selection import CovariateRegularity
+
+
+class CovariateComplexityCase(Case):
+    def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
+        super().__init__(ds, model, *args, **kwargs)
+        self.name = 'covariate_complexity'
+        self._metric_objs['covariate_regularity'] = CovariateRegularity(ds, model)

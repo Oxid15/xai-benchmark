@@ -18,5 +18,11 @@ class ExperimentFactory(Factory):
             return case_factory.get('contrastivity')
 
 
+        @experiment(repo_path, explainers=explainers, batch_size=batch_size)
+        def covariate_complexity():
+            return case_factory.get('covariate_complexity')
+
+
         self._constructors['continuity'] = lambda: continuity
         self._constructors['contrastivity'] = lambda: contrastivity
+        self._constructors['covariate_complexity'] = lambda: covariate_complexity

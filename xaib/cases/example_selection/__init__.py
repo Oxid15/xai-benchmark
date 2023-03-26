@@ -1,2 +1,3 @@
 from .continuity_case import ContinuityCase
 from .contrastivity_case import ContrastivityCase
+from .covariate_complexity_case import CovariateComplexityCase

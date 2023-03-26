@@ -1,6 +1,6 @@
 from ...base import Dataset, Model, Factory
 from ...cases.example_selection import (
-    ContinuityCase, ContrastivityCase
+    ContinuityCase, ContrastivityCase, CovariateComplexityCase
 )
 
 from ..utils import NoiseApplier
@@ -21,3 +21,4 @@ class CaseFactory(Factory):
         super().__init__()
         self._constructors['continuity'] = lambda: continuity(test_ds, model)
         self._constructors['contrastivity'] = lambda: ContrastivityCase(test_ds, model)
+        self._constructors['covariate_complexity'] = lambda: CovariateComplexityCase(test_ds, model)
