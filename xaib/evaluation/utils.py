@@ -77,12 +77,12 @@ def visualize_results(path, output_path=None, title=None):
         for metric_name in p[0]['metrics']:
             data.append(
                 {
-                    'name': p[0]['params']['name'],
+                    'name': p[0]['params']['metric_params'][metric_name]['name'],
                     'case': p[0]['params']['case'],
-                    'dataset': p[0]['params']['dataset'],
-                    'model': p[0]['params']['model'],
+                    'dataset': p[0]['params']['metric_params'][metric_name]['dataset'],
+                    'model': p[0]['params']['metric_params'][metric_name]['model'],
                     'metric': metric_name,
-                    'direction': p[0]['params']['direction'],
+                    'direction': p[0]['params']['metric_params'][metric_name]['direction'],
                     'value': p[0]['metrics'][metric_name]
                 }
             )
