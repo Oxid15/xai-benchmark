@@ -17,12 +17,16 @@ class ExperimentFactory(Factory):
         def contrastivity():
             return case_factory.get('contrastivity')
 
-
         @experiment(repo_path, explainers=explainers, batch_size=batch_size)
         def covariate_complexity():
             return case_factory.get('covariate_complexity')
+
+        @experiment(repo_path, explainers=explainers, batch_size=batch_size)
+        def correctness():
+            return case_factory.get('correctness')
 
 
         self._constructors['continuity'] = lambda: continuity
         self._constructors['contrastivity'] = lambda: contrastivity
         self._constructors['covariate_complexity'] = lambda: covariate_complexity
+        self._constructors['correctness'] = lambda: correctness
