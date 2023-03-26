@@ -16,7 +16,7 @@ class DatasetFactory(Factory):
             n_features=10,
             random_state=0,
             n_informative=5,
-            n_redundant=0,
+            n_redundant=1,
             n_repeated=0,
             n_clusters_per_class=1,
             frac=0.9

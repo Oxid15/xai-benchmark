@@ -146,7 +146,7 @@ First you need to create a wrapper with required interface and fields
 
 ```python
 import numpy as np
-from xaib.base import Dataset
+from xaib import Dataset
 
 
 class NewDataset(Dataset):
@@ -257,7 +257,7 @@ see specification in `xaib/base` and examples in
 
 ```python
 import numpy as np
-from xaib.base import Model
+from xaib import Model
 
 
 class NewModel(Model):
@@ -450,14 +450,27 @@ First you need to create a Metric object - which will accept and explainer and d
 and return some value
 
 ```python
-class NewMetric(Metric):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    from xaib import Metric
 
-        self.name = 'new_metric'
+    class NewMetric(Metric):
+        def __init__(self, ds, model *args, **kwargs):
+            super().__init__(ds, model, *args, **kwargs)
 
-    def compute(self, explainer, *args, batch_size=1, **kwargs):
-        return np.random.rand()
+            self.name = 'new_metric'
+            self.direction = 'down'
+
+        def compute(self, explainer, *args, batch_size=1, expl_kwargs=None, **kwargs):
+            if expl_kwargs is None:
+                expl_kwargs = {}
+
+            dl = SimpleDataloader(self._ds, batch_size=batch_size)
+            for batch in tqdm(dl):
+                # get explanations
+                ex = expl.predict(batch['item'], self._model, **expl_kwargs)
+
+            # Here compute and return your metric
+
+            return np.random.rand()
 ```
 
 #### Test new metric
@@ -472,7 +485,7 @@ Case of choice.
 ```python
 from xaib.evaluation import DatasetFactory, ModelFactory
 from xaib.evaluation.feature_importance import ExplainerFactory
-from xaib.evaluation.utils import visualize_results
+from xaib.evaluation.utils import visualize_results, experiment
 
 
 train_ds, test_ds = DatasetFactory().get('synthetic')
@@ -494,6 +507,8 @@ def coherence():
     case = CoherenceCase(test_ds, model)
     case.add_metric('new_metric', metric)
     return case
+
+coherence()
 
 visualize_results('results', 'results/results.png')
 ```

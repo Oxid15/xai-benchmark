@@ -15,7 +15,7 @@ see specification in `xaib/base` and examples in
 .. code-block:: python
 
     import numpy as np
-    from xaib.base import Model
+    from xaib import Model
 
 
     class NewModel(Model):

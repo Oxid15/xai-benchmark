@@ -52,6 +52,23 @@ class RandomBinBaseline(cdm.BasicModel):
         return np.stack((proba, 1.0 - proba), axis=1)
 
 
+class KNeighborsTransformer:
+    def __init__(self, dataset_length) -> None:
+        self._dataset_length = dataset_length
+
+    def kneighbors(self, x, n_neighbors):
+        return None, np.asarray([[np.random.randint(0, self._dataset_length)]
+            for _ in range(n_neighbors)])
+
+
+class RandomNeighborsBaseline(cdm.BasicModel):
+    def __init__(self, dataset_length, *args, meta_prefix=None, **kwargs) -> None:
+        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
+        self._pipeline = [KNeighborsTransformer(dataset_length)]
+
+
+
+
 def experiment(root, explainers, *args, batch_size=1, **kwargs):
     def wrapper(case_init):
         def wrap_case():
@@ -77,17 +94,18 @@ def visualize_results(path, output_path=None, title=None):
         for metric_name in p[0]['metrics']:
             data.append(
                 {
-                    'name': p[0]['params']['name'],
+                    'name': p[0]['params']['metric_params'][metric_name]['name'],
                     'case': p[0]['params']['case'],
-                    'dataset': p[0]['params']['dataset'],
-                    'model': p[0]['params']['model'],
+                    'dataset': p[0]['params']['metric_params'][metric_name]['dataset'],
+                    'model': p[0]['params']['metric_params'][metric_name]['model'],
                     'metric': metric_name,
+                    'direction': p[0]['params']['metric_params'][metric_name]['direction'],
                     'value': p[0]['metrics'][metric_name]
                 }
             )
 
     df = pd.DataFrame(data)
-    df = pd.pivot_table(df, values='value', columns=['name'], index=['dataset', 'model', 'case', 'metric'])
+    df = pd.pivot_table(df, values='value', columns=['name'], index=['dataset', 'model', 'case', 'metric', 'direction'])
 
     df = df.reset_index()
     df.loc[df['dataset'].duplicated(), 'dataset'] = ''

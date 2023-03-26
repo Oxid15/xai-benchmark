@@ -14,7 +14,7 @@ First you need to create a wrapper with required interface and fields
 .. code-block:: python
     
     import numpy as np
-    from xaib.base import Dataset
+    from xaib import Dataset
 
 
     class NewDataset(Dataset):
@@ -92,7 +92,7 @@ and then make a constructor for the Factory.
 
     # xaib/evaluation/dataset_factory.py
     # ...
-    from xaib.datasets import NewDataset
+    from xaib.datasets.new_dataset import NewDataset
     # ...
 
     # Create a constructor - function that will build your dataset

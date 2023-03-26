@@ -24,6 +24,7 @@ class SmallNoiseCheck(Metric):
         super().__init__(ds, model, *args, **kwargs)
         self._noisy_ds = noisy_ds
         self.name = 'small_noise_check'
+        self.direction = 'up'
 
     def compute(
         self,
@@ -48,4 +49,4 @@ class SmallNoiseCheck(Metric):
 
             counts += batch_count_eq(explanation_batch, noisy_explanation_batch)
 
-        return np.sum(counts) / (len(self._ds) * len(self._ds[0]['item']))
+        return np.sum(counts) / len(self._ds)

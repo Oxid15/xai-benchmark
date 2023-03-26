@@ -50,6 +50,7 @@ class Metric(cdm.Model):
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.name = None
+        self.direction = None
         self._ds = ds
         self._model = model
 
@@ -69,6 +70,7 @@ class Metric(cdm.Model):
         value = self.compute(expl, batch_size=batch_size, **expl_kwargs, **kwargs)
 
         self.params['name'] = name
+        self.params['direction'] = self.direction
         self.params['dataset'] = self._ds.name
         self.params['model'] = self._model.name
         self.metrics[self.name] = value
@@ -91,6 +93,7 @@ class Case(cdm.Model):
         if metrics_kwargs is None:
             metrics_kwargs = {name: {} for _ in self._metric_objs}
 
+        self.params['metric_params'] = dict()
         for m_name in self._metric_objs:
             mkwargs = {}
             if m_name in metrics_kwargs:
@@ -99,7 +102,8 @@ class Case(cdm.Model):
             self._metric_objs[m_name].evaluate(name, expl, **mkwargs, **kwargs)
 
             self.params['case'] = self.name
-            self.params.update(self._metric_objs[m_name].params)
+
+            self.params['metric_params'][m_name] = (self._metric_objs[m_name].params)
             self.metrics.update(self._metric_objs[m_name].metrics)
 
 
