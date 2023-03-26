@@ -35,8 +35,8 @@ def batch_gini(x):
     return [gini(i) for i in x]
 
 
-def batch_count_eq(x, y):
-    return [xi == yi for xi, yi in zip(x, y)]
+def batch_count_eq(x, y) -> List[bool]:
+    return [all(xi == yi) for xi, yi in zip(x, y)]
 
 
 def minmax_normalize(x):
