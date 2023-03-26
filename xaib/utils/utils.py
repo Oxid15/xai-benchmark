@@ -1,5 +1,6 @@
 from typing import Dict, List
 import numpy as np
+from cascade.data import Composer
 
 
 def rmse(x, y):
@@ -81,3 +82,13 @@ class SimpleDataloader:
 
     def __len__(self) -> int:
         return int(np.ceil(len(self._data) / self._bs))
+
+
+class KeyedComposer(Composer):
+    def __init__(self, datasets, *args, **kwargs) -> None:
+        super().__init__(list(datasets.values()), *args, **kwargs)
+        self._keys = datasets.keys()
+
+    def __getitem__(self, index: int):
+        data_tuple = super().__getitem__(index)
+        return {key: val for key, val in zip(self._keys, data_tuple)}

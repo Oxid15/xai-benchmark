@@ -13,5 +13,10 @@ class ExperimentFactory(Factory):
         def continuity():
             return case_factory.get('continuity')
 
+        @experiment(repo_path, explainers=explainers, batch_size=batch_size)
+        def contrastivity():
+            return case_factory.get('contrastivity')
+
 
         self._constructors['continuity'] = lambda: continuity
+        self._constructors['contrastivity'] = lambda: contrastivity

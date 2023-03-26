@@ -1,6 +1,6 @@
 from ...base import Dataset, Model, Factory
 from ...cases.example_selection import (
-    ContinuityCase
+    ContinuityCase, ContrastivityCase
 )
 
 from ..utils import NoiseApplier
@@ -20,3 +20,4 @@ class CaseFactory(Factory):
     def __init__(self, test_ds: Dataset, model: Model) -> None:
         super().__init__()
         self._constructors['continuity'] = lambda: continuity(test_ds, model)
+        self._constructors['contrastivity'] = lambda: ContrastivityCase(test_ds, model)
