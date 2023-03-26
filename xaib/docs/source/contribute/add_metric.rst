@@ -29,6 +29,12 @@ and return some value
         def compute(self, explainer, *args, batch_size=1, expl_kwargs=None, **kwargs):
             if expl_kwargs is None:
                 expl_kwargs = {}
+
+            dl = SimpleDataloader(self._ds, batch_size=batch_size)
+            for batch in tqdm(dl):
+                # get explanations
+                ex = expl.predict(batch['item'], self._model, **expl_kwargs)
+
             # Here compute and return your metric
 
             return np.random.rand()
