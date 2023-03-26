@@ -1,6 +1,6 @@
 from typing import Dict, List
 import numpy as np
-from cascade.data import Composer
+from cascade.data import SizedDataset, Composer, Sampler
 
 
 def rmse(x, y):
@@ -92,3 +92,13 @@ class KeyedComposer(Composer):
     def __getitem__(self, index: int):
         data_tuple = super().__getitem__(index)
         return {key: val for key, val in zip(self._keys, data_tuple)}
+
+
+class Filter(Sampler):
+    def __init__(self, ds: SizedDataset, indices: List[int], **kwargs) -> None:
+        super().__init__(ds, num_samples=len(indices), **kwargs)
+
+        self._indices = indices
+
+    def __getitem__(self, index: int):
+        return self._dataset[self._indices[index]]

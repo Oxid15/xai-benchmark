@@ -4,18 +4,8 @@ from tqdm import tqdm
 import numpy as np
 from cascade.data import Sampler
 
-from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
+from ...utils import batch_rmse, minmax_normalize, SimpleDataloader, Filter
 from ...base import Dataset, Model, Metric, Explainer
-
-
-class Filter(Sampler):
-    def __init__(self, ds: Dataset, indices: List[int], **kwargs) -> None:
-        super().__init__(ds, num_samples=len(indices), **kwargs)
-
-        self._indices = indices
-
-    def __getitem__(self, index: int) -> Any:
-        return self._dataset[self._indices[index]]
 
 
 class LabelDifference(Metric):
