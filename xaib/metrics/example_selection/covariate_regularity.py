@@ -1,22 +1,22 @@
-from typing import List, Union, Dict, Any
+from typing import Dict, List, Any, Union
 
-from tqdm import tqdm
 import numpy as np
-from cascade.data import Sampler
+from tqdm import tqdm
 
-from ...utils import batch_rmse, minmax_normalize, SimpleDataloader, Filter
 from ...base import Dataset, Model, Metric, Explainer
+from ...utils import entropy, minmax_normalize, SimpleDataloader, Filter
 
 
-class LabelDifference(Metric):
+class CovariateRegularity(Metric):
     """
-    ContrastivityCase Measures how different explanations
-    are actually different from each other
+    Coherence measures how method
+    complies with domain knowledge, ground-truth
+    or other methods
     """
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
         super().__init__(ds, model, *args, **kwargs)
-        self.name = 'label_difference'
-        self.direction = 'up'
+        self.name = 'covariate_regularity'
+        self.direction = 'down'
 
     def compute(
         self,
@@ -45,22 +45,15 @@ class LabelDifference(Metric):
             for batch in tqdm(dl):
                 ex = expl.predict(batch['item'], self._model, **expl_kwargs)
                 ex = minmax_normalize(ex)
-                explanations[u].append(ex)
+
+                explanations[u] += ex.tolist()
 
         # Compare explanations of different labels
-        diffs = {u: [] for u in unique_labels}
+        entropies_of_features = {u: [] for u in unique_labels}
         for u in unique_labels:
-            for other_label in unique_labels:
-                if u == other_label:
-                    continue
+            expls = np.asarray(explanations[u])
+            for f in range(expls.shape[1]):
+                e = entropy(expls[:, f])
+                entropies_of_features[u].append(e)
 
-                for batch, other_batch in zip(
-                    explanations[u],
-                    explanations[other_label]
-                ):
-                    rmse = batch_rmse(batch, other_batch)
-                    diffs[u] += list(rmse)
-        for u in unique_labels:
-            diffs[u] = np.nanmean(diffs[u])
-
-        return np.nanmean([diffs[u] for u in diffs])
+        return np.nanmean([entropies_of_features[u] for u in entropies_of_features])

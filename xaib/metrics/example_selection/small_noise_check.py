@@ -49,4 +49,4 @@ class SmallNoiseCheck(Metric):
 
             counts += batch_count_eq(explanation_batch, noisy_explanation_batch)
 
-        return np.sum(counts) / (len(self._ds) * len(self._ds[0]['item']))
+        return np.sum(counts) / len(self._ds)

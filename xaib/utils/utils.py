@@ -1,5 +1,6 @@
 from typing import Dict, List
 import numpy as np
+from cascade.data import SizedDataset, Composer, Sampler
 
 
 def rmse(x, y):
@@ -34,8 +35,8 @@ def batch_gini(x):
     return [gini(i) for i in x]
 
 
-def batch_count_eq(x, y):
-    return [xi == yi for xi, yi in zip(x, y)]
+def batch_count_eq(x, y) -> List[bool]:
+    return [all(xi == yi) for xi, yi in zip(x, y)]
 
 
 def minmax_normalize(x):
@@ -81,3 +82,23 @@ class SimpleDataloader:
 
     def __len__(self) -> int:
         return int(np.ceil(len(self._data) / self._bs))
+
+
+class KeyedComposer(Composer):
+    def __init__(self, datasets, *args, **kwargs) -> None:
+        super().__init__(list(datasets.values()), *args, **kwargs)
+        self._keys = datasets.keys()
+
+    def __getitem__(self, index: int):
+        data_tuple = super().__getitem__(index)
+        return {key: val for key, val in zip(self._keys, data_tuple)}
+
+
+class Filter(Sampler):
+    def __init__(self, ds: SizedDataset, indices: List[int], **kwargs) -> None:
+        super().__init__(ds, num_samples=len(indices), **kwargs)
+
+        self._indices = indices
+
+    def __getitem__(self, index: int):
+        return self._dataset[self._indices[index]]
