@@ -450,14 +450,21 @@ First you need to create a Metric object - which will accept and explainer and d
 and return some value
 
 ```python
-class NewMetric(Metric):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    from xaib.base import Metric
 
-        self.name = 'new_metric'
+    class NewMetric(Metric):
+        def __init__(self, ds, model *args, **kwargs):
+            super().__init__(ds, model, *args, **kwargs)
 
-    def compute(self, explainer, *args, batch_size=1, **kwargs):
-        return np.random.rand()
+            self.name = 'new_metric'
+            self.direction = 'down'
+
+        def compute(self, explainer, *args, batch_size=1, expl_kwargs=None, **kwargs):
+            if expl_kwargs is None:
+                expl_kwargs = {}
+            # Here compute and return your metric
+
+            return np.random.rand()
 ```
 
 #### Test new metric
