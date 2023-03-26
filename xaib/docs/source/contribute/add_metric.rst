@@ -69,6 +69,8 @@ Case of choice.
         case.add_metric('new_metric', metric)
         return case
 
+    coherence()
+
     visualize_results('results', 'results/results.png')
 
 Integrate new metric

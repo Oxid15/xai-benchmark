@@ -502,6 +502,8 @@ def coherence():
     case.add_metric('new_metric', metric)
     return case
 
+coherence()
+
 visualize_results('results', 'results/results.png')
 ```
 
