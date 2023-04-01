@@ -177,10 +177,14 @@ def visualize_results(path, output_dir=None):
     )
 
     pv = pv.reset_index()
-    pv.loc[pv["dataset"].duplicated(), "dataset"] = ""
-    pv.loc[pv["model"].duplicated(), "model"] = ""
-    pv.loc[pv["case"].duplicated(), "case"] = ""
-    pv.loc[pv["metric"].duplicated(), "metric"] = ""
+
+    for col in ["dataset", "model", "case", "metric"]:
+        prev_val = ""
+        for i in range(len(pv[col])):
+            val = pv.loc[i][col]
+            if val == prev_val:
+                pv.loc[i, col] = ""
+            prev_val = val
 
     figs = dict()
     figs["table"] = table(pv)
