@@ -180,11 +180,10 @@ def visualize_results(path, output_dir=None):
     pv.loc[pv["case"].duplicated(), "case"] = ""
     pv.loc[pv["metric"].duplicated(), "metric"] = ""
 
-    metrics = pv.metric.unique()
-
     figs = dict()
     figs["table"] = table(pv)
 
+    metrics = df.metric.unique()
     for name in metrics:
         figs[f"scatter_{name}"] = scatter(df, name)
 
