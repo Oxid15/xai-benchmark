@@ -90,6 +90,10 @@ def experiment(root, explainers, *args, batch_size=1, **kwargs):
 
 
 def table(df):
+    for col in df:
+        if df[col].dtype == np.float64:
+            df[col] = df[col].apply(lambda x: f"{x:0.2f}")
+
     fig = go.Figure(
         data=[
             go.Table(
