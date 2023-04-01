@@ -6,6 +6,7 @@ import pandas as pd
 from cascade import data as cdd
 from cascade import models as cdm
 from cascade.meta import MetaViewer
+from plotly import express as px
 from plotly import graph_objects as go
 
 
@@ -88,7 +89,60 @@ def experiment(root, explainers, *args, batch_size=1, **kwargs):
     return wrapper
 
 
-def visualize_results(path, output_path=None, title=None):
+def table(df):
+    fig = go.Figure(
+        data=[
+            go.Table(
+                header=dict(values=list(df.columns), align="left"),
+                cells=dict(values=[df[col] for col in df.columns], align="left"),
+            )
+        ]
+    )
+    fig.update_layout(title="Table with metric values on all setups")
+
+    return fig
+
+
+def relative_bar(df):
+    metrics = df.metric.unique()
+
+    df["viz_value"] = df["value"]
+    for metric in metrics:
+        df.loc[df["metric"] == metric, "viz_value"] /= df.loc[
+            df["metric"] == metric, "value"
+        ].max()
+    df.loc[df["direction"] == "down", "viz_value"] *= -1
+
+    fig = go.Figure(
+        data=[
+            go.Bar(
+                name=metric,
+                x=df.name.unique(),
+                y=df.loc[df["metric"] == metric]["viz_value"],
+                hovertext=df.loc[df["metric"] == metric]["direction"],
+            )
+            for metric in df.metric.unique()
+        ]
+    )
+    # Change the bar mode
+    fig.update_layout(barmode="relative")
+
+    return fig
+
+
+def scatter(df, metric):
+    direction = df.loc[df.metric == metric]["direction"].iloc[0]
+
+    return px.scatter(
+        df.loc[df.metric == metric].sort_values("value", ascending=direction == "up"),
+        x="name",
+        y="value",
+        title=metric.replace("_", " ").capitalize() + ", direction - " + direction,
+        hover_data=["dataset", "model"],
+    )
+
+
+def visualize_results(path, output_dir=None):
     m = MetaViewer(path, filt={"type": "model"})
 
     data = []
@@ -109,30 +163,31 @@ def visualize_results(path, output_path=None, title=None):
             )
 
     df = pd.DataFrame(data)
-    df = pd.pivot_table(
+    pv = pd.pivot_table(
         df,
         values="value",
         columns=["name"],
         index=["dataset", "model", "case", "metric", "direction"],
     )
 
-    df = df.reset_index()
-    df.loc[df["dataset"].duplicated(), "dataset"] = ""
-    df.loc[df["model"].duplicated(), "model"] = ""
-    df.loc[df["case"].duplicated(), "case"] = ""
-    df.loc[df["metric"].duplicated(), "metric"] = ""
+    pv = pv.reset_index()
+    pv.loc[pv["dataset"].duplicated(), "dataset"] = ""
+    pv.loc[pv["model"].duplicated(), "model"] = ""
+    pv.loc[pv["case"].duplicated(), "case"] = ""
+    pv.loc[pv["metric"].duplicated(), "metric"] = ""
 
-    fig = go.Figure(
-        data=[
-            go.Table(
-                header=dict(values=list(df.columns), align="left"),
-                cells=dict(values=[df[col] for col in df.columns], align="left"),
-            )
-        ]
-    )
-    fig.update_layout(title=title)
+    metrics = pv.metric.unique()
 
-    if output_path is not None:
-        fig.write_image(output_path)
+    figs = dict()
+    figs["table"] = table(pv)
 
-    return fig
+    for name in metrics:
+        figs[f"scatter_{name}"] = scatter(df, name)
+
+    figs["bar"] = relative_bar(df)
+
+    for name in figs:
+        if output_dir is not None:
+            figs[name].write_image(os.path.join(output_dir, name + ".png"))
+
+    return figs
