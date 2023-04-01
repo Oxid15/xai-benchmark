@@ -1,12 +1,9 @@
 import os
 import sys
 
-from cascade import data as cdd
-from cascade.utils.sk_model import SkModel
 from cascade.models import ModelRepo
-
-from xaib.evaluation.feature_importance import ExplainerFactory, ExperimentFactory
-from xaib.evaluation import ModelFactory, DatasetFactory
+from xaib.evaluation import DatasetFactory, ModelFactory
+from xaib.evaluation.feature_importance import ExperimentFactory, ExplainerFactory
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SCRIPT_DIR)
@@ -14,8 +11,6 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
 sys.path.append(PROJECT_DIR)
 
 from xaib.evaluation.utils import visualize_results
-from xaib.evaluation.model_factory import SkWrapper
-
 
 REPO_PATH = os.path.join(os.path.dirname(BASE_DIR), "results", "feature_importance")
 BS = 5
