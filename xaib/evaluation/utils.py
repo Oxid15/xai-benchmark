@@ -110,6 +110,8 @@ def table(df):
 def relative_bar(df):
     metrics = df.metric.unique()
 
+    df = df.groupby(["name", "metric", "direction"], as_index=False).agg("mean")
+
     df["viz_value"] = df["value"]
     for metric in metrics:
         df.loc[df["metric"] == metric, "viz_value"] /= df.loc[
