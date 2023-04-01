@@ -1,12 +1,11 @@
-from typing import Dict, Any
 import os
+from typing import Any
 
 import numpy as np
+import pandas as pd
 from cascade import data as cdd
 from cascade import models as cdm
-
 from cascade.meta import MetaViewer
-import pandas as pd
 from plotly import graph_objects as go
 
 
@@ -21,6 +20,7 @@ class WrapperModel(cdm.ModelModifier):
     def load(self, filepath: str, *args: Any, **kwargs: Any) -> None:
         return self._model.load(filepath, *args, **kwargs)
 
+
 class WrapperDataset(cdd.Modifier):
     def __init__(self, ds, name: str, *args: Any, **kwargs: Any) -> None:
         super().__init__(dataset=ds, *args, **kwargs)
@@ -28,15 +28,16 @@ class WrapperDataset(cdd.Modifier):
 
 
 class NoiseApplier(cdd.Modifier):
-    def __init__(self, dataset, multiplier: float = 1., *args, **kwargs) -> None:
+    def __init__(self, dataset, multiplier: float = 1.0, *args, **kwargs) -> None:
         super().__init__(dataset, *args, **kwargs)
 
         self._multiplier = multiplier
 
     def __getitem__(self, index):
         item = self._dataset.__getitem__(index)
-        item['item'] = item['item'] \
-            + np.random.random(item['item'].shape) * self._multiplier
+        item["item"] = (
+            item["item"] + np.random.random(item["item"].shape) * self._multiplier
+        )
         return item
 
 
@@ -57,16 +58,15 @@ class KNeighborsTransformer:
         self._dataset_length = dataset_length
 
     def kneighbors(self, x, n_neighbors):
-        return None, np.asarray([[np.random.randint(0, self._dataset_length)]
-            for _ in range(n_neighbors)])
+        return None, np.asarray(
+            [[np.random.randint(0, self._dataset_length)] for _ in range(n_neighbors)]
+        )
 
 
 class RandomNeighborsBaseline(cdm.BasicModel):
     def __init__(self, dataset_length, *args, meta_prefix=None, **kwargs) -> None:
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
         self._pipeline = [KNeighborsTransformer(dataset_length)]
-
-
 
 
 def experiment(root, explainers, *args, batch_size=1, **kwargs):
@@ -78,7 +78,9 @@ def experiment(root, explainers, *args, batch_size=1, **kwargs):
             line = repo.add_line()
 
             for name in explainers:
-                c.evaluate(name, explainers[name], *args, batch_size=batch_size, **kwargs)
+                c.evaluate(
+                    name, explainers[name], *args, batch_size=batch_size, **kwargs
+                )
                 line.save(c, only_meta=True)
 
         return wrap_case
@@ -87,37 +89,45 @@ def experiment(root, explainers, *args, batch_size=1, **kwargs):
 
 
 def visualize_results(path, output_path=None, title=None):
-    m = MetaViewer(path, filt={'type': 'model'})
+    m = MetaViewer(path, filt={"type": "model"})
 
     data = []
     for p in m:
-        for metric_name in p[0]['metrics']:
+        for metric_name in p[0]["metrics"]:
             data.append(
                 {
-                    'name': p[0]['params']['metric_params'][metric_name]['name'],
-                    'case': p[0]['params']['case'],
-                    'dataset': p[0]['params']['metric_params'][metric_name]['dataset'],
-                    'model': p[0]['params']['metric_params'][metric_name]['model'],
-                    'metric': metric_name,
-                    'direction': p[0]['params']['metric_params'][metric_name]['direction'],
-                    'value': p[0]['metrics'][metric_name]
+                    "name": p[0]["params"]["metric_params"][metric_name]["name"],
+                    "case": p[0]["params"]["case"],
+                    "dataset": p[0]["params"]["metric_params"][metric_name]["dataset"],
+                    "model": p[0]["params"]["metric_params"][metric_name]["model"],
+                    "metric": metric_name,
+                    "direction": p[0]["params"]["metric_params"][metric_name][
+                        "direction"
+                    ],
+                    "value": p[0]["metrics"][metric_name],
                 }
             )
 
     df = pd.DataFrame(data)
-    df = pd.pivot_table(df, values='value', columns=['name'], index=['dataset', 'model', 'case', 'metric', 'direction'])
+    df = pd.pivot_table(
+        df,
+        values="value",
+        columns=["name"],
+        index=["dataset", "model", "case", "metric", "direction"],
+    )
 
     df = df.reset_index()
-    df.loc[df['dataset'].duplicated(), 'dataset'] = ''
-    df.loc[df['model'].duplicated(), 'model'] = ''
-    df.loc[df['case'].duplicated(), 'case'] = ''
-    df.loc[df['metric'].duplicated(), 'metric'] = ''
+    df.loc[df["dataset"].duplicated(), "dataset"] = ""
+    df.loc[df["model"].duplicated(), "model"] = ""
+    df.loc[df["case"].duplicated(), "case"] = ""
+    df.loc[df["metric"].duplicated(), "metric"] = ""
 
-    fig = go.Figure(data=[go.Table(
-        header=dict(values=list(df.columns),
-                    align='left'),
-        cells=dict(values=[df[col] for col in df.columns],
-                align='left'))
+    fig = go.Figure(
+        data=[
+            go.Table(
+                header=dict(values=list(df.columns), align="left"),
+                cells=dict(values=[df[col] for col in df.columns], align="left"),
+            )
         ]
     )
     fig.update_layout(title=title)
