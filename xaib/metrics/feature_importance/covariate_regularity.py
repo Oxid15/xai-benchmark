@@ -9,9 +9,16 @@ from ...utils import SimpleDataloader, entropy, minmax_normalize
 
 class CovariateRegularity(Metric):
     """
-    CovariateComplexity Measures how complex explanation features are, their
-    consistency. If explanation features are noisy, then
-    they are harder to remember.
+    Covariate Regularity using entropy over explanations
+
+    This measures how comprehensible the explanations are in average.
+    More simple explanations are considered better.
+    This is measured by average Shannon entropy over batch-normalized explanations.
+
+    **The less the better**
+
+      - **Worst case:** constant explainer that gives same importance to each feature, that is equal to 1/N where N is the number of features
+      - **Best case:** constant explainer that gives one feature maximum value and others zero
     """
 
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:

@@ -9,9 +9,22 @@ from ...utils import SimpleDataloader, batch_rmse, minmax_normalize
 
 class ParameterRandomizationCheck(Metric):
     """
-    CorrectnessCase Measures truthfullness of the method
-    to the underlying model - whether it is
-    sensitive to the changes in model
+    Parameter randomization check is a sanity-check.
+    To ensure that the model influence explanations the
+    following is done. The model is changed and it is expected that
+    explanations should not stay the same is model changed.
+    This check uses random model baselines instead of same models
+    with randomized internal states.
+    Then the explanations on the original data are obtained.
+    They are compared with explanations done with the original model using
+    average RMSE on the whole dataset.
+    The further original explanations from the explanations on
+    the randomized model the better.
+
+    **The less the better**
+     - **Worst case:** explanations are the same, so it is Constant explainer.
+     - **Best case:** is reached when explanations are the opposite, distance between them maximized. The problem with this kind of metric is with its maximization. It seems redundant to maximize it because more different explanations on random states do not mean that the model is more correct.
+    It is difficult to define best case explainer in this case - the metric has no maximum value.
     """
 
     def __init__(

@@ -9,9 +9,10 @@ from ...utils import SimpleDataloader, batch_rmse, minmax_normalize
 
 class OtherDisagreement(Metric):
     """
-    Coherence measures how method
-    complies with domain knowledge, ground-truth
-    or other methods
+    Measures how distant explanations on the same data points for
+    this particular method from explanations of all others.
+    Average RMSE is used as a metric.
+    **The less the better**
     """
 
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:

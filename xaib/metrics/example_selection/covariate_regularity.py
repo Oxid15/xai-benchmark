@@ -9,9 +9,16 @@ from ...utils import Filter, SimpleDataloader, entropy, minmax_normalize
 
 class CovariateRegularity(Metric):
     """
-    Coherence measures how method
-    complies with domain knowledge, ground-truth
-    or other methods
+    Measures how noisy the features in the examples provided
+    by the method.
+
+    More simple explanations are considered better.
+    This is measured by average Shannon entropy over batch-normalized explanations.
+
+    **The less the better**
+
+      - **Worst case:** constant explainer that gives examples with same importance to each feature, that is equal to 1/N where N is the number of features
+      - **Best case:** constant explainer that gives examples with one feature with maximum value and others zero
     """
 
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:

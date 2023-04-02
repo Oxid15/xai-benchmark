@@ -8,6 +8,29 @@ from ...utils import SimpleDataloader, batch_count_eq, minmax_normalize
 
 
 class ParameterRandomizationCheck(Metric):
+    """
+    Parameter randomization check is a sanity-check.
+    To ensure that the model influence explanations the
+    following is done. The model is changed and it is expected that
+    explanations should not stay the same is model changed.
+    This check uses random model baselines instead of same models
+    with randomized internal states.
+    Then the explanations on the original data are obtained.
+    They are compared with explanations done with the original model by
+    counting how many examples were the same for same data points.
+    The less  the better.
+
+    **The less the better**
+     - **Worst case:** explanations are the same, so it is Constant explainer
+     - **Best case:** is reached when explanations are the opposite,
+     distance between them maximized.
+    The problem with this kind of metric is
+    with its maximization. It seems redundant to maximize it because more
+    different explanations on random states do not mean that the model is
+    more correct.
+    It is difficult to define best case explainer in this case - the metric has no maximum value.
+    """
+
     def __init__(
         self, ds: Dataset, model: Model, noisy_model: Model, **kwargs: Any
     ) -> None:

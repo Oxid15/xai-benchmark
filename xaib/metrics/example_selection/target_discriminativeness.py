@@ -7,6 +7,18 @@ from ...utils import KeyedComposer, SimpleDataloader
 
 
 class TargetDiscriminativeness(Metric):
+    """
+    Given true labels and explanations in form of the examples, train another model to discriminate between labels.
+    The quality of the model on the examples given describes the quality of the explanations.
+    The quality can be measured by any performance metric,
+    but it is better to adopt to imbalanced data and use F1-measure for example.
+
+    **The greater the better**
+
+    **Best case:** examples are descriptive of labels so that the model reaches best performance
+    **Worst case:** constant or random baseline - giving insufficient information to grasp labels
+    """
+
     def __init__(self, ds, model, *args, **kwargs):
         super().__init__(ds, model, *args, **kwargs)
         self.name = "target_discriminativeness"

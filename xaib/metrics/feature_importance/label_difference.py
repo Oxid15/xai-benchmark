@@ -10,8 +10,17 @@ from ...utils import Filter, SimpleDataloader, batch_rmse, minmax_normalize
 
 class LabelDifference(Metric):
     """
-    ContrastivityCase Measures how different explanations
-    are actually different from each other
+    Obtain explanations for all targets and compare them.
+    In binary case one metric can be computed - the difference
+    between explanations of positive and negative targets.
+    In case of multiclass classification we can compare one explanation
+    to explanations of all other classes and obtain a number of metrics
+    which can be averaged.
+
+    **The more the better**
+
+    - **Worst case:** same explanations for different targets - constant explainer
+    - **Best case:** different explanations for different targets
     """
 
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:

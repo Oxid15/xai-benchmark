@@ -9,8 +9,20 @@ from ...utils import SimpleDataloader, batch_count_eq
 
 class SmallNoiseCheck(Metric):
     """
-    Continuity measures how continuous
-    explanation function is
+    Since the nature of example selection methods is discrete - we choose an example
+    from finite set, the use of RMSE measure may be not appropriate.
+    This means that the metric that is similar to the one that was used in feature
+    importance case is not suitable.
+    More appropriate metric could be the following: take the test dataset and add
+    small amount of noise to the items as was done in the feature importance case.
+    Then count the number of item pairs when the example provided didn't change and
+    divide by the total number of items.
+    This ratio then is how continuous example generator is - if it provides the same
+    examples for slightly changed inputs, then it is continuous.
+
+    **The less the better**
+     - **Worst case:** Constant explainer
+     - **Best case:** Random explainer
     """
 
     def __init__(
