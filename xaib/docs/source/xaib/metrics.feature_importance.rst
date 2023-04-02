@@ -10,7 +10,7 @@ xaib.metrics.feature_importance
 
 |
 
-.. autoclass:: xaib.metrics.feature_importance.covariate_regularity.LabelDifference
+.. autoclass:: xaib.metrics.feature_importance.label_difference.LabelDifference
    :members:
 
 |
@@ -19,7 +19,7 @@ xaib.metrics.feature_importance
 
 |
 
-.. autoclass:: xaib.metrics.feature_importance.covariate_regularity.OtherDisagreement
+.. autoclass:: xaib.metrics.feature_importance.other_disagreement.OtherDisagreement
    :members:
 
 |
@@ -28,7 +28,7 @@ xaib.metrics.feature_importance
 
 |
 
-.. autoclass:: xaib.metrics.feature_importance.covariate_regularity.ParameterRandomizationCheck
+.. autoclass:: xaib.metrics.feature_importance.parameter_randomization_check.ParameterRandomizationCheck
    :members:
 
 |
@@ -37,7 +37,7 @@ xaib.metrics.feature_importance
 
 |
 
-.. autoclass:: xaib.metrics.feature_importance.covariate_regularity.SmallNoiseCheck
+.. autoclass:: xaib.metrics.feature_importance.small_noise_check.SmallNoiseCheck
    :members:
 
 |
@@ -46,7 +46,7 @@ xaib.metrics.feature_importance
 
 |
 
-.. autoclass:: xaib.metrics.feature_importance.covariate_regularity.Sparsity
+.. autoclass:: xaib.metrics.feature_importance.sparsity.Sparsity
    :members:
 
 |

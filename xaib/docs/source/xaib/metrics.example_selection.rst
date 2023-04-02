@@ -1,7 +1,7 @@
 xaib.metrics.example_selection
 ==============================
 
-.. autoclass:: xaib.metrics.feature_importance.covariate_regularity.CovariateRegularity
+.. autoclass:: xaib.metrics.example_selection.covariate_regularity.CovariateRegularity
    :members:
 
 |
@@ -10,7 +10,7 @@ xaib.metrics.example_selection
 
 |
 
-.. autoclass:: xaib.metrics.feature_importance.covariate_regularity.ParameterRandomizationCheck
+.. autoclass:: xaib.metrics.example_selection.parameter_randomization_check.ParameterRandomizationCheck
    :members:
 
 |
@@ -19,7 +19,7 @@ xaib.metrics.example_selection
 
 |
 
-.. autoclass:: xaib.metrics.feature_importance.covariate_regularity.SmallNoiseCheck
+.. autoclass:: xaib.metrics.example_selection.small_noise_check.SmallNoiseCheck
    :members:
 
 |
@@ -28,7 +28,7 @@ xaib.metrics.example_selection
 
 |
 
-.. autoclass:: xaib.metrics.feature_importance.covariate_regularity.TargetDiscriminativeness
+.. autoclass:: xaib.metrics.example_selection.target_discriminativeness.TargetDiscriminativeness
    :members:
 
 |
