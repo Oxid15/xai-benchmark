@@ -40,3 +40,6 @@ class DatasetFactory(Factory):
         self._constructors["iris"] = lambda: generate_dataset(
             SkDataset, "iris", frac=0.8
         )
+        self._constructors["digits"] = lambda: generate_dataset(
+            SkDataset, "digits", frac=0.8
+        )

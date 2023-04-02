@@ -19,7 +19,7 @@ BS = 100
 # Overwrite previous run
 ModelRepo(REPO_PATH, overwrite=True)
 
-for dataset in ["iris", "synthetic_noisy", "synthetic"]:
+for dataset in ["digits", "iris", "synthetic_noisy", "synthetic"]:
     for model in ["svm"]:
         train_ds, test_ds = DatasetFactory().get(dataset)
         print(train_ds.get_meta())

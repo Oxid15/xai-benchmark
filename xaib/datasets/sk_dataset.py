@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 import numpy as np
 from cascade import data as cdd
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_iris, load_digits
 from sklearn.model_selection import train_test_split
 
 
@@ -12,7 +12,10 @@ class SkDataset(cdd.SizedDataset):
 
         self.name = name
 
-        constructors = {"iris": load_iris(return_X_y=True)}
+        constructors = {
+            "iris": load_iris(return_X_y=True),
+            "digits": load_digits(return_X_y=True),
+        }
 
         if name not in constructors:
             raise ValueError(
