@@ -5,10 +5,12 @@ from ..utils import experiment
 
 
 class ExperimentFactory(Factory):
-    def __init__(self, repo_path, explainers, test_ds, model, batch_size) -> None:
+    def __init__(
+        self, repo_path, explainers, test_ds, model, labels, batch_size
+    ) -> None:
         super().__init__()
 
-        case_factory = CaseFactory(test_ds, model)
+        case_factory = CaseFactory(test_ds, model, labels)
 
         @experiment(repo_path, explainers=explainers, batch_size=batch_size)
         def correctness():

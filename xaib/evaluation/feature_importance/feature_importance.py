@@ -31,7 +31,7 @@ for dataset in ["iris", "synthetic_noisy", "synthetic"]:
 
         explainers = ExplainerFactory(train_ds, model, labels=labels).get("all")
         experiment_factory = ExperimentFactory(
-            REPO_PATH, explainers, test_ds, model, BS
+            REPO_PATH, explainers, test_ds, model, labels, BS
         )
 
         experiments = experiment_factory.get("all")

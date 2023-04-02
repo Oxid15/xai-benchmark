@@ -17,7 +17,7 @@ class SyntheticDataset(cdd.SizedDataset):
             self.name = "synthetic"
 
         x, y = make_classification(*args, n_classes=n_classes, **kwargs)
-        self.labels = n_classes
+        self.labels = [i for i in range(n_classes)]
 
         train_x, test_x, train_y, test_y = train_test_split(x, y, train_size=frac)
 
