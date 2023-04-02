@@ -1,8 +1,10 @@
-from typing import Any, Union, Dict
+from typing import Any, Dict, Union
+
 import numpy as np
 from tqdm import tqdm
-from ...base import Metric, Explainer, Dataset, Model
-from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
+
+from ...base import Dataset, Explainer, Metric, Model
+from ...utils import SimpleDataloader, batch_rmse, minmax_normalize
 
 
 class ParameterRandomizationCheck(Metric):

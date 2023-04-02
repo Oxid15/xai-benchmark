@@ -1,5 +1,6 @@
-from ...base import Explainer
 import numpy as np
+
+from ...base import Explainer
 
 
 class KNNExplainer(Explainer):
@@ -9,4 +10,4 @@ class KNNExplainer(Explainer):
 
     def predict(self, x, model):
         _, indices = model._pipeline[0].kneighbors(x, 1)
-        return np.asarray([self._train_ds[i[0]]['item'] for i in indices])
+        return np.asarray([self._train_ds[i[0]]["item"] for i in indices])

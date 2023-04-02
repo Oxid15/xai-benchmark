@@ -1,11 +1,12 @@
-from typing import Any, Union, Dict
+from typing import Any, Dict, Union
+
 import numpy as np
 
-from ...base import Model, Explainer
+from ...base import Explainer, Model
 
 
 class ConstantExplainer(Explainer):
-    def __init__(self, constant: Any, *args:Any, **kwargs: Any) -> None:
+    def __init__(self, constant: Any, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.constant = constant
 

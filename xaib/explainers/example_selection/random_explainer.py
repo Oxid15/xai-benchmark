@@ -9,5 +9,9 @@ class RandomExplainer(Explainer):
         self._train_ds = train_ds
 
     def predict(self, x, model):
-        return np.asarray([self._train_ds[np.random.randint(0, len(self._train_ds) - 1)]['item']
-            for _ in range(len(x))])
+        return np.asarray(
+            [
+                self._train_ds[np.random.randint(0, len(self._train_ds) - 1)]["item"]
+                for _ in range(len(x))
+            ]
+        )

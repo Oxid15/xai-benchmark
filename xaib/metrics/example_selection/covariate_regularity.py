@@ -1,10 +1,10 @@
-from typing import Dict, List, Any, Union
+from typing import Any, Dict, Union
 
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Dataset, Model, Metric, Explainer
-from ...utils import entropy, minmax_normalize, SimpleDataloader, Filter
+from ...base import Dataset, Explainer, Metric, Model
+from ...utils import Filter, SimpleDataloader, entropy, minmax_normalize
 
 
 class CovariateRegularity(Metric):
@@ -13,23 +13,28 @@ class CovariateRegularity(Metric):
     complies with domain knowledge, ground-truth
     or other methods
     """
+
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
         super().__init__(ds, model, *args, **kwargs)
-        self.name = 'covariate_regularity'
-        self.direction = 'down'
+        self.name = "covariate_regularity"
+        self.direction = "down"
 
     def compute(
         self,
         expl: Explainer,
         batch_size: int = 1,
-        expl_kwargs: Union[Dict[Any, Any], None] = None
+        expl_kwargs: Union[Dict[Any, Any], None] = None,
     ) -> None:
         if expl_kwargs is None:
-            expl_kwargs = {} 
+            expl_kwargs = {}
 
         # Obtain all the labels
-        labels = np.asarray([item['label'] for item in
-                             tqdm(self._ds, desc='Obtaining labels', leave=False)])
+        labels = np.asarray(
+            [
+                item["label"]
+                for item in tqdm(self._ds, desc="Obtaining labels", leave=False)
+            ]
+        )
 
         # Determine how much of an intersection different labels have
         unique_labels, counts = np.unique(labels, return_counts=True)
@@ -43,7 +48,7 @@ class CovariateRegularity(Metric):
         for u in unique_labels:
             dl = SimpleDataloader(Filter(self._ds, coords[u]), batch_size=batch_size)
             for batch in tqdm(dl):
-                ex = expl.predict(batch['item'], self._model, **expl_kwargs)
+                ex = expl.predict(batch["item"], self._model, **expl_kwargs)
                 ex = minmax_normalize(ex)
 
                 explanations[u] += ex.tolist()

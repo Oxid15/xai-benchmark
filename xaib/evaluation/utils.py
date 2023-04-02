@@ -126,11 +126,12 @@ def relative_bar(df):
                 x=df.name.unique(),
                 y=df.loc[df["metric"] == metric]["viz_value"],
                 hovertext=df.loc[df["metric"] == metric]["direction"],
+                width=0.25,
             )
-            for metric in df.metric.unique()
+            for metric in metrics
         ]
     )
-    # Change the bar mode
+
     fig.update_layout(barmode="relative")
 
     return fig
@@ -186,17 +187,33 @@ def visualize_results(path, output_dir=None):
                 pv.loc[i, col] = ""
             prev_val = val
 
-    figs = dict()
-    figs["table"] = table(pv)
+    figs = []
+    figs.append(
+        {
+            "name": "table",
+            "fig": table(pv),
+            "desc": "",
+        }
+    )
+
+    figs.append(
+        {
+            "name": "bar",
+            "fig": relative_bar(df),
+            "desc": "This barchart is simple representation of average scores for each method evaluated.<br>"
+            "Since metrics can be directed differenty e.g. in some cases 'the greater the better' or"
+            " 'the less the better' on this chart all metrics directed down (the less the better) were "
+            "multiplied by -1.<br>This means that on the side below zero better method will be higher, "
+            "closer to zero and on the size above zero better method will be also higher as usual.",
+        }
+    )
 
     metrics = df.metric.unique()
     for name in metrics:
-        figs[f"scatter_{name}"] = scatter(df, name)
+        figs.append({"name": f"scatter_{name}", "fig": scatter(df, name), "desc": ""})
 
-    figs["bar"] = relative_bar(df)
-
-    for name in figs:
+    for fig in figs:
         if output_dir is not None:
-            figs[name].write_image(os.path.join(output_dir, name + ".png"))
+            fig["fig"].write_image(os.path.join(output_dir, fig["name"] + ".png"))
 
     return figs

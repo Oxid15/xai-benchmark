@@ -1,13 +1,11 @@
 import os
 import sys
 
-from cascade.models import ModelRepo
 from cascade import data as cdd
+from cascade.models import ModelRepo
 from cascade.utils.sk_model import SkModel
-
 from xaib.evaluation import DatasetFactory, ModelFactory
-from xaib.evaluation.example_selection import ExplainerFactory, ExperimentFactory
-
+from xaib.evaluation.example_selection import ExperimentFactory, ExplainerFactory
 
 SCRIPT_DIR = os.path.dirname(__file__)
 # xaib/results/...
@@ -16,7 +14,7 @@ REPO_PATH = os.path.join(
 )
 
 sys.path.append(os.path.abspath(os.path.dirname(SCRIPT_DIR)))
-from utils import visualize_results, WrapperModel
+from utils import WrapperModel, visualize_results
 
 
 class SkWrapper(SkModel):

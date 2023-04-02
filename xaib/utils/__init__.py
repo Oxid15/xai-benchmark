@@ -1,4 +1,10 @@
 from .utils import (
-    batch_rmse, minmax_normalize, entropy, batch_gini, SimpleDataloader,
-    batch_count_eq, KeyedComposer, Filter
+    Filter,
+    KeyedComposer,
+    SimpleDataloader,
+    batch_count_eq,
+    batch_gini,
+    batch_rmse,
+    entropy,
+    minmax_normalize,
 )

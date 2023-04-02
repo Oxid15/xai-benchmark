@@ -1,10 +1,10 @@
-from typing import Dict, List, Any, Union
+from typing import Any, Dict, List, Union
 
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Dataset, Model, Metric, Explainer
-from ...utils import batch_rmse, minmax_normalize, SimpleDataloader
+from ...base import Dataset, Explainer, Metric, Model
+from ...utils import SimpleDataloader, batch_rmse, minmax_normalize
 
 
 class OtherDisagreement(Metric):
@@ -13,10 +13,11 @@ class OtherDisagreement(Metric):
     complies with domain knowledge, ground-truth
     or other methods
     """
+
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
         super().__init__(ds, model, *args, **kwargs)
-        self.name = 'other_disagreement'
-        self.direction = 'down'
+        self.name = "other_disagreement"
+        self.direction = "down"
 
     def compute(
         self,
@@ -24,7 +25,7 @@ class OtherDisagreement(Metric):
         batch_size: int = 1,
         expls: Union[List[Explainer], None] = None,
         expl_kwargs: Union[Dict[Any, Any], None] = None,
-        expls_kwargs: Union[List[Dict[Any, Any]], None] = None
+        expls_kwargs: Union[List[Dict[Any, Any]], None] = None,
     ) -> None:
         # Default initialization in case of empty
         # parameter to not to break default argument order
@@ -36,15 +37,16 @@ class OtherDisagreement(Metric):
         if expls_kwargs is None:
             expls_kwargs = [{} for _ in range(len(expls))]
 
-
         diffs = []
         for batch in tqdm(SimpleDataloader(self._ds, batch_size)):
-            item = batch['item']
+            item = batch["item"]
 
             e = expl.predict(item, self._model, **expl_kwargs)
             e = minmax_normalize(e)
-            other_e = [minmax_normalize(other_expl.predict(item, self._model, **other_kwargs))
-                       for other_expl, other_kwargs in zip(expls, expls_kwargs)]
+            other_e = [
+                minmax_normalize(other_expl.predict(item, self._model, **other_kwargs))
+                for other_expl, other_kwargs in zip(expls, expls_kwargs)
+            ]
 
             for oe in other_e:
                 diffs += batch_rmse(e, oe)

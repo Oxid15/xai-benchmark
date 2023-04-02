@@ -1,8 +1,8 @@
-from typing import Dict, Any
+from typing import Any, Dict
 
+from cascade import data as cdd
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
-from cascade import data as cdd
 
 
 class SyntheticDataset(cdd.SizedDataset):

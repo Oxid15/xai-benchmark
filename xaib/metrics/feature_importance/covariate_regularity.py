@@ -1,9 +1,10 @@
-from typing import Dict, Union, Any
+from typing import Any, Dict, Union
+
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Dataset, Model, Metric, Explainer
-from ...utils import entropy, minmax_normalize, SimpleDataloader
+from ...base import Dataset, Explainer, Metric, Model
+from ...utils import SimpleDataloader, entropy, minmax_normalize
 
 
 class CovariateRegularity(Metric):
@@ -12,23 +13,24 @@ class CovariateRegularity(Metric):
     consistency. If explanation features are noisy, then
     they are harder to remember.
     """
+
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
         super().__init__(ds, model, *args, **kwargs)
-        self.name = 'covariate_regularity'
-        self.direction = 'down'
+        self.name = "covariate_regularity"
+        self.direction = "down"
 
     def compute(
-            self,
-            expl: Explainer,
-            batch_size: int = 1,
-            expl_kwargs: Union[Dict[Any, Any], None] = None,
+        self,
+        expl: Explainer,
+        batch_size: int = 1,
+        expl_kwargs: Union[Dict[Any, Any], None] = None,
     ):
         if expl_kwargs is None:
             expl_kwargs = {}
 
         explanations = []
         for batch in tqdm(SimpleDataloader(self._ds, batch_size)):
-            item = batch['item']
+            item = batch["item"]
 
             e = expl.predict(item, self._model, **expl_kwargs)
             e = minmax_normalize(e)
