@@ -1,23 +1,26 @@
 from typing import Any, Dict
 
+import numpy as np
 from cascade import data as cdd
-from sklearn.datasets import make_classification
+from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 
 
-class SyntheticDataset(cdd.SizedDataset):
-    def __init__(
-        self, split, name=None, frac=0.8, *args, n_classes=2, **kwargs
-    ) -> None:
+class SkDataset(cdd.SizedDataset):
+    def __init__(self, name, split, frac=0.8, *args, **kwargs) -> None:
         super().__init__(**kwargs)
-        # Useful for different synthetic datasets
-        if name is not None:
-            self.name = name
-        else:
-            self.name = "synthetic"
 
-        x, y = make_classification(*args, n_classes=n_classes, **kwargs)
-        self.labels = n_classes
+        self.name = name
+
+        constructors = {"iris": load_iris(return_X_y=True)}
+
+        if name not in constructors:
+            raise ValueError(
+                f"{name} not in SkDataset use one of {list(constructors.keys())}"
+            )
+
+        x, y = constructors[name]
+        self.labels = np.unique(y)
 
         train_x, test_x, train_y, test_y = train_test_split(x, y, train_size=frac)
 
