@@ -16,9 +16,8 @@ class CovariateRegularity(Metric):
     This is measured by average Shannon entropy over batch-normalized explanations.
 
     **The less the better**
-
-      - **Worst case:** constant explainer that gives same importance to each feature, that is equal to 1/N where N is the number of features
-      - **Best case:** constant explainer that gives one feature maximum value and others zero
+     - **Worst case:** constant explainer that gives same importance to each feature, that is equal to 1/N where N is the number of features
+     - **Best case:** constant explainer that gives one feature maximum value and others zero
     """
 
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
