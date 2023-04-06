@@ -8,6 +8,7 @@ from cascade import models as cdm
 from cascade.meta import MetaViewer
 from plotly import express as px
 from plotly import graph_objects as go
+from scipy.special import softmax
 
 
 class WrapperModel(cdm.ModelModifier):
@@ -42,16 +43,17 @@ class NoiseApplier(cdd.Modifier):
         return item
 
 
-class RandomBinBaseline(cdm.BasicModel):
-    def __init__(self, *args, meta_prefix=None, **kwargs) -> None:
+class RandomBaseline(cdm.BasicModel):
+    def __init__(self, labels, *args, meta_prefix=None, **kwargs) -> None:
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
+        self._labels = labels
 
     def predict(self, x):
-        return np.array([np.random.choice((0, 1)) for _ in range(len(x))])
+        return np.array([np.random.choice(self._labels) for _ in range(len(x))])
 
     def predict_proba(self, x):
-        proba = np.array([np.random.random() for _ in range(len(x))])
-        return np.stack((proba, 1.0 - proba), axis=1)
+        proba = np.random.random((len(x), len(self._labels)))
+        return softmax(proba, axis=1)
 
 
 class KNeighborsTransformer:
@@ -146,6 +148,7 @@ def scatter(df, metric):
         y="value",
         title=metric.replace("_", " ").capitalize() + ", direction - " + direction,
         hover_data=["dataset", "model"],
+        color="dataset"
     )
 
 

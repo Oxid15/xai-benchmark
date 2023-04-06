@@ -6,7 +6,9 @@ from sklearn.model_selection import train_test_split
 
 
 class SyntheticDataset(cdd.SizedDataset):
-    def __init__(self, split, name=None, frac=0.8, *args, **kwargs) -> None:
+    def __init__(
+        self, split, name=None, frac=0.8, *args, n_classes=2, **kwargs
+    ) -> None:
         super().__init__(**kwargs)
         # Useful for different synthetic datasets
         if name is not None:
@@ -14,7 +16,8 @@ class SyntheticDataset(cdd.SizedDataset):
         else:
             self.name = "synthetic"
 
-        x, y = make_classification(*args, **kwargs)
+        x, y = make_classification(*args, n_classes=n_classes, **kwargs)
+        self.labels = [i for i in range(n_classes)]
 
         train_x, test_x, train_y, test_y = train_test_split(x, y, train_size=frac)
 

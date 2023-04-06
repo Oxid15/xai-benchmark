@@ -7,11 +7,11 @@ from ...cases.feature_importance import (
     CorrectnessCase,
     CovariateComplexityCase,
 )
-from ..utils import NoiseApplier, RandomBinBaseline
+from ..utils import NoiseApplier, RandomBaseline
 
 
-def correctness(test_ds, model):
-    noisy_model = RandomBinBaseline()
+def correctness(test_ds, model, labels):
+    noisy_model = RandomBaseline(labels=labels)
     return CorrectnessCase(test_ds, model, noisy_model)
 
 
@@ -21,9 +21,11 @@ def continuity(test_ds, model):
 
 
 class CaseFactory(Factory):
-    def __init__(self, test_ds: Dataset, model: Model) -> None:
+    def __init__(self, test_ds: Dataset, model: Model, labels) -> None:
         super().__init__()
-        self._constructors["correctness"] = lambda: correctness(test_ds, model)
+        self._constructors["correctness"] = lambda: correctness(
+            test_ds, model, labels=labels
+        )
         self._constructors["continuity"] = lambda: continuity(test_ds, model)
         self._constructors["contrastivity"] = lambda: ContrastivityCase(test_ds, model)
         self._constructors["coherence"] = lambda: CoherenceCase(test_ds, model)

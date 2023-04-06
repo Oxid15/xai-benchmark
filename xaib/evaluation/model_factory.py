@@ -24,7 +24,7 @@ def svm(train_ds, test_ds):
 
     model = SkWrapper(blocks=[SVC(probability=True)], name="svm")
     model.fit(X_train, Y_train)
-    model.evaluate(X_test, Y_test, {"f1": f1_score})
+    model.evaluate(X_test, Y_test, {"f1": lambda x, y: f1_score(x, y, average="macro")})
     return model
 
 

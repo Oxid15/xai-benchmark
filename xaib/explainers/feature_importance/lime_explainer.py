@@ -10,7 +10,7 @@ class LimeExplainer(Explainer):
 
         data = np.array([item["item"] for item in train_ds])
         self._explainer = lime_tabular.LimeTabularExplainer(
-            data, feature_selection="none"
+            data, feature_selection="none", training_labels=labels
         )
         self._labels = labels
 
@@ -21,7 +21,10 @@ class LimeExplainer(Explainer):
         explanations = []
         for item in x:
             ex = self._explainer.explain_instance(
-                item, model.predict_proba, labels=self._labels
+                item,
+                model.predict_proba,
+                labels=self._labels,
+                num_features=len(self._labels),
             )
             predicted_label = np.argmax(ex.predict_proba)
             ex = ex.as_map()[predicted_label]
