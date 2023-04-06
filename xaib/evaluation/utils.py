@@ -148,6 +148,7 @@ def scatter(df, metric):
         y="value",
         title=metric.replace("_", " ").capitalize() + ", direction - " + direction,
         hover_data=["dataset", "model"],
+        color="dataset"
     )
 
 
