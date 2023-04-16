@@ -28,7 +28,7 @@ BS = 5
 # Overwrite previous run
 ModelRepo(REPO_PATH, overwrite=True)
 
-for dataset in ["synthetic_noisy", "synthetic"]:
+for dataset in ["synthetic_noisy", "synthetic", "iris", "digits"]:
     for model in ["knn"]:
         train_ds, test_ds = DatasetFactory().get(dataset)
         print(train_ds.get_meta())

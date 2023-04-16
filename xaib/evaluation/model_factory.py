@@ -13,6 +13,7 @@ class SkWrapper(SkModel):
         self.name = name
 
 
+# TODO: merge code repetition
 def svm(train_ds, test_ds):
     X_train, Y_train = [x["item"] for x in train_ds], [x["label"] for x in train_ds]
     X_test, Y_test = [x["item"] for x in test_ds], [x["label"] for x in test_ds]
@@ -39,7 +40,7 @@ def knn(train_ds, test_ds):
 
     model = SkWrapper(blocks=[KNeighborsClassifier(n_neighbors=3)], name="svm")
     model.fit(X_train, Y_train)
-    model.evaluate(X_test, Y_test, {"f1": f1_score})
+    model.evaluate(X_test, Y_test, {"f1": lambda x, y: f1_score(x, y, average="macro")})
     return model
 
 
