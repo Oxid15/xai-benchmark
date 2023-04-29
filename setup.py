@@ -20,5 +20,5 @@ setuptools.setup(
     package_dir={"xaib": "./xaib"},
     packages=setuptools.find_packages(),
     python_requires=">=3.8",
-    install_requires=["cascade-ml>=0.7.2", "scikit-learn", "plotly", "kaleido"],
+    install_requires=["cascade-ml", "scikit-learn", "plotly", "kaleido"],
 )
