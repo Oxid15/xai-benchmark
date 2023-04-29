@@ -1,5 +1,6 @@
 import matplotlib
-matplotlib.use('TkAgg')
+
+matplotlib.use("TkAgg")
 import os
 import sys
 
@@ -22,9 +23,19 @@ MAX_EVAL_SAMPLES = 1000
 # Overwrite previous run
 ModelRepo(REPO_PATH, overwrite=True)
 
-for dataset in ["kddcup99", "covtype", "breast_cancer", "digits",
-                "iris", "synthetic_noisy", "synthetic"]:
-    for model in ["svm"]:
+for dataset in [
+    "lfw_people",
+    "kddcup99",
+    "covtype",
+    "breast_cancer",
+    "digits",
+    "iris",
+    "synthetic_noisy",
+    "synthetic",
+]:
+    for model in ["svm", "nn"]:
+        print(dataset, model)
+
         train_ds, test_ds = DatasetFactory().get(dataset)
         print(train_ds.get_meta())
 

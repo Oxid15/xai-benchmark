@@ -2,14 +2,20 @@ from typing import Any, Dict
 
 import numpy as np
 from cascade import data as cdd
-from sklearn.datasets import (load_iris, load_digits, load_breast_cancer, fetch_covtype,
-                              fetch_kddcup99)
+from sklearn.datasets import (
+    load_iris,
+    load_digits,
+    load_breast_cancer,
+    fetch_covtype,
+    fetch_kddcup99,
+    fetch_lfw_people,
+)
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 
 
 def prepare_kddcup99():
-    x, y = fetch_kddcup99(return_X_y=True) # 1, 2, 3 - categorical
+    x, y = fetch_kddcup99(return_X_y=True)  # 1, 2, 3 - categorical
 
     enc = OneHotEncoder(sparse_output=False)
     cats = enc.fit_transform(x[:, 1:3])
@@ -30,7 +36,8 @@ class SkDataset(cdd.SizedDataset):
             "digits": load_digits(return_X_y=True),
             "breast_cancer": load_breast_cancer(return_X_y=True),
             "covtype": fetch_covtype(return_X_y=True),
-            'kddcup99': prepare_kddcup99()
+            "kddcup99": prepare_kddcup99(),
+            "lfw_people": fetch_lfw_people(return_X_y=True),
         }
 
         if name not in constructors:

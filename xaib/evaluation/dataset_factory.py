@@ -52,3 +52,6 @@ class DatasetFactory(Factory):
         self._constructors["kddcup99"] = lambda: generate_dataset(
             SkDataset, "kddcup99", frac=0.8
         )
+        self._constructors["lfw_people"] = lambda: generate_dataset(
+            SkDataset, "lfw_people", frac=0.8
+        )
