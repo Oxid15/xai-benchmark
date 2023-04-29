@@ -43,3 +43,12 @@ class DatasetFactory(Factory):
         self._constructors["digits"] = lambda: generate_dataset(
             SkDataset, "digits", frac=0.8
         )
+        self._constructors["breast_cancer"] = lambda: generate_dataset(
+            SkDataset, "breast_cancer", frac=0.8
+        )
+        self._constructors["covtype"] = lambda: generate_dataset(
+            SkDataset, "covtype", frac=0.8
+        )
+        self._constructors["kddcup99"] = lambda: generate_dataset(
+            SkDataset, "kddcup99", frac=0.8
+        )
