@@ -83,6 +83,8 @@ class Metric(cdm.Model):
         self.params["direction"] = self.direction
         self.params["dataset"] = self._ds.name
         self.params["model"] = self._model.name
+        self.params["model_params"] = self._model.params
+        self.params["model_metrics"] = self._model.metrics
         self.metrics[self.name] = value
 
 
