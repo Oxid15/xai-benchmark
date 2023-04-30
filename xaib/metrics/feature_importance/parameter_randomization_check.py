@@ -33,7 +33,7 @@ class ParameterRandomizationCheck(Metric):
         super().__init__(ds, model, **kwargs)
         self._noisy_model = noisy_model
         self.name = "parameter_randomization_check"
-        self.direction = "down"
+        self.direction = "up"
 
     def compute(
         self,
