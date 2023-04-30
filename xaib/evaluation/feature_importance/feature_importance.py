@@ -18,15 +18,12 @@ from xaib.evaluation.utils import visualize_results
 
 REPO_PATH = os.path.join(os.path.dirname(BASE_DIR), "results", "feature_importance")
 BS = 100
-MAX_EVAL_SAMPLES = 1000
 
 # Overwrite previous run
 ModelRepo(REPO_PATH, overwrite=True)
 
 for dataset in [
-    "lfw_people",
-    "kddcup99",
-    "covtype",
+    "wine",
     "breast_cancer",
     "digits",
     "iris",
@@ -43,9 +40,6 @@ for dataset in [
 
         model = ModelFactory(train_ds, test_ds).get(model)
         print(model.get_meta())
-
-        if len(test_ds) > MAX_EVAL_SAMPLES:
-            test_ds = cdd.RandomSampler(test_ds, MAX_EVAL_SAMPLES)
 
         explainers = ExplainerFactory(train_ds, model, labels=labels).get("all")
         experiment_factory = ExperimentFactory(
