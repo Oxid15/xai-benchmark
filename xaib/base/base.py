@@ -1,3 +1,4 @@
+from .. import __version__ as version
 from typing import Union, List, Dict, Any, Callable
 from cascade import data as cdd
 from cascade import models as cdm
@@ -95,6 +96,7 @@ class Case(cdm.Model):
         super().__init__(*args, **kwargs)
         self.name = None
         self._metric_objs = dict()
+        self._meta_prefix.update({"xaib_version": version})
 
     def add_metric(self, name: str, metric: Metric) -> None:
         self._metric_objs[name] = metric
