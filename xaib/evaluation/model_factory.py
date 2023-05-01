@@ -39,7 +39,7 @@ def knn(train_ds, test_ds):
     X_test = np.array(X_test)
     Y_test = np.array(Y_test, dtype=int)
 
-    model = SkWrapper(blocks=[KNeighborsClassifier(n_neighbors=3)], name="svm")
+    model = SkWrapper(blocks=[KNeighborsClassifier(n_neighbors=3)], name="knn")
     model.fit(X_train, Y_train)
     model.evaluate(X_test, Y_test, {"f1": lambda x, y: f1_score(x, y, average="macro")})
     return model
