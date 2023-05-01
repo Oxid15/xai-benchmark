@@ -61,7 +61,7 @@ def nn(train_ds, test_ds):
 
 
 class ModelFactory(Factory):
-    def __init__(self, train_ds, test_ds) -> None:
+    def __init__(self, train_ds=None, test_ds=None) -> None:
         super().__init__()
         self._constructors["svm"] = lambda: svm(train_ds, test_ds)
         self._constructors["knn"] = lambda: knn(train_ds, test_ds)

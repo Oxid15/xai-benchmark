@@ -6,7 +6,13 @@ from ..utils import experiment
 
 class ExperimentFactory(Factory):
     def __init__(
-        self, repo_path, explainers, test_ds, model, labels, batch_size
+        self,
+        repo_path=None,
+        explainers=None,
+        test_ds=None,
+        model=None,
+        labels=None,
+        batch_size=None,
     ) -> None:
         super().__init__()
 
