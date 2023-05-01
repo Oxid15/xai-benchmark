@@ -1,5 +1,5 @@
 import os
-from typing import Any
+from typing import Any, Union, Literal, List
 
 import numpy as np
 import pandas as pd
@@ -9,6 +9,95 @@ from cascade.meta import MetaViewer
 from plotly import express as px
 from plotly import graph_objects as go
 from scipy.special import softmax
+from cascade.base import Traceable
+from ..base import Factory
+
+
+class Setup(Traceable):
+    def __init__(
+        self,
+        dataset_factory: Factory,
+        model_factory: Factory,
+        explainer_factory: Factory,
+        case_factory: Factory,
+        datasets: Union[List[str], Literal["all"]] = "all",
+        models: Union[List[str], Literal["all"]] = "all",
+        explainers: Union[List[str], Literal["all"]] = "all",
+        cases: Union[List[str], Literal["all"]] = "all",
+        datasets_except: Union[List[str], None] = None,
+        models_except: Union[List[str], None] = None,
+        explainers_except: Union[List[str], None] = None,
+        cases_except: Union[List[str], None] = None,
+    ) -> None:
+        super().__init__()
+
+        self._cfg = {
+            "datasets": {
+                "input": datasets,
+                "factory": dataset_factory,
+                "output": None,
+                "except": datasets_except,
+            },
+            "models": {
+                "input": models,
+                "factory": model_factory,
+                "output": None,
+                "except": models_except,
+            },
+            "explainers": {
+                "input": explainers,
+                "factory": explainer_factory,
+                "output": None,
+                "except": explainers_except,
+            },
+            "cases": {
+                "input": cases,
+                "factory": case_factory,
+                "output": None,
+                "except": cases_except,
+            },
+        }
+
+        for name in self._cfg:
+            output = self._cfg[name]["input"]
+            if output == "all":
+                output = self._cfg[name]["factory"].get_names()
+
+            if self._cfg[name]["except"]:
+                output = list(set(output) - set(self._cfg[name]["except"]))
+
+            self._cfg[name]["output"] = output
+
+        self.datasets = self._cfg["datasets"]["output"]
+        self.models = self._cfg["models"]["output"]
+        self.explainers = self._cfg["explainers"]["output"]
+        self.cases = self._cfg["cases"]["output"]
+
+    def __repr__(self) -> str:
+        for name in self._cfg:
+            if self._cfg[name]["input"] == "all":
+                rep = "all"
+            else:
+                rep = ", ".join(self._cfg[name]["output"])
+
+            if self._cfg[name]["except"]:
+                rep += f" except {', '.join(self._cfg[name]['except'])}"
+            self._cfg[name]["repr"] = rep
+
+        return (
+            f"Experiment setup with {self._cfg['datasets']['repr']} Datasets,"
+            f" {self._cfg['models']['repr']} Models,"
+            f" {self._cfg['explainers']['repr']} Explainers,"
+            f" {self._cfg['cases']['repr']} Cases"
+        )
+
+    def get_meta(self) -> PipeMeta:
+        meta = super().get_meta()
+        meta[0]["datasets"] = self.datasets
+        meta[0]["models"] = self.models
+        meta[0]["explainers"] = self.explainers
+        meta[0]["cases"] = self.cases
+        return meta
 
 
 class WrapperModel(cdm.ModelModifier):
@@ -148,7 +237,7 @@ def scatter(df, metric):
         y="value",
         title=metric.replace("_", " ").capitalize() + ", direction - " + direction,
         hover_data=["dataset", "model"],
-        color="dataset"
+        color="dataset",
     )
 
 
