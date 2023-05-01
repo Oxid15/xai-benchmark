@@ -73,7 +73,7 @@ class Metric(cdm.Model):
         expl: Explainer,
         batch_size: int = 1,
         expl_kwargs: Union[Dict[Any, Any], None] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         if expl_kwargs is None:
             expl_kwargs = {}
@@ -108,7 +108,7 @@ class Case(cdm.Model):
         name: str,
         expl: Explainer,
         metrics_kwargs: Union[Dict[str, Dict[Any, Any]], None] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         if metrics_kwargs is None:
             metrics_kwargs = {name: {} for _ in self._metric_objs}
@@ -162,3 +162,6 @@ class Factory:
     ) -> None:
         self._constructors[name] = constructor
         self._constructors_kwargs[name] = constr_kwargs
+
+    def get_names(self):
+        return list(self._constructors.keys())
