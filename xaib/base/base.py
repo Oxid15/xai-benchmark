@@ -150,9 +150,12 @@ class Factory:
         return constructor(**kwargs)
 
     def get(self, name: str) -> Union[Dict[str, Any], Any]:
-        if name == "all":
-            return self._get_all()
-        return self._get(name)
+        try:
+            if name == "all":
+                return self._get_all()
+            return self._get(name)
+        except Exception as e:
+            raise RuntimeError(f"Failed to create object {name} in {self}") from e
 
     def add(
         self,
