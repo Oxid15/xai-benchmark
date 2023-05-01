@@ -20,7 +20,7 @@ def correctness(test_ds, model):
 
 
 class CaseFactory(Factory):
-    def __init__(self, test_ds: Dataset, model: Model) -> None:
+    def __init__(self, test_ds: Dataset = None, model: Model = None) -> None:
         super().__init__()
         self._constructors["continuity"] = lambda: continuity(test_ds, model)
         self._constructors["contrastivity"] = lambda: ContrastivityCase(test_ds, model)

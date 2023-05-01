@@ -5,7 +5,9 @@ from ..utils import experiment
 
 
 class ExperimentFactory(Factory):
-    def __init__(self, repo_path, explainers, test_ds, model, batch_size) -> None:
+    def __init__(
+        self, repo_path=None, explainers=None, test_ds=None, model=None, batch_size=None
+    ) -> None:
         super().__init__()
 
         case_factory = CaseFactory(test_ds, model)

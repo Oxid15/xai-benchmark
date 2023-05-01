@@ -5,7 +5,7 @@ from ...explainers.example_selection.random_explainer import RandomExplainer
 
 
 class ExplainerFactory(Factory):
-    def __init__(self, train_ds: Dataset, model: Model) -> None:
+    def __init__(self, train_ds: Dataset = None, model: Model = None) -> None:
         super().__init__()
         self._constructors["const"] = lambda: ConstantExplainer(
             train_ds, train_ds[0]["item"]
