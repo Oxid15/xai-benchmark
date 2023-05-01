@@ -9,8 +9,8 @@ from cascade.meta import MetaViewer
 from plotly import express as px
 from plotly import graph_objects as go
 from scipy.special import softmax
-from cascade.base import Traceable
-from ..base import Factory
+from cascade.base import Traceable, PipeMeta
+from xaib.base import Factory
 
 
 class Setup(Traceable):
