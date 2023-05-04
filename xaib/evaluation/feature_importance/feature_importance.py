@@ -28,7 +28,7 @@ BS = 100
 ModelRepo(REPO_PATH, overwrite=True)
 
 factories = (DatasetFactory(), ModelFactory(), ExplainerFactory(), CaseFactory())
-setups = [Setup(*factories, models_except="knn")]
+setups = [Setup(*factories, models_except=["knn"])]
 
 for setup in setups:
     for dataset in setup.datasets:

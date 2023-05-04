@@ -16,7 +16,7 @@ class DatasetFactory(Factory):
         super().__init__()
         self._constructors["synthetic"] = lambda: generate_dataset(
             SyntheticDataset,
-            n_samples=100,
+            n_samples=1000,
             n_features=14,
             random_state=0,
             n_informative=14,
@@ -28,7 +28,7 @@ class DatasetFactory(Factory):
         self._constructors["synthetic_noisy"] = lambda: generate_dataset(
             SyntheticDataset,
             name="synthetic_noisy",
-            n_samples=100,
+            n_samples=1000,
             n_features=14,
             random_state=0,
             n_informative=7,
