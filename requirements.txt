@@ -3,3 +3,4 @@ scikit-learn
 plotly
 kaleido
 pandas==1.5.3
+numpy<1.20.0
