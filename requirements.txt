@@ -1,4 +1,5 @@
-cascade-ml
+cascade-ml>=0.11.0
 scikit-learn
 plotly
 kaleido
+pandas==1.5.3
