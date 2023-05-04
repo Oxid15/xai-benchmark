@@ -20,7 +20,7 @@ sys.path.append(os.path.abspath(os.path.dirname(SCRIPT_DIR)))
 from utils import Setup, visualize_results
 
 
-BS = 5
+BS = 100
 
 # Overwrite previous run
 ModelRepo(REPO_PATH, overwrite=True)
