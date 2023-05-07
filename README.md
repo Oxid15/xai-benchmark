@@ -50,9 +50,6 @@ Read more on [Cases](https://oxid15.github.io/xai-benchmark/cases) and [Metrics]
 
 ### Reproduce
 
-Full run will be available soon.  
-Until then, there are regular [pipelines](https://github.com/Oxid15/xai-benchmark/actions)  
-  
 For the implementation of the evaluation procedure, you can visit `xaib/evaluation`
 
 ### Try method
