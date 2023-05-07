@@ -16,7 +16,7 @@ class DatasetFactory(Factory):
         super().__init__()
         self._constructors["synthetic"] = lambda: generate_dataset(
             SyntheticDataset,
-            n_samples=100,
+            n_samples=1000,
             n_features=14,
             random_state=0,
             n_informative=14,
@@ -28,7 +28,7 @@ class DatasetFactory(Factory):
         self._constructors["synthetic_noisy"] = lambda: generate_dataset(
             SyntheticDataset,
             name="synthetic_noisy",
-            n_samples=100,
+            n_samples=1000,
             n_features=14,
             random_state=0,
             n_informative=7,
@@ -40,6 +40,12 @@ class DatasetFactory(Factory):
         self._constructors["iris"] = lambda: generate_dataset(
             SkDataset, "iris", frac=0.8
         )
+        self._constructors["wine"] = lambda: generate_dataset(
+            SkDataset, "wine", frac=0.8
+        )
         self._constructors["digits"] = lambda: generate_dataset(
             SkDataset, "digits", frac=0.8
+        )
+        self._constructors["breast_cancer"] = lambda: generate_dataset(
+            SkDataset, "breast_cancer", frac=0.8
         )

@@ -21,7 +21,9 @@ def continuity(test_ds, model):
 
 
 class CaseFactory(Factory):
-    def __init__(self, test_ds: Dataset, model: Model, labels) -> None:
+    def __init__(
+        self, test_ds: Dataset = None, model: Model = None, labels=None
+    ) -> None:
         super().__init__()
         self._constructors["correctness"] = lambda: correctness(
             test_ds, model, labels=labels

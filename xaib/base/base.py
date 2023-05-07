@@ -1,3 +1,4 @@
+from .. import __version__ as version
 from typing import Union, List, Dict, Any, Callable
 from cascade import data as cdd
 from cascade import models as cdm
@@ -72,7 +73,7 @@ class Metric(cdm.Model):
         expl: Explainer,
         batch_size: int = 1,
         expl_kwargs: Union[Dict[Any, Any], None] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         if expl_kwargs is None:
             expl_kwargs = {}
@@ -82,6 +83,8 @@ class Metric(cdm.Model):
         self.params["direction"] = self.direction
         self.params["dataset"] = self._ds.name
         self.params["model"] = self._model.name
+        self.params["model_params"] = self._model.params
+        self.params["model_metrics"] = self._model.metrics
         self.metrics[self.name] = value
 
 
@@ -95,6 +98,7 @@ class Case(cdm.Model):
         super().__init__(*args, **kwargs)
         self.name = None
         self._metric_objs = dict()
+        self._meta_prefix.update({"xaib_version": version})
 
     def add_metric(self, name: str, metric: Metric) -> None:
         self._metric_objs[name] = metric
@@ -104,7 +108,7 @@ class Case(cdm.Model):
         name: str,
         expl: Explainer,
         metrics_kwargs: Union[Dict[str, Dict[Any, Any]], None] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         if metrics_kwargs is None:
             metrics_kwargs = {name: {} for _ in self._metric_objs}
@@ -146,9 +150,12 @@ class Factory:
         return constructor(**kwargs)
 
     def get(self, name: str) -> Union[Dict[str, Any], Any]:
-        if name == "all":
-            return self._get_all()
-        return self._get(name)
+        try:
+            if name == "all":
+                return self._get_all()
+            return self._get(name)
+        except Exception as e:
+            raise RuntimeError(f"Failed to create object {name} in {self}") from e
 
     def add(
         self,
@@ -158,3 +165,6 @@ class Factory:
     ) -> None:
         self._constructors[name] = constructor
         self._constructors_kwargs[name] = constr_kwargs
+
+    def get_names(self):
+        return list(self._constructors.keys())

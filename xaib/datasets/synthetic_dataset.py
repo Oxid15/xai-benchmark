@@ -31,3 +31,8 @@ class SyntheticDataset(cdd.SizedDataset):
 
     def __getitem__(self, index: int) -> Dict[str, Any]:
         return {"item": self.x[index], "label": self.y[index]}
+
+    def get_meta(self):
+        meta = super().get_meta()
+        meta[0]["dataset_name"] = self.name
+        return meta
