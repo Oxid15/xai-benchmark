@@ -16,3 +16,4 @@ XAIB is an open benchmark that provides a way to compare different XAI methods u
     metrics
     cases
     reference
+    _tags/tagsindex

@@ -40,6 +40,8 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.extlinks",
     "sphinx_copybutton",
+    "sphinx_tags",
+    "sphinx_design",
 ]
 
 autodoc_default_options = {"special-members": "__init__", "undoc-members": False}
@@ -83,4 +85,13 @@ html_theme_options = {
 
 html_sidebars = {
     "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+}
+
+# Tags configuration
+tags_intro_text = ""
+tags_page_title = "Tags"
+tags_create_tags = True
+tags_create_badges = True
+tags_badge_colors = {
+    "sk_dataset": "primary",
 }
