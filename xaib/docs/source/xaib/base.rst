@@ -35,3 +35,21 @@ xaib.base
 |
 
 |
+
+.. autoclass:: xaib.base.Metric
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: xaib.base.Factory
+   :members:
+
+|
+
+|
+
+|
