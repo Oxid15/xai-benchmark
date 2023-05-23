@@ -9,6 +9,7 @@ XAIB is an open benchmark that provides a way to compare different XAI methods u
     use_cases
     contribute
     results
+    framework
     cases
     metrics
     datasets
