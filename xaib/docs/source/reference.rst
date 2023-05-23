@@ -1,5 +1,5 @@
 XAIB modules reference
--------------------------
+----------------------
 
 .. toctree::
     xaib/base
