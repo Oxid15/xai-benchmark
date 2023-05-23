@@ -80,7 +80,12 @@ html_theme_options = {
     "html_minify": True,
     "css_minify": True,
     "nav_title": "XAIB - Open and extensible benchmark for XAI methods",
-    "logo_icon": "細部",  # "&#x8cea",  #'&#x7d30&#x90e8'
+    "logo_icon": (
+        '<link rel="preconnect" href="https://fonts.googleapis.com">'
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+        '<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap"'
+        ' rel="stylesheet"><ooo style="font-family: Dela Gothic One;font-size: 40px">細部</p>'
+    ),  # "&#x8cea",  #'&#x7d30&#x90e8'
 }
 
 html_sidebars = {
