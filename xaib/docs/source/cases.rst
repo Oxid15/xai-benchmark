@@ -23,7 +23,7 @@ even on the scale of one property.
 Each case corresponds to one of the :doc:`Co-12 properties <framework>`.
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
 
     cases/feature_importance
     cases/example_selection
