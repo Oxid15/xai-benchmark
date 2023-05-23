@@ -12,10 +12,16 @@ SVC
 ***
 :py:mod:`xaib.evaluation.model_factory.py`
 
+.. tags:: classification, black_box
+
 MLPClassifier
 *************
 :py:mod:`xaib.evaluation.model_factory.py`
 
+.. tags:: classification, black_box
+
 KNeighborsClassifier
 ********************
 :py:mod:`xaib.evaluation.model_factory.py`
+
+.. tags:: classification, white_box

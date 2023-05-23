@@ -94,4 +94,8 @@ tags_create_tags = True
 tags_create_badges = True
 tags_badge_colors = {
     "sk_dataset": "primary",
+    "toy_dataset": "primary",
+    "classification": "success",
+    "white_box": "light",
+    "black_box": "dark",
 }
