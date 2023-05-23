@@ -1,5 +1,21 @@
 Models
-======
-Coming soon
+######
+:py:class:`xaib.base.Model`
 
-Until that, consider reading reference on models.
+Models are defined as generic as possible to be able to cover any use-case - from classification and regression to segmentation and language modelling.
+Here are the list of ones that are available in the moment.
+  
+.. note::
+    The requirement is that all models should be able to work with batches.
+
+SVC
+***
+:py:mod:`xaib.evaluation.model_factory.py`
+
+MLPClassifier
+*************
+:py:mod:`xaib.evaluation.model_factory.py`
+
+KNeighborsClassifier
+********************
+:py:mod:`xaib.evaluation.model_factory.py`
