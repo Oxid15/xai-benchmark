@@ -17,7 +17,7 @@ class LabelDifference(Metric):
     to explanations of all other classes and obtain a number of metrics
     which can be averaged.
 
-    **The more the better**
+    **The greater the better**
 
     - **Worst case:** same explanations for different targets - constant explainer
     - **Best case:** different explanations for different targets
