@@ -16,7 +16,7 @@ Parameter randomization check
    * - Case
      - :ref:`Correctness <cases:Correctness>`
    * - Direction
-     - Down
+     - Down :octicon:`arrow-down`
 
 Small noise check
 *****************
@@ -31,7 +31,7 @@ Small noise check
    * - Case
      - :ref:`Continuity <cases:Continuity>`
    * - Direction
-     - Down
+     - Down :octicon:`arrow-down`
 
 Covariate regularity
 ********************
@@ -46,7 +46,7 @@ Covariate regularity
    * - Case
      - :ref:`Covariate complexity <cases:Covariate complexity>`
    * - Direction
-     - Down
+     - Down :octicon:`arrow-down`
 
 
 Target discriminativeness
@@ -62,4 +62,4 @@ Target discriminativeness
    * - Case
      - :ref:`Contrastivity <cases:Contrastivity>`
    * - Direction
-     - Up
+     - Up :octicon:`arrow-up`
