@@ -5,34 +5,88 @@ Parameter randomization check
 *****************************
 :py:class:`xaib.metrics.feature_importance.parameter_randomization_check.ParameterRandomizationCheck`
 
-Case: :ref:`Correctness <cases:Correctness>`
+.. list-table::
+   :widths: 25 75
+   :header-rows: 1
+
+   * - Properties
+     - 
+   * - Case
+     - :ref:`Correctness <cases:Correctness>`
+   * - Direction
+     - Up
 
 Small noise check
 *****************
 :py:class:`xaib.metrics.feature_importance.small_noise_check.SmallNoiseCheck`
 
-Case: :ref:`Continuity <cases:Continuity>`
+.. list-table::
+   :widths: 25 75
+   :header-rows: 1
+
+   * - Properties
+     - 
+   * - Case
+     - :ref:`Continuity <cases:Continuity>`
+   * - Direction
+     - Down
 
 Label difference
 ****************
 :py:class:`xaib.metrics.feature_importance.label_difference.LabelDifference`
 
-Case: :ref:`Contrastivity <cases:Contrastivity>`
+.. list-table::
+   :widths: 25 75
+   :header-rows: 1
+
+   * - Properties
+     - 
+   * - Case
+     - :ref:`Contrastivity <cases:Contrastivity>`
+   * - Direction
+     - Up
 
 Covariate regularity
 ********************
 :py:class:`xaib.metrics.feature_importance.covariate_regularity.CovariateRegularity`
 
-Case: :ref:`Covariate complexity <cases:Covariate complexity>`
+.. list-table::
+   :widths: 25 75
+   :header-rows: 1
+
+   * - Properties
+     - 
+   * - Case
+     - :ref:`Covariate complexity <cases:Covariate complexity>`
+   * - Direction
+     - Down
 
 Other disagreement
 ******************
 :py:class:`xaib.metrics.feature_importance.other_disagreement.OtherDisagreement`
 
-Case: :ref:`Coherence <cases:Coherence>`
+.. list-table::
+   :widths: 25 75
+   :header-rows: 1
+
+   * - Properties
+     - 
+   * - Case
+     - :ref:`Coherence <cases:Coherence>`
+   * - Direction
+     - Down
 
 Sparsity
 ********
 :py:class:`xaib.metrics.feature_importance.sparsity.Sparsity`
 
-Case: :ref:`Compactness <cases:Compactness>`
+.. list-table::
+   :widths: 25 75
+   :header-rows: 1
+
+   * - Properties
+     - 
+   * - Case
+     - :ref:`Compactness <cases:Compactness>`
+   * - Direction
+     - Up
