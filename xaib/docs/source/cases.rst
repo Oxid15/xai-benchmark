@@ -1,9 +1,9 @@
 Cases
-=====
+#####
 :py:class:`xaib.base.Case`
 
 Case is the core element of XAIB – it provides an interface to
-compute metric values using all entities defined above.
+conduct experiments.
   
 It defines one abstract method which accepts name of an explainer, and
 an explainer to evaluate. It receives a model and a dataset on creation. This is done
@@ -23,7 +23,7 @@ even on the scale of one property.
 Each case corresponds to one of the :doc:`Co-12 properties <framework>`.
 
 Correctness
------------
+***********
 :py:class:`xaib.cases.feature_importance.CorrectnessCase`
 
 :py:class:`xaib.cases.example_selection.CorrectnessCase`
@@ -32,10 +32,14 @@ The property named Correctness means that explanations describe the model
 correctly and truthfully. The explanations may not always be reasonable for the
 user, but they should be true to the model to satisfy this criterion.
 
+Metrics
+=======
+* :ref:`Feature importance: Parameter Randomization Check <metrics/feature_importance:Parameter randomization check>`
+* :ref:`Example selection: Parameter Randomization Check <metrics/example_selection:Parameter randomization check>`
 
 
 Completeness
-------------
+************
 
 Nothing in the explanation is left out, but it should be balanced with
 compactness and correctness: "don't overwhelm". This property can be measured
@@ -50,7 +54,7 @@ information as possible, trying not to omit details of little influence in pursu
 pleasant explanation.
 
 Consistency
------------
+***********
 
 Identical inputs have identical explanations. This is different from
 Continuity, because this metric is about implementation invariance. It can be from
@@ -61,7 +65,7 @@ of their internal state when trained on one task, will eventually have the same 
 of reasoning that should be captured by explainer.
 
 Continuity
-----------
+**********
 :py:class:`xaib.cases.feature_importance.ContinuityCase`
 
 :py:class:`xaib.cases.example_selection.ContinuityCase`
@@ -69,8 +73,14 @@ Continuity
 How continuous explanation function is. Continuous functions are desirable,
 because they are more predictable and comprehensive.
 
+Metrics
+=======
+* :ref:`Feature importance: Small noise Check <metrics/feature_importance:Small noise check>`
+* :ref:`Example selection: Small noise Check <metrics/example_selection:Small noise check>`
+
+
 Contrastivity
--------------
+*************
 :py:class:`xaib.cases.feature_importance.ContrastivityCase`
 
 :py:class:`xaib.cases.example_selection.ContrastivityCase`
@@ -79,8 +89,14 @@ How discriminative the explanation is in relation to different targets. The
 contrast between different concepts is very important and explanation method
 should explain instances of different classes in different ways.
 
+Metrics
+=======
+* :ref:`Feature importance: Label difference <metrics/feature_importance:Label difference>`
+* :ref:`Example selection: Target discriminativeness <metrics/example_selection:Target discriminativeness>`
+
+
 Covariate complexity
---------------------
+********************
 :py:class:`xaib.cases.feature_importance.CovariateComplexityCase`
 
 :py:class:`xaib.cases.example_selection.CovariateComplexityCase`
@@ -88,15 +104,21 @@ Covariate complexity
 The features used in the explanation should be comprehensible. Also non-
 complex interactions between features are desired.
 
+Metrics
+=======
+* :ref:`Feature importance: Covariate regularity <metrics/feature_importance:Covariate regularity>`
+* :ref:`Example selection: Covariate regularity <metrics/example_selection:Covariate regularity>`
+
+
 Compactness
------------
+***********
 :py:class:`xaib.cases.feature_importance.CompactnessCase`
 
 Compactness measures the size of explanations. Explanations should be
 sparse, short and not redundant.
 
 Compositionality
-----------------
+****************
 
 Compositionality considers the format of presentation of the explanation.
 Some formats are considered more interpretable than others. Here in some cases
@@ -106,29 +128,33 @@ measure for the presentation format of the explanations that will not involve
 human experiments into computation.
 
 Confidence
-----------
+**********
 
 Confidence describes the presence and accuracy of probability information.
 It may be defined as some quality value for agreement between confidence and
 true labels.
 
 Context
--------
+*******
 
 Context is about relevance for the users of different needs. May be computed
 using Simulated User Studies – for example the identification of a better model or
 bad features.
 
 Coherence
----------
+*********
 :py:class:`xaib.cases.feature_importance.CoherenceCase`
 
 To what extent the explanation is consistent with relevant background
 knowledge, beliefs and general consensus. The agreement with domain-specific 
 knowledge can be measured, but this is difficult to define and very task-dependent.
 
+Metrics
+=======
+* :ref:`Feature importance: Other disagreement <metrics/feature_importance:Other disagreement>`
+
 Controllability
----------------
+***************
 
 How interactive the explanation is for user. This can be measured using
 Human Feedback Impact – improvement after feedback and the metric called

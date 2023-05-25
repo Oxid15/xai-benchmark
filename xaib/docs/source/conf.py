@@ -40,11 +40,13 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.extlinks",
     "sphinx_copybutton",
+    "sphinx.ext.autosectionlabel",
     "sphinx_tags",
     "sphinx_design",
 ]
 
 autodoc_default_options = {"special-members": "__init__", "undoc-members": False}
+autosectionlabel_prefix_document = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
