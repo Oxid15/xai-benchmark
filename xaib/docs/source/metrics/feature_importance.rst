@@ -1,6 +1,8 @@
 Feature importance metrics
 ##########################
 
+Numerical results with visualizations are available on :doc:`results page. <../results/feature_importance>`
+
 Parameter randomization check
 *****************************
 :py:class:`xaib.metrics.feature_importance.parameter_randomization_check.ParameterRandomizationCheck`

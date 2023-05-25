@@ -1,6 +1,8 @@
 Example selection metrics
 =========================
 
+Numerical results with visualizations are available on :doc:`results page. <../results/example_selection>`
+
 Parameter randomization check
 *****************************
 :py:class:`xaib.metrics.example_selection.parameter_randomization_check.ParameterRandomizationCheck`

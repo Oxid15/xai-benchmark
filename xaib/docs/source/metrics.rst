@@ -12,6 +12,8 @@ In XAIB each metric should correspond to some :doc:`Case <cases>`
 
 To further read on metrics in this benchmark, please proceed to the following pages.
 
+To see how different XAI methods perform on the different datasets, please proceed to the :doc:`results page. <./results>`
+
 .. toctree::
     :maxdepth: 2
 
