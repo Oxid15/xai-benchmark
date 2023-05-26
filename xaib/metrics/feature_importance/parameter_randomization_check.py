@@ -21,7 +21,7 @@ class ParameterRandomizationCheck(Metric):
     The further original explanations from the explanations on
     the randomized model the better.
 
-    **The less the better**
+    **The greater the better**
      - **Worst case:** explanations are the same, so it is Constant explainer.
      - **Best case:** is reached when explanations are the opposite, distance between them maximized. The problem with this kind of metric is with its maximization. It seems redundant to maximize it because more different explanations on random states do not mean that the model is more correct.
     It is difficult to define best case explainer in this case - the metric has no maximum value.

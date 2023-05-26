@@ -3,3 +3,5 @@ sphinx-material
 beautifulsoup4
 plotly
 sphinx-copybutton
+sphinx-design
+sphinx-tags

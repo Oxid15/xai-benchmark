@@ -18,7 +18,6 @@ class ParameterRandomizationCheck(Metric):
     Then the explanations on the original data are obtained.
     They are compared with explanations done with the original model by
     counting how many examples were the same for same data points.
-    The less  the better.
 
     **The less the better**
      - **Worst case:** explanations are the same, so it is Constant explainer
