@@ -40,9 +40,13 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.extlinks",
     "sphinx_copybutton",
+    "sphinx.ext.autosectionlabel",
+    "sphinx_tags",
+    "sphinx_design",
 ]
 
 autodoc_default_options = {"special-members": "__init__", "undoc-members": False}
+autosectionlabel_prefix_document = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -78,9 +82,27 @@ html_theme_options = {
     "html_minify": True,
     "css_minify": True,
     "nav_title": "XAIB - Open and extensible benchmark for XAI methods",
-    "logo_icon": "細部",  # "&#x8cea",  #'&#x7d30&#x90e8'
+    "logo_icon": (
+        '<link rel="preconnect" href="https://fonts.googleapis.com">'
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+        '<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap"'
+        ' rel="stylesheet"><ooo style="font-family: Dela Gothic One;font-size: 40px">細部</p>'
+    ),  # "&#x8cea",  #'&#x7d30&#x90e8'
 }
 
 html_sidebars = {
     "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+}
+
+# Tags configuration
+tags_intro_text = ""
+tags_page_title = "Tags"
+tags_create_tags = True
+tags_create_badges = True
+tags_badge_colors = {
+    "sk_dataset": "primary",
+    "toy_dataset": "primary",
+    "classification": "success",
+    "white_box": "light",
+    "black_box": "dark",
 }

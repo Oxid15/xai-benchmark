@@ -17,8 +17,8 @@ class CovariateRegularity(Metric):
 
     **The less the better**
 
-      - **Worst case:** constant explainer that gives examples with same importance to each feature, that is equal to 1/N where N is the number of features
-      - **Best case:** constant explainer that gives examples with one feature with maximum value and others zero
+    - **Worst case:** constant explainer that gives examples with same importance to each feature, that is equal to 1/N where N is the number of features
+    - **Best case:** constant explainer that gives examples with one feature with maximum value and others zero
     """
 
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
