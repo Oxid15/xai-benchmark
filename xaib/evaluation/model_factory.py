@@ -37,13 +37,21 @@ class ModelFactory(Factory):
         self._train_ds = train_ds
         self._test_ds = test_ds
 
-        self._constructors["svm"] = lambda: SkWrapper(blocks=[SVC()], name="nn")
-        self._constructors["knn"] = lambda: SkWrapper(blocks=[KNeighborsClassifier(n_neighbors=3)], name="knn")
-        self._constructors["nn"] = lambda: SkWrapper(blocks=[MLPClassifier()], name="nn")
+        self._constructors["svm"] = SkWrapper
+        self._constructors_kwargs["svm"] = dict(blocks=[SVC()], name="nn")
+        self._constructors["knn"] = SkWrapper
+        self._constructors_kwargs["knn"] = dict(
+            blocks=[KNeighborsClassifier(n_neighbors=3)], name="knn"
+        )
+        self._constructors["nn"] = SkWrapper
+        self._constructors_kwargs["nn"] = dict(blocks=[MLPClassifier()], name="nn")
 
     def get(self, name: str) -> Dict[str, Any] | Any:
         model = super().get(name)
 
         model.fit(self._train_ds)
-        model.evaluate(self._test_ds, metrics_dict={"f1": lambda x, y: f1_score(x, y, average="macro")})
+        model.evaluate(
+            self._test_ds,
+            metrics_dict={"f1": lambda x, y: f1_score(x, y, average="macro")},
+        )
         return model
