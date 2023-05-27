@@ -121,14 +121,18 @@ class WrapperDataset(cdd.Modifier):
 class NoiseApplier(cdd.Modifier):
     def __init__(self, dataset, multiplier: float = 1.0, *args, **kwargs) -> None:
         super().__init__(dataset, *args, **kwargs)
-
         self._multiplier = multiplier
+
+        data = np.asarray([item["item"] for item in dataset])
+        means = (data * data).mean(axis=0)
+        self._stds = np.sqrt(means * multiplier)
 
     def __getitem__(self, index):
         item = self._dataset.__getitem__(index)
-        item["item"] = (
-            item["item"] + np.random.random(item["item"].shape) * self._multiplier
-        )
+
+        noises = [np.random.normal(0, scale) for scale in self._stds]
+
+        item["item"] = item["item"] + noises
         return item
 
 
