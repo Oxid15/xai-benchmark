@@ -1,5 +1,5 @@
 from .. import __version__ as version
-from typing import Union, List, Dict, Any, Callable
+from typing import Union, List, Dict, Any, Callable, Type
 from cascade import data as cdd
 from cascade import models as cdm
 
@@ -157,10 +157,13 @@ class Factory:
         except Exception as e:
             raise RuntimeError(f"Failed to create object {name} in {self}") from e
 
+    def get_constructor(self, name: str) -> Type:
+        return self._constructors[name]
+
     def add(
         self,
         name: str,
-        constructor: Callable[[Any], Any],
+        constructor: Type,
         constr_kwargs: Union[Any, None] = None,
     ) -> None:
         self._constructors[name] = constructor

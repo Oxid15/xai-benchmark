@@ -8,3 +8,4 @@ from .utils import (
     entropy,
     minmax_normalize,
 )
+from .cache import ModelCache
