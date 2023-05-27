@@ -38,7 +38,9 @@ class ModelFactory(Factory):
         self._test_ds = test_ds
 
         self._constructors["svm"] = SkWrapper
-        self._constructors_kwargs["svm"] = dict(blocks=[SVC()], name="nn")
+        self._constructors_kwargs["svm"] = dict(
+            blocks=[SVC(probability=True)], name="nn"
+        )
         self._constructors["knn"] = SkWrapper
         self._constructors_kwargs["knn"] = dict(
             blocks=[KNeighborsClassifier(n_neighbors=3)], name="knn"
