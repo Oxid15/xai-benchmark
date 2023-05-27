@@ -100,24 +100,6 @@ class Setup(Traceable):
         return meta
 
 
-class WrapperModel(cdm.ModelModifier):
-    def __init__(self, model, name: str, *args: Any, **kwargs: Any) -> None:
-        super().__init__(model, *args, **kwargs)
-        self.name = name
-
-    def save(self, filepath: str, *args: Any, **kwargs: Any) -> None:
-        return self._model.save(filepath, *args, **kwargs)
-
-    def load(self, filepath: str, *args: Any, **kwargs: Any) -> None:
-        return self._model.load(filepath, *args, **kwargs)
-
-
-class WrapperDataset(cdd.Modifier):
-    def __init__(self, ds, name: str, *args: Any, **kwargs: Any) -> None:
-        super().__init__(dataset=ds, *args, **kwargs)
-        self.name = name
-
-
 class NoiseApplier(cdd.Modifier):
     def __init__(self, dataset, multiplier: float = 1.0, *args, **kwargs) -> None:
         super().__init__(dataset, *args, **kwargs)
