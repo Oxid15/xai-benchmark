@@ -124,8 +124,8 @@ class NoiseApplier(cdd.Modifier):
         self._multiplier = multiplier
 
         data = np.asarray([item["item"] for item in dataset])
-        means = data.mean(axis=1)
-        self._stds = means * multiplier
+        means = (data * data).mean(axis=0)
+        self._stds = np.sqrt(means * multiplier)
 
     def __getitem__(self, index):
         item = self._dataset.__getitem__(index)
