@@ -5,7 +5,7 @@ from ...cases.example_selection import (
     CorrectnessCase,
     CovariateComplexityCase,
 )
-from ..utils import NoiseApplier, RandomNeighborsBaseline
+from ...utils import NoiseApplier, RandomNeighborsBaseline
 
 
 def continuity(test_ds, model):

@@ -1,14 +1,12 @@
 import os
-from typing import Any, Union, Literal, List
+from typing import Union, Literal, List
 
 import numpy as np
 import pandas as pd
-from cascade import data as cdd
 from cascade import models as cdm
 from cascade.meta import MetaViewer
 from plotly import express as px
 from plotly import graph_objects as go
-from scipy.special import softmax
 from cascade.base import Traceable, PipeMeta
 from xaib.base import Factory
 
@@ -98,53 +96,6 @@ class Setup(Traceable):
         meta[0]["explainers"] = self.explainers
         meta[0]["cases"] = self.cases
         return meta
-
-
-class NoiseApplier(cdd.Modifier):
-    def __init__(self, dataset, multiplier: float = 1.0, *args, **kwargs) -> None:
-        super().__init__(dataset, *args, **kwargs)
-        self._multiplier = multiplier
-
-        data = np.asarray([item["item"] for item in dataset])
-        means = (data * data).mean(axis=0)
-        self._stds = np.sqrt(means * multiplier)
-
-    def __getitem__(self, index):
-        item = self._dataset.__getitem__(index)
-
-        noises = [np.random.normal(0, scale) for scale in self._stds]
-
-        item["item"] = item["item"] + noises
-        return item
-
-
-class RandomBaseline(cdm.BasicModel):
-    def __init__(self, labels, *args, meta_prefix=None, **kwargs) -> None:
-        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
-        self._labels = labels
-
-    def predict(self, x):
-        return np.array([np.random.choice(self._labels) for _ in range(len(x))])
-
-    def predict_proba(self, x):
-        proba = np.random.random((len(x), len(self._labels)))
-        return softmax(proba, axis=1)
-
-
-class KNeighborsTransformer:
-    def __init__(self, dataset_length) -> None:
-        self._dataset_length = dataset_length
-
-    def kneighbors(self, x, n_neighbors):
-        return None, np.asarray(
-            [[np.random.randint(0, self._dataset_length)] for _ in range(n_neighbors)]
-        )
-
-
-class RandomNeighborsBaseline(cdm.BasicModel):
-    def __init__(self, dataset_length, *args, meta_prefix=None, **kwargs) -> None:
-        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
-        self._pipeline = [KNeighborsTransformer(dataset_length)]
 
 
 def experiment(root, explainers, *args, batch_size=1, **kwargs):

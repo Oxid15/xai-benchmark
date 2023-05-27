@@ -7,7 +7,7 @@ from ...cases.feature_importance import (
     CorrectnessCase,
     CovariateComplexityCase,
 )
-from ..utils import NoiseApplier, RandomBaseline
+from ...utils import NoiseApplier, RandomBaseline
 
 
 def correctness(test_ds, model, labels):
