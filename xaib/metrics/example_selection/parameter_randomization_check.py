@@ -58,7 +58,12 @@ class ParameterRandomizationCheck(Metric):
             explanation_batch = expl.predict(item, self._model, **expl_kwargs)
             noisy_explanation_batch = expl.predict(
                 item, self._noisy_model, **expl_noisy_kwargs
-            )["item"]
+            )
+
+            explanation_batch = np.asarray([item["item"] for item in explanation_batch])
+            noisy_explanation_batch = np.asarray(
+                [item["item"] for item in noisy_explanation_batch]
+            )
 
             diffs_expl += batch_count_eq(explanation_batch, noisy_explanation_batch)
 
