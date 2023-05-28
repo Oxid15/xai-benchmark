@@ -36,3 +36,12 @@ xaib.metrics.example_selection
 |
 
 |
+
+.. autoclass:: xaib.metrics.example_selection.same_class_check.SameClassCheck
+   :members:
+
+|
+
+|
+
+|
