@@ -63,3 +63,18 @@ Target discriminativeness
      - :ref:`Contrastivity <cases:Contrastivity>`
    * - Direction
      - Up :octicon:`arrow-up`
+
+Same class check
+****************
+:py:class:`xaib.metrics.example_selection.same_class_check.SameClassCheck`
+
+.. list-table::
+   :widths: 25 75
+   :header-rows: 1
+
+   * - Properties
+     - 
+   * - Case
+     - :ref:`Coherence <cases:Coherence>`
+   * - Direction
+     - Up :octicon:`arrow-up`
