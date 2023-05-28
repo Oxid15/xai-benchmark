@@ -1,5 +1,6 @@
 from cascade import data as cdd
 from tqdm import tqdm
+import numpy as np
 
 from ...base import Metric
 from ...evaluation import ModelFactory
