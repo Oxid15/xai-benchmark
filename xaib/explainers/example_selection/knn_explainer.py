@@ -12,5 +12,5 @@ class KNNExplainer(Explainer):
         self._explainer = KNeighborsClassifier(n_neighbors=1)
 
     def predict(self, x, model):
-        _, indices = self._explainer.kneighbors(x)
+        _, indices = model._pipeline[0].kneighbors(x, 1)
         return [self._train_ds[i[0]] for i in indices]
