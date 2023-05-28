@@ -58,7 +58,7 @@ class ParameterRandomizationCheck(Metric):
             explanation_batch = expl.predict(item, self._model, **expl_kwargs)
             noisy_explanation_batch = expl.predict(
                 item, self._noisy_model, **expl_noisy_kwargs
-            )
+            )["item"]
 
             diffs_expl += batch_count_eq(explanation_batch, noisy_explanation_batch)
 

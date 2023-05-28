@@ -33,7 +33,9 @@ class TargetDiscriminativeness(Metric):
         for batch in tqdm(SimpleDataloader(self._ds, batch_size=batch_size)):
             item, label = batch["item"], batch["label"]
 
-            explanation_batch = explainer.predict(item, self._model, **expl_kwargs)
+            explanation_batch = explainer.predict(item, self._model, **expl_kwargs)[
+                "item"
+            ]
 
             explanations += explanation_batch.tolist()
             labels += label.tolist()

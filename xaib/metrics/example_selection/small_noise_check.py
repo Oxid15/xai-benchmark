@@ -54,7 +54,7 @@ class SmallNoiseCheck(Metric):
             explanation_batch = expl.predict(item, self._model, **expl_kwargs)
             noisy_explanation_batch = expl.predict(
                 noisy_item, self._model, **expl_kwargs
-            )
+            )["item"]
 
             counts += batch_count_eq(explanation_batch, noisy_explanation_batch)
 
