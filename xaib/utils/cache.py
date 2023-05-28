@@ -1,6 +1,7 @@
 import os
 from typing import Any
 from ..base import Factory, Model
+from cascade.base import MetaHandler
 
 
 class ModelCache:
@@ -28,14 +29,17 @@ class ModelCache:
             clss = self._factory.get_constructor(name)
             model = clss(name=name)
             model.load(
-                os.path.join(self._root, full_name, "model")
+                os.path.join(self._root, full_name, "model.pkl")
             )  # NOTE: The use of filename should be deprecated
             return model
 
         model = self._factory.get(name, *args, **kwargs)
 
         os.makedirs(os.path.join(self._root, full_name), exist_ok=True)
-        model.save(os.path.join(self._root, full_name, "model"))
+        model.save(os.path.join(self._root, full_name, "model.pkl"))
+        MetaHandler().write(
+            os.path.join(self._root, full_name, "meta.json"), model.get_meta()
+        )
         self._keys.append(full_name)
         return model
 
