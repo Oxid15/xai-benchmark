@@ -60,6 +60,11 @@ class ParameterRandomizationCheck(Metric):
                 item, self._noisy_model, **expl_noisy_kwargs
             )
 
+            explanation_batch = np.asarray([item["item"] for item in explanation_batch])
+            noisy_explanation_batch = np.asarray(
+                [item["item"] for item in noisy_explanation_batch]
+            )
+
             diffs_expl += batch_count_eq(explanation_batch, noisy_explanation_batch)
 
         return sum(diffs_expl) / len(diffs_expl)

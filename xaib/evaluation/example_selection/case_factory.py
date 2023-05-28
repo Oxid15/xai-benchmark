@@ -4,6 +4,7 @@ from ...cases.example_selection import (
     ContrastivityCase,
     CorrectnessCase,
     CovariateComplexityCase,
+    CoherenceCase,
 )
 from ...utils import NoiseApplier, RandomNeighborsBaseline
 
@@ -28,3 +29,4 @@ class CaseFactory(Factory):
             test_ds, model
         )
         self._constructors["correctness"] = lambda: correctness(test_ds, model)
+        self._constructors["coherence"] = lambda: CoherenceCase(test_ds, model)

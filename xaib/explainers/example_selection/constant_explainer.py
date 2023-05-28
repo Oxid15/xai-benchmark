@@ -9,4 +9,4 @@ class ConstantExplainer(Explainer):
         self._example = example
 
     def predict(self, x, model):
-        return np.asarray([self._example for _ in range(len(x))])
+        return [self._example for _ in range(len(x))]

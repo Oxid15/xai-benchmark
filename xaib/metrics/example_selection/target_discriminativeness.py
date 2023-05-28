@@ -1,5 +1,6 @@
 from cascade import data as cdd
 from tqdm import tqdm
+import numpy as np
 
 from ...base import Metric
 from ...evaluation import ModelFactory
@@ -34,6 +35,7 @@ class TargetDiscriminativeness(Metric):
             item, label = batch["item"], batch["label"]
 
             explanation_batch = explainer.predict(item, self._model, **expl_kwargs)
+            explanation_batch = np.asarray([item["item"] for item in explanation_batch])
 
             explanations += explanation_batch.tolist()
             labels += label.tolist()
