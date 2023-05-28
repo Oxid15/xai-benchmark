@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn.neighbors import KNeighborsClassifier
 
 from ...base import Explainer
 
@@ -8,6 +9,8 @@ class KNNExplainer(Explainer):
         super().__init__(**kwargs)
         self._train_ds = train_ds
 
+        self._explainer = KNeighborsClassifier(n_neighbors=1)
+
     def predict(self, x, model):
-        _, indices = model._pipeline[0].kneighbors(x, 1)
-        return np.asarray([self._train_ds[i[0]] for i in indices])
+        _, indices = self._explainer.kneighbors(x)
+        return [self._train_ds[i[0]] for i in indices]

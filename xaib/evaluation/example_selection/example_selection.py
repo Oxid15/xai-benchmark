@@ -14,7 +14,9 @@ from xaib.utils import ModelCache
 SCRIPT_DIR = os.path.dirname(__file__)
 # xaib/results/...
 REPO_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(SCRIPT_DIR)), "results", "example_selection"
+    os.path.dirname(os.path.dirname(SCRIPT_DIR)),
+    "results",
+    "example_selection_coherence_model_f1",
 )
 
 sys.path.append(os.path.abspath(os.path.dirname(SCRIPT_DIR)))
@@ -27,7 +29,7 @@ BS = 100
 ModelRepo(REPO_PATH, overwrite=True)
 
 factories = (DatasetFactory(), ModelFactory(), ExplainerFactory(), CaseFactory())
-setups = [Setup(*factories, models=["knn"])]
+setups = [Setup(*factories, models=["knn"], cases=["coherence"], explainers=["knn"])]
 
 for setup in setups:
     for dataset in setup.datasets:
