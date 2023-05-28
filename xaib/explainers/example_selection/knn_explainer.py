@@ -9,8 +9,14 @@ class KNNExplainer(Explainer):
         super().__init__(**kwargs)
         self._train_ds = train_ds
 
+        X, Y = [x["item"] for x in train_ds], [x["label"] for x in train_ds]
+
+        X = np.array(X)
+        Y = np.array(Y, dtype=int)
+
         self._explainer = KNeighborsClassifier(n_neighbors=1)
+        self._explainer.fit(X, Y)
 
     def predict(self, x, model):
-        _, indices = model._pipeline[0].kneighbors(x, 1)
+        _, indices = self._explainer.kneighbors(x)
         return [self._train_ds[i[0]] for i in indices]
