@@ -1,5 +1,6 @@
 from cascade import models as cdm
 import numpy as np
+from scipy.special import softmax
 
 
 class RandomBaseline(cdm.BasicModel):
