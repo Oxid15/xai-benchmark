@@ -34,8 +34,8 @@ user, but they should be true to the model to satisfy this criterion.
 
 Metrics
 =======
-* :ref:`Feature importance: Parameter Randomization Check <metrics/feature_importance:Parameter randomization check>`
-* :ref:`Example selection: Parameter Randomization Check <metrics/example_selection:Parameter randomization check>`
+* :ref:`Feature importance: Model Randomization Check <metrics/feature_importance:Model randomization check>`
+* :ref:`Example selection: Model Randomization Check <metrics/example_selection:Model randomization check>`
 
 
 Completeness
@@ -145,6 +145,8 @@ Coherence
 *********
 :py:class:`xaib.cases.feature_importance.CoherenceCase`
 
+:py:class:`xaib.cases.example_selection.CoherenceCase`
+
 To what extent the explanation is consistent with relevant background
 knowledge, beliefs and general consensus. The agreement with domain-specific 
 knowledge can be measured, but this is difficult to define and very task-dependent.
@@ -152,6 +154,7 @@ knowledge can be measured, but this is difficult to define and very task-depende
 Metrics
 =======
 * :ref:`Feature importance: Other disagreement <metrics/feature_importance:Other disagreement>`
+* :ref:`Example selection: Same class check <metrics/example_selection:Same class check>`
 
 Controllability
 ***************

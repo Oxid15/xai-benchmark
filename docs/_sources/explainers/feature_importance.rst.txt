@@ -8,7 +8,7 @@ ConstantExplainer
 .. tags:: baseline
 
 Returns the predefined constant vector for every input. This baseline is useful for
-checking stability metrics. For example it should maximize :doc:`Parameter randomization check <../metrics/feature_importance>`
+checking stability metrics. For example it should maximize :doc:`Model randomization check <../metrics/feature_importance>`
 
 LimeExplainer
 *************
