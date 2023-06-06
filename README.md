@@ -1,5 +1,7 @@
 # xai-benchmark
 
+[![DOI](https://zenodo.org/badge/544003050.svg)](https://zenodo.org/badge/latestdoi/544003050)
+
 Open and extensible benchmark for XAI methods
 
 ## Description
