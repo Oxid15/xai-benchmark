@@ -7,9 +7,9 @@ from ...base import Dataset, Explainer, Metric, Model
 from ...utils import SimpleDataloader, batch_rmse, minmax_normalize
 
 
-class ParameterRandomizationCheck(Metric):
+class ModelRandomizationCheck(Metric):
     """
-    Parameter randomization check is a sanity-check.
+    Model randomization check is a sanity-check.
     To ensure that the model influence explanations the
     following is done. The model is changed and it is expected that
     explanations should not stay the same is model changed.
@@ -32,7 +32,7 @@ class ParameterRandomizationCheck(Metric):
     ) -> None:
         super().__init__(ds, model, **kwargs)
         self._noisy_model = noisy_model
-        self.name = "parameter_randomization_check"
+        self.name = "model_randomization_check"
         self.direction = "up"
 
     def compute(
