@@ -10,3 +10,6 @@ class ExplainerFactory(Factory):
         self._constructors["const"] = lambda: ConstantExplainer(train_ds, train_ds[0])
         self._constructors["random"] = lambda: RandomExplainer(train_ds)
         self._constructors["knn"] = lambda: KNNExplainer(train_ds)
+        self._constructors["knn_cosine"] = lambda: KNNExplainer(
+            train_ds, metric="cosine"
+        )
