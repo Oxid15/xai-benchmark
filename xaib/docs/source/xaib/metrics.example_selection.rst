@@ -10,7 +10,7 @@ xaib.metrics.example_selection
 
 |
 
-.. autoclass:: xaib.metrics.example_selection.parameter_randomization_check.ParameterRandomizationCheck
+.. autoclass:: xaib.metrics.example_selection.model_randomization_check.ModelRandomizationCheck
    :members:
 
 |

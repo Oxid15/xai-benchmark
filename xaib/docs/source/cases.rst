@@ -34,8 +34,8 @@ user, but they should be true to the model to satisfy this criterion.
 
 Metrics
 =======
-* :ref:`Feature importance: Parameter Randomization Check <metrics/feature_importance:Parameter randomization check>`
-* :ref:`Example selection: Parameter Randomization Check <metrics/example_selection:Parameter randomization check>`
+* :ref:`Feature importance: Model Randomization Check <metrics/feature_importance:Model randomization check>`
+* :ref:`Example selection: Model Randomization Check <metrics/example_selection:Model randomization check>`
 
 
 Completeness

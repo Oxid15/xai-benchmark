@@ -28,7 +28,7 @@ xaib.metrics.feature_importance
 
 |
 
-.. autoclass:: xaib.metrics.feature_importance.parameter_randomization_check.ParameterRandomizationCheck
+.. autoclass:: xaib.metrics.feature_importance.model_randomization_check.ModelRandomizationCheck
    :members:
 
 |
