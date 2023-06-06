@@ -1,7 +1,7 @@
 from typing import Any
 
 from ...base import Case, Dataset, Model
-from ...metrics.feature_importance import ParameterRandomizationCheck
+from ...metrics.feature_importance import ModelRandomizationCheck
 
 
 class CorrectnessCase(Case):
@@ -10,6 +10,6 @@ class CorrectnessCase(Case):
     ) -> None:
         super().__init__(ds, model, *args, **kwargs)
         self.name = "correctness"
-        self._metric_objs[
-            "parameter_randomization_check"
-        ] = ParameterRandomizationCheck(ds, model, noisy_model)
+        self._metric_objs["model_randomization_check"] = ModelRandomizationCheck(
+            ds, model, noisy_model
+        )

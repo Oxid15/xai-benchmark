@@ -9,6 +9,7 @@ from xaib.evaluation.example_selection import (
     ExplainerFactory,
     CaseFactory,
 )
+from xaib.utils import ModelCache
 
 SCRIPT_DIR = os.path.dirname(__file__)
 # xaib/results/...
@@ -26,15 +27,17 @@ BS = 100
 ModelRepo(REPO_PATH, overwrite=True)
 
 factories = (DatasetFactory(), ModelFactory(), ExplainerFactory(), CaseFactory())
-setups = [Setup(*factories, models=["knn"])]
+setups = [Setup(*factories, models_except=["knn"])]
 
 for setup in setups:
     for dataset in setup.datasets:
+        train_ds, test_ds = DatasetFactory().get(dataset)
+        model_factory = ModelCache(ModelFactory(train_ds, test_ds))
+
         for model in setup.models:
-            train_ds, test_ds = DatasetFactory().get(dataset)
             print(train_ds.get_meta())
 
-            model = ModelFactory(train_ds, test_ds).get(model)
+            model = model_factory.get(model, key=dataset)
             print(model.get_meta())
 
             explainers = {

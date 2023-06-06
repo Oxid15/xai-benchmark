@@ -45,7 +45,7 @@ extensions = [
     "sphinx_design",
 ]
 
-autodoc_default_options = {"special-members": "__init__", "undoc-members": False}
+autodoc_default_options = {"undoc-members": False}
 autosectionlabel_prefix_document = True
 
 # Add any paths that contain templates here, relative to this directory.

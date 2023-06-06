@@ -13,8 +13,8 @@ class SmallNoiseCheck(Metric):
     Obtain original and perturbed explanations.
     Compare them using RMSE and average.
     **The less the better**
-     - **Worst case:** is when explanations are hugely changed by the small variations in input
-     - **Best case:** is no variations, so constant explainer should achieve best results
+    - **Worst case:** is when explanations are hugely changed by the small variations in input
+    - **Best case:** is no variations, so constant explainer should achieve best results
     """
 
     def __init__(

@@ -12,6 +12,7 @@ from xaib.evaluation.feature_importance import (
     ExplainerFactory,
     CaseFactory,
 )
+from xaib.utils import ModelCache
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SCRIPT_DIR)
@@ -32,15 +33,16 @@ setups = [Setup(*factories, models_except=["knn"])]
 
 for setup in setups:
     for dataset in setup.datasets:
+        train_ds, test_ds = DatasetFactory().get(dataset)
+        model_factory = ModelCache(ModelFactory(train_ds, test_ds))
+
+        print(train_ds.get_meta())
         for model in setup.models:
             print(dataset, model)
 
-            train_ds, test_ds = DatasetFactory().get(dataset)
-            print(train_ds.get_meta())
-
             labels = train_ds.labels
 
-            model = ModelFactory(train_ds, test_ds).get(model)
+            model = model_factory.get(model, key=dataset)
             print(model.get_meta())
 
             explainers = {

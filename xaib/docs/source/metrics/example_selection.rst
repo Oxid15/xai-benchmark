@@ -3,9 +3,9 @@ Example selection metrics
 
 Numerical results with visualizations are available on :doc:`results page. <../results/example_selection>`
 
-Parameter randomization check
+Model randomization check
 *****************************
-:py:class:`xaib.metrics.example_selection.parameter_randomization_check.ParameterRandomizationCheck`
+:py:class:`xaib.metrics.example_selection.model_randomization_check.ModelRandomizationCheck`
 
 .. list-table::
    :widths: 25 75
@@ -61,5 +61,20 @@ Target discriminativeness
      - 
    * - Case
      - :ref:`Contrastivity <cases:Contrastivity>`
+   * - Direction
+     - Up :octicon:`arrow-up`
+
+Same class check
+****************
+:py:class:`xaib.metrics.example_selection.same_class_check.SameClassCheck`
+
+.. list-table::
+   :widths: 25 75
+   :header-rows: 1
+
+   * - Properties
+     - 
+   * - Case
+     - :ref:`Coherence <cases:Coherence>`
    * - Direction
      - Up :octicon:`arrow-up`

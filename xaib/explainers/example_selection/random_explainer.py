@@ -11,7 +11,7 @@ class RandomExplainer(Explainer):
     def predict(self, x, model):
         return np.asarray(
             [
-                self._train_ds[np.random.randint(0, len(self._train_ds) - 1)]["item"]
+                self._train_ds[np.random.randint(0, len(self._train_ds) - 1)]
                 for _ in range(len(x))
             ]
         )

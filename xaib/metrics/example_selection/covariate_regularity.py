@@ -56,6 +56,7 @@ class CovariateRegularity(Metric):
             dl = SimpleDataloader(Filter(self._ds, coords[u]), batch_size=batch_size)
             for batch in tqdm(dl):
                 ex = expl.predict(batch["item"], self._model, **expl_kwargs)
+                ex = np.asarray([item["item"] for item in ex])
                 ex = minmax_normalize(ex)
 
                 explanations[u] += ex.tolist()
