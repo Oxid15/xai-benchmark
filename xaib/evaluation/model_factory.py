@@ -1,6 +1,6 @@
 from typing import Any, Dict
 import numpy as np
-from cascade.utils.sk_model import SkModel
+from cascade.utils.sklearn import SkModel
 from sklearn.metrics import f1_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier

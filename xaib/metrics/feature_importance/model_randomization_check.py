@@ -4,7 +4,7 @@ import numpy as np
 from tqdm import tqdm
 
 from ...base import Dataset, Explainer, Metric, Model
-from ...utils import SimpleDataloader, batch_rmse, minmax_normalize
+from ...utils import ChannelDataloader, batch_rmse, minmax_normalize
 
 
 class ModelRandomizationCheck(Metric):
@@ -49,7 +49,7 @@ class ModelRandomizationCheck(Metric):
 
         diffs_expl = []
 
-        for batch in tqdm(SimpleDataloader(self._ds, batch_size)):
+        for batch in tqdm(ChannelDataloader(self._ds, batch_size)):
             item = batch["item"]
 
             explanation_batch = expl.predict(item, self._model, **expl_kwargs)

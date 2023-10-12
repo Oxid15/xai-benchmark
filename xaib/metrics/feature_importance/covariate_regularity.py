@@ -4,7 +4,7 @@ import numpy as np
 from tqdm import tqdm
 
 from ...base import Dataset, Explainer, Metric, Model
-from ...utils import SimpleDataloader, entropy, minmax_normalize
+from ...utils import ChannelDataloader, entropy, minmax_normalize
 
 
 class CovariateRegularity(Metric):
@@ -35,7 +35,7 @@ class CovariateRegularity(Metric):
             expl_kwargs = {}
 
         explanations = []
-        for batch in tqdm(SimpleDataloader(self._ds, batch_size)):
+        for batch in tqdm(ChannelDataloader(self._ds, batch_size)):
             item = batch["item"]
 
             e = expl.predict(item, self._model, **expl_kwargs)

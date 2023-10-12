@@ -450,6 +450,7 @@ and return some value
 
 ```python
     from xaib import Metric
+    from xaib.utils import ChannelDataloader
 
     class NewMetric(Metric):
         def __init__(self, ds, model *args, **kwargs):
@@ -462,7 +463,7 @@ and return some value
             if expl_kwargs is None:
                 expl_kwargs = {}
 
-            dl = SimpleDataloader(self._ds, batch_size=batch_size)
+            dl = ChannelDataloader(self._ds, batch_size=batch_size)
             for batch in tqdm(dl):
                 # get explanations
                 ex = expl.predict(batch['item'], self._model, **expl_kwargs)

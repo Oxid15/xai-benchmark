@@ -4,7 +4,7 @@ import numpy as np
 from tqdm import tqdm
 
 from ...base import Dataset, Explainer, Metric, Model
-from ...utils import SimpleDataloader, batch_count_eq
+from ...utils import ChannelDataloader, batch_count_eq
 
 
 class SmallNoiseCheck(Metric):
@@ -44,8 +44,8 @@ class SmallNoiseCheck(Metric):
 
         counts = []
         dls = zip(
-            SimpleDataloader(self._ds, batch_size),
-            SimpleDataloader(self._noisy_ds, batch_size),
+            ChannelDataloader(self._ds, batch_size),
+            ChannelDataloader(self._noisy_ds, batch_size),
         )
         for batch, noisy_batch in tqdm(dls):
             item = batch["item"]

@@ -1,11 +1,10 @@
 from typing import Any, Dict, Union
 
 import numpy as np
-from cascade.data import Sampler
 from tqdm import tqdm
 
 from ...base import Dataset, Explainer, Metric, Model
-from ...utils import Filter, SimpleDataloader, batch_rmse, minmax_normalize
+from ...utils import Filter, ChannelDataloader, batch_rmse, minmax_normalize
 
 
 class LabelDifference(Metric):
@@ -55,7 +54,7 @@ class LabelDifference(Metric):
         # Obtain all explanations by batches
         explanations = {u: [] for u in unique_labels}
         for u in unique_labels:
-            dl = SimpleDataloader(Filter(self._ds, coords[u]), batch_size=batch_size)
+            dl = ChannelDataloader(Filter(self._ds, coords[u]), batch_size=batch_size)
             for batch in tqdm(dl):
                 ex = expl.predict(batch["item"], self._model, **expl_kwargs)
                 ex = minmax_normalize(ex)

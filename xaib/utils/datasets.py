@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Any, Dict, List, Sequence
 
 import cascade.data as cdd
 import numpy as np
@@ -6,37 +6,21 @@ import numpy as np
 from ..base import Dataset
 
 
-class SimpleDataloader:
+class ChannelDataloader(cdd.SimpleDataloader):
     def __init__(self, data, batch_size: int = 1) -> None:
-        self._data = data
-        self._bs = batch_size
+        super().__init__(data, batch_size)
         self._channels = list(data[0].keys())
 
-    def __getitem__(self, index: int) -> Dict:
-        batch = {ch: [] for ch in self._channels}
-
-        start_index = index * self._bs
-        end_index = min((index + 1) * self._bs, len(self._data))
-        for i in range(start_index, end_index):
-            item = self._data[i]
-            for ch in self._channels:
-                batch[ch].append(item[ch])
-
+    def __getitem__(self, index: int) -> Dict[str, Any]:
+        batch = super().__getitem__(index)
+        new_batch = dict()
         for ch in batch:
-            batch[ch] = np.array(batch[ch])
-
-        return batch
-
-    def __iter__(self):
-        for i in range(len(self)):
-            yield self[i]
-
-    def __len__(self) -> int:
-        return int(np.ceil(len(self._data) / self._bs))
+            new_batch[ch] = np.array(batch[ch])
+        return new_batch
 
 
 class KeyedComposer(cdd.Composer):
-    def __init__(self, datasets: Dict, *args, **kwargs) -> None:
+    def __init__(self, datasets: Dict[str, Dataset], *args, **kwargs) -> None:
         super().__init__(list(datasets.values()), *args, **kwargs)
         self._keys = datasets.keys()
 

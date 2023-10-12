@@ -6,5 +6,5 @@ from .utils import (
     minmax_normalize,
 )
 from .cache import ModelCache
-from .datasets import Filter, KeyedComposer, SimpleDataloader, NoiseApplier
+from .datasets import ChannelDataloader, Filter, KeyedComposer, NoiseApplier
 from .models import RandomBaseline, KNeighborsTransformer, RandomNeighborsBaseline

@@ -1,11 +1,11 @@
 from typing import Any, Dict, Union
 
-from sklearn.metrics import f1_score, accuracy_score
+from sklearn.metrics import f1_score
 from tqdm import tqdm
 import numpy as np
 
 from ...base import Dataset, Explainer, Metric, Model
-from ...utils import SimpleDataloader, batch_count_eq
+from ...utils import ChannelDataloader
 
 
 class SameClassCheck(Metric):
@@ -34,7 +34,7 @@ class SameClassCheck(Metric):
         y_model = []
         y_pred = []
 
-        for batch in tqdm(SimpleDataloader(self._ds, batch_size)):
+        for batch in tqdm(ChannelDataloader(self._ds, batch_size)):
             item = batch["item"]
 
             explanation_batch = expl.predict(item, self._model, **expl_kwargs)

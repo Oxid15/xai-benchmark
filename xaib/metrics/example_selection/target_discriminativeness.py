@@ -4,7 +4,7 @@ import numpy as np
 
 from ...base import Metric
 from ...evaluation import ModelFactory
-from ...utils import KeyedComposer, SimpleDataloader
+from ...utils import KeyedComposer, ChannelDataloader
 
 
 class TargetDiscriminativeness(Metric):
@@ -31,7 +31,7 @@ class TargetDiscriminativeness(Metric):
 
         labels = []
         explanations = []
-        for batch in tqdm(SimpleDataloader(self._ds, batch_size=batch_size)):
+        for batch in tqdm(ChannelDataloader(self._ds, batch_size=batch_size)):
             item, label = batch["item"], batch["label"]
 
             explanation_batch = explainer.predict(item, self._model, **expl_kwargs)

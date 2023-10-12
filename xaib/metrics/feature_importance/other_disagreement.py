@@ -4,7 +4,7 @@ import numpy as np
 from tqdm import tqdm
 
 from ...base import Dataset, Explainer, Metric, Model
-from ...utils import SimpleDataloader, batch_rmse, minmax_normalize
+from ...utils import ChannelDataloader, batch_rmse, minmax_normalize
 
 
 class OtherDisagreement(Metric):
@@ -39,7 +39,7 @@ class OtherDisagreement(Metric):
             expls_kwargs = [{} for _ in range(len(expls))]
 
         diffs = []
-        for batch in tqdm(SimpleDataloader(self._ds, batch_size)):
+        for batch in tqdm(ChannelDataloader(self._ds, batch_size)):
             item = batch["item"]
 
             e = expl.predict(item, self._model, **expl_kwargs)
