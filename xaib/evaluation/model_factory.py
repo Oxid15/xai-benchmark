@@ -1,4 +1,4 @@
-from typing import Any, Dict, Union
+from typing import Any, Dict
 import numpy as np
 from cascade.utils.sk_model import SkModel
 from sklearn.metrics import f1_score
