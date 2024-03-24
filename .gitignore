@@ -139,3 +139,4 @@ repo/
 .vscode/
 *.zip
 xaib/results/
+venv*/

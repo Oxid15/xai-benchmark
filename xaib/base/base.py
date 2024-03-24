@@ -1,7 +1,9 @@
-from .. import __version__ as version
-from typing import List, Union, Dict, Any, Type
+from typing import Any, Dict, List, Type, Union
+
 from cascade import data as cdd
 from cascade import models as cdm
+
+from ..version import __version__ as version
 
 
 class Dataset(cdd.Dataset):
