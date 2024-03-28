@@ -1,7 +1,7 @@
 from typing import Any, Dict
+
 import numpy as np
-from cascade.utils.sklearn import SkModel
-from sklearn.metrics import f1_score
+from cascade.utils.sklearn import SkMetric, SkModel
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
@@ -18,7 +18,7 @@ class SkWrapper(SkModel):
         X, Y = [x["item"] for x in train_ds], [x["label"] for x in train_ds]
 
         X = np.array(X)
-        Y = np.array(Y, dtype=int)
+        Y = np.array(Y, dtype=int)  #TODO: revise this
 
         super().fit(X, Y, *args, **kwargs)
 
@@ -54,6 +54,6 @@ class ModelFactory(Factory):
         model.fit(self._train_ds)
         model.evaluate(
             self._test_ds,
-            metrics_dict={"f1": lambda x, y: f1_score(x, y, average="macro")},
+            metrics=[SkMetric("f1_score", average="macro")],
         )
         return model

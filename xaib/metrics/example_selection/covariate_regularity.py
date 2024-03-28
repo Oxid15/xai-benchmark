@@ -4,7 +4,7 @@ import numpy as np
 from tqdm import tqdm
 
 from ...base import Dataset, Explainer, Metric, Model
-from ...utils import Filter, ChannelDataloader, entropy, minmax_normalize
+from ...utils import ChannelDataloader, Filter, entropy, minmax_normalize
 
 
 class CovariateRegularity(Metric):
@@ -22,9 +22,9 @@ class CovariateRegularity(Metric):
     """
 
     def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
-        super().__init__(ds, model, *args, **kwargs)
-        self.name = "covariate_regularity"
-        self.direction = "down"
+        super().__init__(
+            name="covariate_regularity", direction="down", ds=ds, model=model, *args, **kwargs
+        )
 
     def compute(
         self,
@@ -37,10 +37,7 @@ class CovariateRegularity(Metric):
 
         # Obtain all the labels
         labels = np.asarray(
-            [
-                item["label"]
-                for item in tqdm(self._ds, desc="Obtaining labels", leave=False)
-            ]
+            [item["label"] for item in tqdm(self._ds, desc="Obtaining labels", leave=False)]
         )
 
         # Determine how much of an intersection different labels have
@@ -53,7 +50,8 @@ class CovariateRegularity(Metric):
         # Obtain all explanations by batches
         explanations = {u: [] for u in unique_labels}
         for u in unique_labels:
-            dl = ChannelDataloader(Filter(self._ds, coords[u]), batch_size=batch_size)
+            ds = Filter(self._ds, coords[u])
+            dl = ChannelDataloader(ds, batch_size=batch_size)
             for batch in tqdm(dl):
                 ex = expl.predict(batch["item"], self._model, **expl_kwargs)
                 ex = np.asarray([item["item"] for item in ex])

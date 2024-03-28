@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Sequence
+from typing import Any, Dict, List
 
 import cascade.data as cdd
 import numpy as np
@@ -8,14 +8,15 @@ from ..base import Dataset
 
 class ChannelDataloader(cdd.SimpleDataloader):
     def __init__(self, data, batch_size: int = 1) -> None:
+        batch_size = min(len(data), batch_size)
         super().__init__(data, batch_size)
         self._channels = list(data[0].keys())
 
     def __getitem__(self, index: int) -> Dict[str, Any]:
         batch = super().__getitem__(index)
         new_batch = dict()
-        for ch in batch:
-            new_batch[ch] = np.array(batch[ch])
+        for ch in self._channels:
+            new_batch[ch] = np.array([item[ch] for item in batch])
         return new_batch
 
 

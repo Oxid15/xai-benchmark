@@ -526,7 +526,7 @@ class CoherenceCase(Case):
         super().__init__(ds, model, *args, **kwargs)
         # ...
 
-        self._metric_objs['new_metric'] = NewMetric(ds, model)
+        self.metrics.append(NewMetric(ds, model))
 
 ```
 

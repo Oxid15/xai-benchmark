@@ -30,13 +30,11 @@ class ModelRandomizationCheck(Metric):
     It is difficult to define best case explainer in this case - the metric has no maximum value.
     """
 
-    def __init__(
-        self, ds: Dataset, model: Model, noisy_model: Model, **kwargs: Any
-    ) -> None:
-        super().__init__(ds, model, **kwargs)
+    def __init__(self, ds: Dataset, model: Model, noisy_model: Model, **kwargs: Any) -> None:
         self._noisy_model = noisy_model
-        self.name = "model_randomization_check"
-        self.direction = "down"
+        super().__init__(
+            name="model_randomization_check", direction="down", ds=ds, model=model, **kwargs
+        )
 
     def compute(
         self,
@@ -56,14 +54,10 @@ class ModelRandomizationCheck(Metric):
             item = batch["item"]
 
             explanation_batch = expl.predict(item, self._model, **expl_kwargs)
-            noisy_explanation_batch = expl.predict(
-                item, self._noisy_model, **expl_noisy_kwargs
-            )
+            noisy_explanation_batch = expl.predict(item, self._noisy_model, **expl_noisy_kwargs)
 
             explanation_batch = np.asarray([item["item"] for item in explanation_batch])
-            noisy_explanation_batch = np.asarray(
-                [item["item"] for item in noisy_explanation_batch]
-            )
+            noisy_explanation_batch = np.asarray([item["item"] for item in noisy_explanation_batch])
 
             diffs_expl += batch_count_eq(explanation_batch, noisy_explanation_batch)
 

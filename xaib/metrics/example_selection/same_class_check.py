@@ -2,7 +2,6 @@ from typing import Any, Dict, Union
 
 from sklearn.metrics import f1_score
 from tqdm import tqdm
-import numpy as np
 
 from ...base import Dataset, Explainer, Metric, Model
 from ...utils import ChannelDataloader
@@ -14,10 +13,10 @@ class SameClassCheck(Metric):
     example produced are the same
     """
 
-    def __init__(self, ds: Dataset, model: Model, **kwargs: Any) -> None:
-        super().__init__(ds, model, **kwargs)
-        self.name = "same_class_check"
-        self.direction = "up"
+    def __init__(self, ds: Dataset, model: Model, *args, **kwargs: Any) -> None:
+        super().__init__(
+            name="same_class_check", direction="up", ds=ds, model=model, *args, **kwargs
+        )
 
     def compute(
         self,

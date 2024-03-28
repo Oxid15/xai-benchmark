@@ -1,12 +1,14 @@
-from typing import Any, Dict, List, Type, Union
+from typing import Any, Callable, Dict, List, Literal, Optional, Tuple, Type, Union
 
-from cascade import data as cdd
-from cascade import models as cdm
+from cascade.data import Dataset as CascadeDataset
+from cascade.metrics import Metric as CascadeMetric
+from cascade.metrics import MetricType as CascadeMetricType
+from cascade.models import Model as CascadeModel
 
 from ..version import __version__ as version
 
 
-class Dataset(cdd.Dataset):
+class Dataset(CascadeDataset):
     """
     Dataset is a wrapper around any collection of items to put in the ML model
     for inference
@@ -20,7 +22,7 @@ class Dataset(cdd.Dataset):
         return super().__getitem__(index)
 
 
-class Model(cdm.Model):
+class Model(CascadeModel):
     """
     Model is a wrapper around any inference of ML or other solution in the form y = f(x)
     it implements method `predict` that given certain data x returns the response y
@@ -34,7 +36,7 @@ class Model(cdm.Model):
         raise NotImplementedError()
 
 
-class Explainer(cdm.Model):
+class Explainer(CascadeModel):
     """
     Explainer is a special kind of Model e = g(f, x) that accepts another Model and data as input
     and also returns a response e - an explanation
@@ -48,16 +50,35 @@ class Explainer(cdm.Model):
         raise NotImplementedError()
 
 
-class Metric(cdm.Model):
+class Metric(CascadeMetric):
     """
     Metric is an entity which accepts Explainer, Model and Dataset and outputs a metric
     corresponding to the quality of Explainer v = m(g, f, x)
     """
 
-    def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        self.name = None
-        self.direction = None
+    def __init__(
+        self,
+        name: str,
+        direction: Literal["up", "down"],
+        ds: Dataset,
+        model: Model,
+        *args: Any,
+        split: Optional[str] = None,
+        interval: Optional[Tuple[CascadeMetricType, CascadeMetricType]] = None,
+        extra: Optional[Dict[str, Any]] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(
+            name=name,
+            direction=direction,
+            dataset=ds.name,
+            split=split,
+            interval=interval,
+            extra=extra,
+            *args,
+            **kwargs,
+        )
+
         self._ds = ds
         self._model = model
 
@@ -66,31 +87,11 @@ class Metric(cdm.Model):
         expl: Explainer,
         batch_size: int = 1,
         expl_kwargs: Union[Dict[Any, Any], None] = None,
-    ) -> Any:
+    ) -> CascadeMetricType:
         raise NotImplementedError()
 
-    def evaluate(
-        self,
-        name: str,
-        expl: Explainer,
-        batch_size: int = 1,
-        expl_kwargs: Union[Dict[Any, Any], None] = None,
-        **kwargs: Any,
-    ) -> None:
-        if expl_kwargs is None:
-            expl_kwargs = {}
-        value = self.compute(expl, batch_size=batch_size, **expl_kwargs, **kwargs)
 
-        self.params["name"] = name
-        self.params["direction"] = self.direction
-        self.params["dataset"] = self._ds.name
-        self.params["model"] = self._model.name
-        self.params["model_params"] = self._model.params
-        self.params["model_metrics"] = self._model.metrics
-        self.metrics[self.name] = value
-
-
-class Case(cdm.Model):
+class Case(CascadeModel):
     """
     Case is a collection of Metrics which represent some
     high-level property of an Explainer
@@ -99,34 +100,25 @@ class Case(cdm.Model):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.name = None
-        self._metric_objs = dict()
         self._meta_prefix.update({"xaib_version": version})
-
-    def add_metric(self, name: str, metric: Metric) -> None:
-        self._metric_objs[name] = metric
 
     def evaluate(
         self,
-        name: str,
         expl: Explainer,
         metrics_kwargs: Union[Dict[str, Dict[Any, Any]], None] = None,
         **kwargs: Any,
     ) -> None:
         if metrics_kwargs is None:
-            metrics_kwargs = {name: {} for _ in self._metric_objs}
+            metrics_kwargs = {metric.name: {} for metric in self.metrics}
 
-        self.params["metric_params"] = dict()
-        for m_name in self._metric_objs:
+        for metric in self.metrics:
+            m_name = metric.name
+
             mkwargs = {}
             if m_name in metrics_kwargs:
                 mkwargs = metrics_kwargs[m_name]
 
-            self._metric_objs[m_name].evaluate(name, expl, **mkwargs, **kwargs)
-
-            self.params["case"] = self.name
-
-            self.params["metric_params"][m_name] = self._metric_objs[m_name].params
-            self.metrics.update(self._metric_objs[m_name].metrics)
+            metric.compute(expl, **mkwargs, **kwargs)
 
 
 class Factory:

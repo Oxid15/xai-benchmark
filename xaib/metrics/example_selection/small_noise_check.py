@@ -28,10 +28,10 @@ class SmallNoiseCheck(Metric):
     def __init__(
         self, ds: Dataset, noisy_ds: Dataset, model: Model, *args: Any, **kwargs: Any
     ) -> None:
-        super().__init__(ds, model, *args, **kwargs)
         self._noisy_ds = noisy_ds
-        self.name = "small_noise_check"
-        self.direction = "up"
+        super().__init__(
+            name="small_noise_check", direction="up", ds=ds, model=model, *args, **kwargs
+        )
 
     def compute(
         self,
@@ -52,14 +52,10 @@ class SmallNoiseCheck(Metric):
             noisy_item = noisy_batch["item"]
 
             explanation_batch = expl.predict(item, self._model, **expl_kwargs)
-            noisy_explanation_batch = expl.predict(
-                noisy_item, self._model, **expl_kwargs
-            )
+            noisy_explanation_batch = expl.predict(noisy_item, self._model, **expl_kwargs)
 
             explanation_batch = np.asarray([item["item"] for item in explanation_batch])
-            noisy_explanation_batch = np.asarray(
-                [item["item"] for item in noisy_explanation_batch]
-            )
+            noisy_explanation_batch = np.asarray([item["item"] for item in noisy_explanation_batch])
 
             counts += batch_count_eq(explanation_batch, noisy_explanation_batch)
 

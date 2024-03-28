@@ -2,12 +2,12 @@ import os
 import sys
 
 from cascade.models import ModelRepo
-from cascade.utils.sk_model import SkModel
+
 from xaib.evaluation import DatasetFactory, ModelFactory
 from xaib.evaluation.example_selection import (
+    CaseFactory,
     ExperimentFactory,
     ExplainerFactory,
-    CaseFactory,
 )
 from xaib.utils import ModelCache
 
@@ -19,7 +19,6 @@ REPO_PATH = os.path.join(
 
 sys.path.append(os.path.abspath(os.path.dirname(SCRIPT_DIR)))
 from utils import Setup, visualize_results
-
 
 BS = 100
 

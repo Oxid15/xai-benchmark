@@ -140,3 +140,4 @@ repo/
 *.zip
 xaib/results/
 venv*/
+.xaib

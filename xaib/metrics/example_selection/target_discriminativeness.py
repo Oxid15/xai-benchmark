@@ -1,10 +1,10 @@
+import numpy as np
 from cascade import data as cdd
 from tqdm import tqdm
-import numpy as np
 
 from ...base import Metric
 from ...evaluation import ModelFactory
-from ...utils import KeyedComposer, ChannelDataloader
+from ...utils import ChannelDataloader, KeyedComposer
 
 
 class TargetDiscriminativeness(Metric):
@@ -21,9 +21,9 @@ class TargetDiscriminativeness(Metric):
     """
 
     def __init__(self, ds, model, *args, **kwargs):
-        super().__init__(ds, model, *args, **kwargs)
-        self.name = "target_discriminativeness"
-        self.direction = "up"
+        super().__init__(
+            name="target_discriminativeness", direction="up", ds=ds, model=model, *args, **kwargs
+        )
 
     def compute(self, explainer, batch_size=1, expl_kwargs=None):
         if expl_kwargs is None:
@@ -40,12 +40,13 @@ class TargetDiscriminativeness(Metric):
             explanations += explanation_batch.tolist()
             labels += label.tolist()
 
-        ds = KeyedComposer(
-            {"item": cdd.Wrapper(explanations), "label": cdd.Wrapper(labels)}
-        )
+        ds = KeyedComposer({"item": cdd.Wrapper(explanations), "label": cdd.Wrapper(labels)})
 
         expl_train_ds, expl_test_ds = cdd.split(ds, frac=0.8)
 
         user_model = ModelFactory(expl_train_ds, expl_test_ds).get("svm")
 
-        return user_model.metrics["f1"]
+        for metric in user_model.metrics:
+            if metric.name == "f1_score":
+                return metric
+        raise RuntimeError("f1_score not found in user_model's metrics")

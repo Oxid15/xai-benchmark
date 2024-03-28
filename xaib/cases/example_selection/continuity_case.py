@@ -10,4 +10,4 @@ class ContinuityCase(Case):
     ) -> None:
         super().__init__(ds, model, *args, **kwargs)
         self.name = "continuity"
-        self._metric_objs["small_noise_check"] = SmallNoiseCheck(ds, noisy_ds, model)
+        self.metrics.append(SmallNoiseCheck(ds, noisy_ds, model))
