@@ -94,4 +94,4 @@ Integrate new metric
             super().__init__(ds, model, *args, **kwargs)
             # ...
 
-            self.metrics(NewMetric(ds, model))
+            self.metrics.append(NewMetric(ds, model))
