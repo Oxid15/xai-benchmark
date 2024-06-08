@@ -1,14 +1,9 @@
 from typing import Any, Dict
-from cascade.base import PipeMeta
 
 import numpy as np
 from cascade import data as cdd
-from sklearn.datasets import (
-    load_iris,
-    load_digits,
-    load_wine,
-    load_breast_cancer,
-)
+from cascade.base import PipeMeta
+from sklearn.datasets import load_breast_cancer, load_digits, load_iris, load_wine
 from sklearn.model_selection import train_test_split
 
 
@@ -18,6 +13,10 @@ class SkDataset(cdd.SizedDataset):
         super().__init__(**kwargs)
 
         self.name = name
+
+        if split not in ("train", "test"):
+            raise ValueError("Split should be 'train' or 'test'")
+
         self.split = split
 
         constructors = {
