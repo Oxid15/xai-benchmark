@@ -141,3 +141,4 @@ repo/
 xaib/results/
 venv*/
 .xaib
+/example.py

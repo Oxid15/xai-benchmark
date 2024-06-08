@@ -3,7 +3,7 @@ from typing import Any, Dict, Union
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Dataset, Explainer, Metric, Model
+from ...base import Explainer, Metric, Model
 from ...utils import ChannelDataloader, batch_count_eq
 
 
@@ -30,11 +30,9 @@ class ModelRandomizationCheck(Metric):
     It is difficult to define best case explainer in this case - the metric has no maximum value.
     """
 
-    def __init__(self, ds: Dataset, model: Model, noisy_model: Model, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, noisy_model: Model, **kwargs: Any) -> None:
         self._noisy_model = noisy_model
-        super().__init__(
-            name="model_randomization_check", direction="down", ds=ds, model=model, **kwargs
-        )
+        super().__init__(name="model_randomization_check", direction="down", *args, **kwargs)
 
     def compute(
         self,
@@ -61,4 +59,5 @@ class ModelRandomizationCheck(Metric):
 
             diffs_expl += batch_count_eq(explanation_batch, noisy_explanation_batch)
 
-        return sum(diffs_expl) / len(diffs_expl)
+        self.value = sum(diffs_expl) / len(diffs_expl)
+        return self.value

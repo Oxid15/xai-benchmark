@@ -1,9 +1,9 @@
-from typing import Any, Dict, Union
+from typing import Any
 
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Dataset, Explainer, Metric, Model
+from ...base import Metric
 from ...utils import ChannelDataloader, Filter, entropy, minmax_normalize
 
 
@@ -21,20 +21,22 @@ class CovariateRegularity(Metric):
     - **Best case:** constant explainer that gives examples with one feature with maximum value and others zero
     """
 
-    def __init__(self, ds: Dataset, model: Model, *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        *args: Any,
+        **kwargs: Any
+    ) -> None:
         super().__init__(
-            name="covariate_regularity", direction="down", ds=ds, model=model, *args, **kwargs
+            name="covariate_regularity",
+            direction="down",
+            *args,
+            **kwargs
         )
 
     def compute(
         self,
-        expl: Explainer,
         batch_size: int = 1,
-        expl_kwargs: Union[Dict[Any, Any], None] = None,
     ) -> None:
-        if expl_kwargs is None:
-            expl_kwargs = {}
-
         # Obtain all the labels
         labels = np.asarray(
             [item["label"] for item in tqdm(self._ds, desc="Obtaining labels", leave=False)]
@@ -53,7 +55,7 @@ class CovariateRegularity(Metric):
             ds = Filter(self._ds, coords[u])
             dl = ChannelDataloader(ds, batch_size=batch_size)
             for batch in tqdm(dl):
-                ex = expl.predict(batch["item"], self._model, **expl_kwargs)
+                ex = self._explainer.predict(batch["item"], self._model, **self._explainer_kwargs)
                 ex = np.asarray([item["item"] for item in ex])
                 ex = minmax_normalize(ex)
 
@@ -67,4 +69,5 @@ class CovariateRegularity(Metric):
                 e = entropy(expls[:, f])
                 entropies_of_features[u].append(e)
 
-        return np.nanmean([entropies_of_features[u] for u in entropies_of_features])
+        self.value = np.nanmean([entropies_of_features[u] for u in entropies_of_features])
+        return self.value

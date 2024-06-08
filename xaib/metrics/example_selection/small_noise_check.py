@@ -1,9 +1,9 @@
-from typing import Any, Dict, Union
+from typing import Any
 
 import numpy as np
 from tqdm import tqdm
 
-from ...base import Dataset, Explainer, Metric, Model
+from ...base import Dataset, Metric
 from ...utils import ChannelDataloader, batch_count_eq
 
 
@@ -25,23 +25,14 @@ class SmallNoiseCheck(Metric):
      - **Best case:** Random explainer
     """
 
-    def __init__(
-        self, ds: Dataset, noisy_ds: Dataset, model: Model, *args: Any, **kwargs: Any
-    ) -> None:
+    def __init__(self, ds, model, explainer, noisy_ds: Dataset, *args, **kwargs: Any) -> None:
         self._noisy_ds = noisy_ds
-        super().__init__(
-            name="small_noise_check", direction="up", ds=ds, model=model, *args, **kwargs
-        )
+        super().__init__("small_noise_check", "up", ds, model, explainer, *args, **kwargs)
 
     def compute(
         self,
-        expl: Explainer,
         batch_size: int = 1,
-        expl_kwargs: Union[Dict[Any, Any], None] = None,
     ) -> None:
-        if expl_kwargs is None:
-            expl_kwargs = {}
-
         counts = []
         dls = zip(
             ChannelDataloader(self._ds, batch_size),
@@ -51,12 +42,15 @@ class SmallNoiseCheck(Metric):
             item = batch["item"]
             noisy_item = noisy_batch["item"]
 
-            explanation_batch = expl.predict(item, self._model, **expl_kwargs)
-            noisy_explanation_batch = expl.predict(noisy_item, self._model, **expl_kwargs)
+            explanation_batch = self._explainer.predict(item, self._model, **self._explainer_kwargs)
+            noisy_explanation_batch = self._explainer.predict(
+                noisy_item, self._model, **self._explainer_kwargs
+            )
 
             explanation_batch = np.asarray([item["item"] for item in explanation_batch])
             noisy_explanation_batch = np.asarray([item["item"] for item in noisy_explanation_batch])
 
             counts += batch_count_eq(explanation_batch, noisy_explanation_batch)
 
-        return np.sum(counts) / len(self._ds)
+        self.value = np.sum(counts) / len(self._ds)
+        return self.value

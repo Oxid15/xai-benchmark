@@ -21,6 +21,11 @@ class Dataset(CascadeDataset):
     def __getitem__(self, index: int) -> Any:
         return super().__getitem__(index)
 
+    def get_meta(self) -> List[Dict[Any, Any]]:
+        meta = super().get_meta()
+        meta[0]["name"] = self.name
+        return meta
+
 
 class Model(CascadeModel):
     """
@@ -34,6 +39,11 @@ class Model(CascadeModel):
 
     def predict(self, x: Any) -> Any:
         raise NotImplementedError()
+
+    def get_meta(self) -> List[Dict[Any, Any]]:
+        meta = super().get_meta()
+        meta[0]["name"] = self.name
+        return meta
 
 
 class Explainer(CascadeModel):
@@ -49,6 +59,12 @@ class Explainer(CascadeModel):
     def predict(self, x: Any, model: Model) -> Any:
         raise NotImplementedError()
 
+    def get_meta(self) -> List[Dict[Any, Any]]:
+        meta = super().get_meta()
+        meta[0]["name"] = self.name
+        meta[0]["type"] = "explainer"
+        return meta
+
 
 class Metric(CascadeMetric):
     """
@@ -62,8 +78,9 @@ class Metric(CascadeMetric):
         direction: Literal["up", "down"],
         ds: Dataset,
         model: Model,
+        explainer: Explainer,
         *args: Any,
-        split: Optional[str] = None,
+        explainer_kwargs: Optional[Dict[str, Any]] = None,
         interval: Optional[Tuple[CascadeMetricType, CascadeMetricType]] = None,
         extra: Optional[Dict[str, Any]] = None,
         **kwargs: Any,
@@ -71,8 +88,6 @@ class Metric(CascadeMetric):
         super().__init__(
             name=name,
             direction=direction,
-            dataset=ds.name,
-            split=split,
             interval=interval,
             extra=extra,
             *args,
@@ -81,13 +96,12 @@ class Metric(CascadeMetric):
 
         self._ds = ds
         self._model = model
+        self._explainer = explainer
+        if explainer_kwargs is None:
+            explainer_kwargs = {}
+        self._explainer_kwargs = explainer_kwargs
 
-    def compute(
-        self,
-        expl: Explainer,
-        batch_size: int = 1,
-        expl_kwargs: Union[Dict[Any, Any], None] = None,
-    ) -> CascadeMetricType:
+    def compute(self) -> CascadeMetricType:
         raise NotImplementedError()
 
 
@@ -104,7 +118,6 @@ class Case(CascadeModel):
 
     def evaluate(
         self,
-        expl: Explainer,
         metrics_kwargs: Union[Dict[str, Dict[Any, Any]], None] = None,
         **kwargs: Any,
     ) -> None:
@@ -118,7 +131,13 @@ class Case(CascadeModel):
             if m_name in metrics_kwargs:
                 mkwargs = metrics_kwargs[m_name]
 
-            metric.compute(expl, **mkwargs, **kwargs)
+            metric.compute(**mkwargs, **kwargs)
+
+    def get_meta(self) -> List[Dict[Any, Any]]:
+        meta = super().get_meta()
+        meta[0]["name"] = self.name
+        meta[0]["type"] = "case"
+        return meta
 
 
 class Factory:

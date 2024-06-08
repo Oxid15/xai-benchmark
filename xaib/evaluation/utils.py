@@ -1,14 +1,15 @@
 import os
-from typing import Union, Literal, List
+from typing import Any, List, Literal, Union
 
 import numpy as np
 import pandas as pd
 from cascade import models as cdm
+from cascade.base import PipeMeta, Traceable
 from cascade.meta import MetaViewer
 from plotly import express as px
 from plotly import graph_objects as go
-from cascade.base import Traceable, PipeMeta
-from xaib.base import Factory
+
+from xaib.base import Case, Factory
 
 
 class Setup(Traceable):
@@ -28,6 +29,11 @@ class Setup(Traceable):
         cases_except: Union[List[str], None] = None,
     ) -> None:
         super().__init__()
+
+        self.dataset_factory = dataset_factory
+        self.model_factory = model_factory
+        self.explainer_factory = explainer_factory
+        self.case_factory = case_factory
 
         self._cfg = {
             "datasets": {
@@ -98,23 +104,16 @@ class Setup(Traceable):
         return meta
 
 
-def experiment(root, explainers, *args, batch_size=1, **kwargs):
-    def wrapper(case_init):
-        def wrap_case():
-            c = case_init()
-
-            repo = cdm.ModelRepo(os.path.join(root))
-            line = repo.add_line()
-
-            for name in explainers:
-                c.evaluate(
-                    name, explainers[name], *args, batch_size=batch_size, **kwargs
-                )
-                line.save(c, only_meta=True)
-
-        return wrap_case
-
-    return wrapper
+def run_experiment(case: Case, root: str, **metrics_kwargs: Any) -> bool:
+    try:
+        repo = cdm.ModelRepo(root)
+        line = repo.add_line(case.name)
+        case.evaluate(**metrics_kwargs)
+        line.save(case, only_meta=True)
+        return True
+    except Exception as e:
+        print(e)
+        return False
 
 
 def table(df):

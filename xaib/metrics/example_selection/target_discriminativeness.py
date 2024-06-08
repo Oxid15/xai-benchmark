@@ -9,10 +9,11 @@ from ...utils import ChannelDataloader, KeyedComposer
 
 class TargetDiscriminativeness(Metric):
     """
-    Given true labels and explanations in form of the examples, train another model to discriminate between labels.
+    Given true labels and explanations in form of the examples, train another model
+    to discriminate between labels.
     The quality of the model on the examples given describes the quality of the explanations.
     The quality can be measured by any performance metric,
-    but it is better to adopt to imbalanced data and use F1-measure for example.
+    but it is better to adapt to imbalanced data and use F1-measure for example.
 
     **The greater the better**
 
@@ -20,9 +21,9 @@ class TargetDiscriminativeness(Metric):
     **Worst case:** constant or random baseline - giving insufficient information to grasp labels
     """
 
-    def __init__(self, ds, model, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(
-            name="target_discriminativeness", direction="up", ds=ds, model=model, *args, **kwargs
+            name="target_discriminativeness", direction="up", *args, **kwargs
         )
 
     def compute(self, explainer, batch_size=1, expl_kwargs=None):
@@ -48,5 +49,6 @@ class TargetDiscriminativeness(Metric):
 
         for metric in user_model.metrics:
             if metric.name == "f1_score":
-                return metric
+                self.value = metric
+                return self.value
         raise RuntimeError("f1_score not found in user_model's metrics")

@@ -4,11 +4,7 @@ import sys
 from cascade.models import ModelRepo
 
 from xaib.evaluation import DatasetFactory, ModelFactory
-from xaib.evaluation.example_selection import (
-    CaseFactory,
-    ExperimentFactory,
-    ExplainerFactory,
-)
+from xaib.evaluation.example_selection import CaseFactory, ExplainerFactory
 from xaib.utils import ModelCache
 
 SCRIPT_DIR = os.path.dirname(__file__)
@@ -18,7 +14,7 @@ REPO_PATH = os.path.join(
 )
 
 sys.path.append(os.path.abspath(os.path.dirname(SCRIPT_DIR)))
-from utils import Setup, visualize_results
+from utils import Setup, run_experiment
 
 BS = 100
 
@@ -34,22 +30,16 @@ for setup in setups:
         model_factory = ModelCache(ModelFactory(train_ds, test_ds))
 
         for model in setup.models:
-            print(train_ds.get_meta())
-
             model = model_factory.get(model, key=dataset)
-            print(model.get_meta())
-
-            explainers = {
-                explainer: ExplainerFactory(train_ds, model).get(explainer)
-                for explainer in setup.explainers
-            }
-
-            experiment_factory = ExperimentFactory(
-                REPO_PATH, explainers, test_ds, model, BS
-            )
+            print(f"Model: {model.name} trained on: {train_ds.name}")
 
             for case in setup.cases:
-                experiment = experiment_factory.get(case)
-                experiment()
+                print(f"Evaluating: {case}")
+                for explainer in setup.explainers:
+                    print(f"Explainer: {explainer}")
+                    explainer = ExplainerFactory(train_ds, model).get(explainer)
+                    case_obj = CaseFactory(test_ds, model, explainer).get(case)
+                    success = run_experiment(case_obj, REPO_PATH)
+                    print("Success\n" if success else "Failed\n")
 
-visualize_results(REPO_PATH, REPO_PATH)
+# visualize_results(REPO_PATH, REPO_PATH)
