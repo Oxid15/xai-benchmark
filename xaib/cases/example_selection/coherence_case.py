@@ -8,6 +8,6 @@ class CoherenceCase(Case):
     def __init__(
         self, ds: Dataset, model: Model, explainer: Explainer, *args: Any, **kwargs: Any
     ) -> None:
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, ds=ds, model=model, explainer=explainer, **kwargs)
         self.name = "coherence"
         self.metrics.append(SameClassCheck(ds, model, explainer))

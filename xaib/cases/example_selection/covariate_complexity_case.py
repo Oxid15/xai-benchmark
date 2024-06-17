@@ -8,6 +8,6 @@ class CovariateComplexityCase(Case):
     def __init__(
         self, ds: Dataset, model: Model, explainer: Explainer, *args: Any, **kwargs: Any
     ) -> None:
-        super().__init__(ds, model, explainer, *args, **kwargs)
+        super().__init__(*args, ds=ds, model=model, explainer=explainer, **kwargs)
         self.name = "covariate_complexity"
         self.metrics.append(CovariateRegularity(ds, model, explainer))

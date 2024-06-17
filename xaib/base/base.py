@@ -111,11 +111,21 @@ class Case(CascadeModel):
     high-level property of an Explainer
     """
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        *args: Any,
+        ds: Optional[Dataset] = None,
+        model: Optional[Model] = None,
+        explainer: Optional[Explainer] = None,
+        **kwargs: Any,
+    ) -> None:
         super().__init__(*args, **kwargs)
         # TODO: if not hasattr(self, "name"):
         self.name = None
         self._meta_prefix.update({"xaib_version": version})
+        for obj in [ds, model, explainer]:
+            if obj:
+                self.link(obj)
 
     def evaluate(
         self,

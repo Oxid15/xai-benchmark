@@ -14,6 +14,6 @@ class ContinuityCase(Case):
         *args: Any,
         **kwargs: Any
     ) -> None:
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, ds=ds, model=model, explainer=explainer, **kwargs)
         self.name = "continuity"
         self.metrics.append(SmallNoiseCheck(ds, model, explainer, noisy_ds=noisy_ds))
