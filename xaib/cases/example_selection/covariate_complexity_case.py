@@ -10,4 +10,4 @@ class CovariateComplexityCase(Case):
     ) -> None:
         super().__init__(ds, model, explainer, *args, **kwargs)
         self.name = "covariate_complexity"
-        self.metrics.append(CovariateRegularity(ds, model))
+        self.metrics.append(CovariateRegularity(ds, model, explainer))

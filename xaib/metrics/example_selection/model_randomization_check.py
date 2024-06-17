@@ -30,13 +30,20 @@ class ModelRandomizationCheck(Metric):
     It is difficult to define best case explainer in this case - the metric has no maximum value.
     """
 
-    def __init__(self, *args: Any, noisy_model: Model, **kwargs: Any) -> None:
+    def __init__(self, ds, model, explainer, noisy_model: Model, *args: Any, **kwargs: Any) -> None:
         self._noisy_model = noisy_model
-        super().__init__(name="model_randomization_check", direction="down", *args, **kwargs)
+        super().__init__(
+            name="model_randomization_check",
+            direction="down",
+            ds=ds,
+            model=model,
+            explainer=explainer,
+            *args,
+            **kwargs
+        )
 
     def compute(
         self,
-        expl: Explainer,
         batch_size: int = 1,
         expl_kwargs: Union[Dict[Any, Any], None] = None,
         expl_noisy_kwargs: Union[Dict[Any, Any], None] = None,
@@ -51,8 +58,8 @@ class ModelRandomizationCheck(Metric):
         for batch in tqdm(ChannelDataloader(self._ds, batch_size)):
             item = batch["item"]
 
-            explanation_batch = expl.predict(item, self._model, **expl_kwargs)
-            noisy_explanation_batch = expl.predict(item, self._noisy_model, **expl_noisy_kwargs)
+            explanation_batch = self._explainer.predict(item, self._model, **expl_kwargs)
+            noisy_explanation_batch = self._explainer.predict(item, self._noisy_model, **expl_noisy_kwargs)
 
             explanation_batch = np.asarray([item["item"] for item in explanation_batch])
             noisy_explanation_batch = np.asarray([item["item"] for item in noisy_explanation_batch])

@@ -113,6 +113,7 @@ class Case(CascadeModel):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
+        # TODO: if not hasattr(self, "name"):
         self.name = None
         self._meta_prefix.update({"xaib_version": version})
 

@@ -14,8 +14,16 @@ class SameClassCheck(Metric):
     based on it
     """
 
-    def __init__(self, *args, **kwargs: Any) -> None:
-        super().__init__(name="same_class_check", direction="up", *args, **kwargs)
+    def __init__(self, ds, model, explainer, *args, **kwargs: Any) -> None:
+        super().__init__(
+            name="same_class_check",
+            direction="up",
+            ds=ds,
+            model=model,
+            explainer=explainer,
+            *args,
+            **kwargs
+        )
 
     def compute(
         self,

@@ -16,4 +16,4 @@ class CorrectnessCase(Case):
     ) -> None:
         super().__init__(ds, model, explainer, *args, **kwargs)
         self.name = "correctness"
-        self.metrics.append(ModelRandomizationCheck(ds, model, noisy_model))
+        self.metrics.append(ModelRandomizationCheck(ds, model, explainer, noisy_model))

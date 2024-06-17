@@ -21,14 +21,13 @@ class CovariateRegularity(Metric):
     - **Best case:** constant explainer that gives examples with one feature with maximum value and others zero
     """
 
-    def __init__(
-        self,
-        *args: Any,
-        **kwargs: Any
-    ) -> None:
+    def __init__(self, ds, model, explainer, *args: Any, **kwargs: Any) -> None:
         super().__init__(
             name="covariate_regularity",
             direction="down",
+            ds=ds,
+            model=model,
+            explainer=explainer,
             *args,
             **kwargs
         )

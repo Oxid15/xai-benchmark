@@ -21,12 +21,18 @@ class TargetDiscriminativeness(Metric):
     **Worst case:** constant or random baseline - giving insufficient information to grasp labels
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, ds, model, explainer, *args, **kwargs):
         super().__init__(
-            name="target_discriminativeness", direction="up", *args, **kwargs
+            name="target_discriminativeness",
+            direction="up",
+            ds=ds,
+            model=model,
+            explainer=explainer,
+            *args,
+            **kwargs
         )
 
-    def compute(self, explainer, batch_size=1, expl_kwargs=None):
+    def compute(self, batch_size=1, expl_kwargs=None):
         if expl_kwargs is None:
             expl_kwargs = {}
 
@@ -35,7 +41,7 @@ class TargetDiscriminativeness(Metric):
         for batch in tqdm(ChannelDataloader(self._ds, batch_size=batch_size)):
             item, label = batch["item"], batch["label"]
 
-            explanation_batch = explainer.predict(item, self._model, **expl_kwargs)
+            explanation_batch = self._explainer.predict(item, self._model, **expl_kwargs)
             explanation_batch = np.asarray([item["item"] for item in explanation_batch])
 
             explanations += explanation_batch.tolist()
@@ -49,6 +55,6 @@ class TargetDiscriminativeness(Metric):
 
         for metric in user_model.metrics:
             if metric.name == "f1_score":
-                self.value = metric
+                self.value = metric.value
                 return self.value
         raise RuntimeError("f1_score not found in user_model's metrics")
