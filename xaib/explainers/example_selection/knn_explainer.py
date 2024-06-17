@@ -21,3 +21,10 @@ class KNNExplainer(Explainer):
     def predict(self, x, model):
         _, indices = self._explainer.kneighbors(x)
         return [self._train_ds[i[0]] for i in indices]
+
+
+class KNNCosineExplainer(KNNExplainer):
+    def __init__(self, *args, **kwargs):
+        kwargs.update({"metric": "cosine"})
+        super().__init__(*args, **kwargs)
+        self.name = "knn_cosine"

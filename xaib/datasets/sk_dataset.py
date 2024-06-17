@@ -50,7 +50,7 @@ class SkDataset(Dataset):
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0]["dataset_name"] = self.name
+        meta[0]["name"] = self.name
         meta[0]["split"] = self.split
         meta[0]["labels"] = self.labels
         return meta

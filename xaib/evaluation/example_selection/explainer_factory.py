@@ -1,6 +1,9 @@
 from ...base import Dataset, Factory, Model
 from ...explainers.example_selection.constant_explainer import ConstantExplainer
-from ...explainers.example_selection.knn_explainer import KNNExplainer
+from ...explainers.example_selection.knn_explainer import (
+    KNNCosineExplainer,
+    KNNExplainer,
+)
 from ...explainers.example_selection.random_explainer import RandomExplainer
 
 
@@ -10,6 +13,4 @@ class ExplainerFactory(Factory):
         self._constructors["const"] = lambda: ConstantExplainer(train_ds, train_ds[0])
         self._constructors["random"] = lambda: RandomExplainer(train_ds)
         self._constructors["knn"] = lambda: KNNExplainer(train_ds)
-        self._constructors["knn_cosine"] = lambda: KNNExplainer(
-            train_ds, metric="cosine"
-        )
+        self._constructors["knn_cosine"] = lambda: KNNCosineExplainer(train_ds)
