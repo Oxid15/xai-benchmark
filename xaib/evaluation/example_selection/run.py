@@ -14,9 +14,7 @@ REPO_PATH = os.path.join(
 )
 
 sys.path.append(os.path.abspath(os.path.dirname(SCRIPT_DIR)))
-from utils import Setup, run_experiment
-
-BS = 100
+from utils import Setup, run_experiment, visualize_results
 
 # Overwrite previous run
 ModelRepo(REPO_PATH, overwrite=True)
@@ -42,4 +40,4 @@ for setup in setups:
                     success = run_experiment(case_obj, REPO_PATH)
                     print("Success\n" if success else "Failed\n")
 
-# visualize_results(REPO_PATH, REPO_PATH)
+visualize_results(results_dir=REPO_PATH, output_dir=REPO_PATH)

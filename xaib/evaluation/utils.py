@@ -137,7 +137,7 @@ def table(df):
 def relative_bar(df):
     metrics = df.metric.unique()
 
-    df = df.groupby(["name", "metric", "direction"], as_index=False).agg("mean")
+    df = df.groupby(["explainer", "metric", "direction"], as_index=False)[["value"]].agg("mean")
 
     df["viz_value"] = df["value"]
     for metric in metrics:
@@ -150,7 +150,7 @@ def relative_bar(df):
         data=[
             go.Bar(
                 name=metric,
-                x=df.name.unique(),
+                x=df["explainer"].unique(),
                 y=df.loc[df["metric"] == metric]["viz_value"],
                 hovertext=df.loc[df["metric"] == metric]["direction"],
                 width=0.25,
@@ -169,7 +169,7 @@ def scatter(df, metric):
 
     return px.scatter(
         df.loc[df.metric == metric].sort_values("value", ascending=direction == "up"),
-        x="name",
+        x="explainer",
         y="value",
         title=metric.replace("_", " ").capitalize() + ", direction - " + direction,
         hover_data=["dataset", "model"],
@@ -177,23 +177,34 @@ def scatter(df, metric):
     )
 
 
-def visualize_results(path, output_dir=None):
-    m = MetaViewer(path, filt={"type": "model"})
+def first_link_of_type(t, meta):
+    if not meta[0]["links"]:
+        return None
+
+    for linked in meta[0]["links"]:
+        if linked["meta"] and linked["meta"][0].get("type") == t:
+            return linked["meta"]
+
+
+def visualize_results(results_dir, output_dir=None):
+    m = MetaViewer(results_dir, filt={"type": "case"})
 
     data = []
     for p in m:
-        for metric_name in p[0]["metrics"]:
+        ds = first_link_of_type("dataset", p)
+        model = first_link_of_type("model", p)
+        explainer = first_link_of_type("explainer", p)
+
+        for metric in p[0]["metrics"]:
             data.append(
                 {
-                    "name": p[0]["params"]["metric_params"][metric_name]["name"],
-                    "case": p[0]["params"]["case"],
-                    "dataset": p[0]["params"]["metric_params"][metric_name]["dataset"],
-                    "model": p[0]["params"]["metric_params"][metric_name]["model"],
-                    "metric": metric_name,
-                    "direction": p[0]["params"]["metric_params"][metric_name][
-                        "direction"
-                    ],
-                    "value": p[0]["metrics"][metric_name],
+                    "case": p[0]["name"],
+                    "dataset": ds[0].get("name") if ds is not None else None,
+                    "model": model[0].get("name") if model is not None else None,
+                    "explainer": explainer[0].get("name") if explainer is not None else None,
+                    "metric": metric.get("name"),
+                    "direction": metric.get("direction"),
+                    "value": metric.get("value"),
                 }
             )
 
@@ -201,7 +212,7 @@ def visualize_results(path, output_dir=None):
     pv = pd.pivot_table(
         df,
         values="value",
-        columns=["name"],
+        columns=["explainer"],
         index=["dataset", "model", "case", "metric", "direction"],
     )
 
