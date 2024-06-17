@@ -7,6 +7,7 @@ class RandomExplainer(Explainer):
     def __init__(self, train_ds, **kwargs) -> None:
         super().__init__(**kwargs)
         self._train_ds = train_ds
+        self.name = "random"
 
     def predict(self, x, model):
         return np.asarray(

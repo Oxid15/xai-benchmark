@@ -8,6 +8,7 @@ class KNNExplainer(Explainer):
     def __init__(self, train_ds, **kwargs) -> None:
         super().__init__(**kwargs)
         self._train_ds = train_ds
+        self.name = "knn"
 
         X, Y = [x["item"] for x in train_ds], [x["label"] for x in train_ds]
 

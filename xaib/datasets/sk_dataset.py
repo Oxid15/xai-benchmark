@@ -1,13 +1,14 @@
 from typing import Any, Dict
 
 import numpy as np
-from cascade import data as cdd
 from cascade.base import PipeMeta
 from sklearn.datasets import load_breast_cancer, load_digits, load_iris, load_wine
 from sklearn.model_selection import train_test_split
 
+from ..base import Dataset
 
-class SkDataset(cdd.SizedDataset):
+
+class SkDataset(Dataset):
     # TODO: this is classification dataset - should be renamed
     def __init__(self, name, split, frac=0.8, *args, **kwargs) -> None:
         super().__init__(**kwargs)

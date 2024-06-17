@@ -7,6 +7,7 @@ class ConstantExplainer(Explainer):
     def __init__(self, train_ds, example, **kwargs) -> None:
         super().__init__(**kwargs)
         self._example = example
+        self.name = "const"
 
     def predict(self, x, model):
         return [self._example for _ in range(len(x))]

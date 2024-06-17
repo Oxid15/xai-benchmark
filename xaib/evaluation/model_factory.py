@@ -30,6 +30,11 @@ class SkWrapper(SkModel):
 
         super().evaluate(X, Y, *args, **kwargs)
 
+    def get_meta(self):
+        meta = super().get_meta()
+        meta[0]["name"] = self.name
+        return meta
+
 
 class ModelFactory(Factory):
     def __init__(self, train_ds=None, test_ds=None) -> None:
