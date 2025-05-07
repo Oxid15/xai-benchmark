@@ -4,6 +4,10 @@
 
 Open and extensible benchmark for XAI methods
 
+## Links
+- [Paper](https://www.mdpi.com/1999-4893/18/2/85)
+- [Website](https://oxid15.github.io/xai-benchmark)
+
 ## Description
 
 XAIB is an open benchmark that provides a way to compare different XAI methods using broad set of metrics that measure different aspects of interpretability
